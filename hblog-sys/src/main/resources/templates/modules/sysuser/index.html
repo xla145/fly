@@ -1,0 +1,223 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="admin-main">
+	<!-- 按钮组 -->
+	<blockquote class="layui-elem-quote">
+		<@shiro.hasPermission name="sysuser:add">
+		<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
+		</@shiro.hasPermission>
+		<!--<a href="#" class="layui-btn layui-btn-sm layui-btn-normal operator-btn" data-type="edit"><i class="layui-icon">&#xe642;</i> 编辑</a>-->
+		<!--<a href="#" class="layui-btn layui-btn-sm layui-btn-danger" id="delete"><i class="layui-icon">&#xe640;</i> 删除信息</a>-->
+	</blockquote>
+	<!-- 筛选组 -->
+	<blockquote class="layui-elem-quote filter-bar">
+		<form class="layui-form" action="/table.html" id="filterForm">
+		    <div class="layui-inline">
+		      <label class="layui-filtrate-title">登录名：</label>
+		      <div class="layui-input-inline">
+		        <input type="text" name="name" class="layui-input">
+		      </div>
+		    </div>
+		    <div class="layui-inline">
+		      <label class="layui-filtrate-title">真实姓名：</label>
+		      <div class="layui-input-inline">
+		        <input type="text" name="realName" class="layui-input">
+		      </div>
+		    </div>
+		    <div class="layui-inline">
+		      <label class="layui-filtrate-title">手机号：</label>
+		      <div class="layui-input-inline">
+		        <input type="text" name="mobile" class="layui-input">
+		      </div>
+		    </div>
+		    <div class="layui-inline">
+		      <label class="layui-filtrate-title">创建时间：</label>
+		      <div class="layui-input-inline" style="width: 250px">
+		        <input type="text" name="createTime" id="create-time"  autocomplete="off" class="layui-input">
+		      </div>
+		    </div>
+		    <div class="layui-inline">
+		      <label class="layui-filtrate-title">最后登录时间：</label>
+		      <div class="layui-input-inline" style="width: 250px">
+		        <input type="text" name="lastLoginTime" id="last-login-time"  autocomplete="off" class="layui-input">
+		      </div>
+		    </div>
+		    <div class="layui-inline">
+		      <label class="layui-filtrate-title">是否有效：</label>
+		      <div class="layui-input-inline">
+		        <select name="isValid">
+				  <option value=" ">全部</option>
+				  <option value=1>有效</option>
+				  <option value=0>无效</option>
+				</select> 
+		      </div>
+		    </div>
+			<div class="layui-inline">
+				<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="search"><i class="layui-icon layui-icon-search"></i>搜索</a>
+				<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-normal operator-btn" data-type="reset"><i class="layui-icon layui-icon-refresh-3"></i>重置</a>
+			</div>
+		</form>
+	</blockquote>
+	<!-- 表格区域 -->
+	<table class="layui-table" id="sysuser-table" lay-filter="sysuser-table"></table>
+	<script type="text/html" id="barDemo">
+		<@shiro.hasPermission name="sysuser:getView,sysuser:edit">
+		<a class='layui-btn layui-btn-xs layui-btn-normal' lay-event='edit'>编辑</a>
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="sysAction:index">
+		<a class='layui-btn layui-btn-danger layui-btn-xs' lay-event='auth'>赋权</a>
+	</@shiro.hasPermission>
+	</script>
+	</div>
+</div>
+<#include "_add.html"><#t>
+<@footer>
+<script>
+    //入口
+    layui.use(['form','table','common','layer','laydate'], function(){
+        var table = layui.table,
+			layer = layui.layer,
+			form = layui.form,
+            laydate = layui.laydate,
+            common = layui.common;
+
+        //日期范围选择
+        laydate.render({elem: '#last-login-time',range: true,type: 'datetime',range: '~'});
+        laydate.render({elem: '#create-time',range: true,type: 'datetime',range: '~'});
+        var tableIns = table.render({ //其它参数在此省略
+            id: 'sysuser-table',
+            elem: '#sysuser-table',
+            url: '${ctx}sysuser/list',
+            request: {
+                pageName: 'pageNo' //页码的参数名称，默认：page
+                ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            method: 'post',
+            cols: [[
+                {checkbox: true, fixed: true}
+                ,{fixed: true,field:'uid', title: 'uid', width:50}
+                ,{field:'name', title: '登录名', minWidth:100}
+                ,{field:'realName', title: '真实姓名', width:120}
+                ,{field:'mobile', title: '手机号', width:120}
+                ,{field:'qq', title: '联系QQ', width:150}
+                ,{field:'email', title: '邮箱', minWidth:150}
+                ,{field:'createTime', title: '创建时间', width:150,sort:true,templet: '<div>{{dateFormat(d.createTime)}}</div>'}
+                ,{field:'lastLoginTime', title: '最后登录时间', width:150,sort:true,templet: '<div>{{dateFormat(d.lastLoginTime)}}</div>'}
+                ,{field:'isValid', title: '是否有效', width:100,templet: '#isValidTpl'}
+                ,{fixed:'right', title: '操作',width:120, align:'left', toolbar: '#barDemo'}
+            ]],
+            height: 'full-170',
+            size: 'sm',
+            even: true,
+            page: true,
+            limits: [15,30,60,90,150]
+            ,limit: 15  //默认采用15
+        });
+        // 编辑 删除
+        var $ = layui.jquery, active = {
+            search: function () {
+                dataReload();
+            },
+            reset: function () {
+                $('#filterForm')[0].reset();
+                dataReload();
+            },
+            add: function () {
+                common.addForm({
+					content:$('#add-form'),
+					title:"添加系统用户",
+					yes:function (index, layero) {
+                        var formEm = $(layero).find('form');
+                        if (!form.onVerify(formEm)) {
+                            return false;
+                        }
+                        /**表单提交 **/
+                        $.post('${ctx}sysuser/add', formEm.serialize(), function (result) {
+                            if (result.code == 0) {
+                                formEm[0].reset();	//清空弹框表单内容
+                                layer.close(index);	//关闭弹框
+                                dataReload();
+                                return;
+                            }
+                            layer.msg(result.msg);
+                        });
+                    },
+					isFull:true
+				});
+            },
+            edit: function (data) {
+				data = data || table.checkStatus('sysuser-table').data;
+                if(data.length != 1){
+                    layer.msg("请选择一条数据进行编辑！");
+                    return;
+                }
+                common.editForm({
+					content: '${ctx}sysuser/getView?uid='+data[0].uid,
+					title: '修改系统用户',
+					yes: function (index, layero) {
+						var formEm = $(layero).find('iframe').contents().find("#edit-form");
+						if (!form.onVerify(formEm)) {
+                            return false;
+                        }
+						/**表单提交 **/
+						$.post('${ctx}sysuser/edit', formEm.serialize(), function (result) {
+							if (result.code == 0) {
+								formEm[0].reset();	//清空弹框表单内容
+								layer.close(index);	//关闭弹框
+								dataReload(true);
+								return;
+							}
+							layer.msg(result.msg);
+						});
+					},
+					isFull: true
+				});
+            },
+			auth: function (data) {
+                var uid = data[0].uid;
+                if(!uid){
+                    layer.msg('请选择一条数据!');
+                    return;
+                }
+                layer.open({
+                    type: 2,
+                    area: ['646px', '486px'],
+                    maxmin: false,
+                    content: '${ctx}sysUserAuth/index?targetUid=' + uid,
+                    title: '用户赋权'
+                });
+            }
+        }
+        //加载数据
+        var dataReload = function (isEdit) {
+            if (isEdit) {
+                $(".layui-laypage-btn")[0].click();
+                return;
+			}
+            tableIns.reload({
+                where: common.formatForm($('#filterForm')),page: {
+                    pageNo: 1 //重新从第 1 页开始
+                }
+            });
+        }
+        //绑定操作按钮
+        $('.operator-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //监听工具条
+        table.on('tool(sysuser-table)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, [obj.data]) : '';
+        });
+    });
+</script>
+<script type="text/html" id="isValidTpl">
+	{{# if(d.isValid === 0){ }}
+	{{ '<span style="color: grey;">无效</span>' }}
+	{{# } }}
+	{{# if(d.isValid === 1){ }}
+	{{ '<span style="color: green;">有效</span>' }}
+	{{# } }}
+</script>
+</@footer>

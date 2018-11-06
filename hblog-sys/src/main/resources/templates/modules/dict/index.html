@@ -1,0 +1,176 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="admin-main">
+		<!-- 按钮组 -->
+		<blockquote class="layui-elem-quote">
+			<@shiro.hasPermission name="dict:group:getView,dict:group:add">
+			<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
+		</@shiro.hasPermission>
+			<@shiro.hasPermission name="dict:group:getView,dict:group:edit">
+			<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-normal operator-btn" data-type="edit"><i class="layui-icon">&#xe642;</i>编&nbsp;&nbsp;辑</a>
+			</@shiro.hasPermission>
+		</blockquote>
+
+		<!-- 筛选组 -->
+		<blockquote class="layui-elem-quote filter-bar">
+			<form class="layui-form" id="filterForm">
+				<div class="layui-inline">
+					<label class="layui-filtrate-title">组编码：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" id="code" name="code">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="search"><i class="layui-icon layui-icon-search"></i>搜索</a>
+					<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="reset"><i class="layui-icon layui-icon-refresh-3"></i>重置</a>
+				</div>
+			</form>
+		</blockquote>
+		<!-- 表格区域 -->
+		<table id="dict-group-table" lay-filter="dict-group-table"></table>
+		<script type="text/html" id="bar">
+			<@shiro.hasPermission name="dict:item:index,dict:item:list">
+			<a class="layui-btn layui-btn-xs" lay-event="url">子项</a>
+			</@shiro.hasPermission>
+		</script>
+	</div>
+<@footer>
+<script>
+//入口
+layui.use(['table','layer','form','laydate','common'], function(){
+	var table = layui.table, layer = layui.layer, form = layui.form,common = layui.common;
+    //自定义验证规则
+    form.verify({
+        info: function (value) {
+            if(!/^.{5,250}$/.test(value)){
+                return '组描述必须在5到250个字符之内！';
+            }
+        }
+    });
+	//列表渲染
+	var tableIns = table.render({
+	  id: 'dict-group-table',
+	  elem: '#dict-group-table'
+	  ,url: '${ctx}dict/group/list'
+	  ,height: 'full-140'
+	  ,page: true
+	  ,method: 'post'
+	  ,request: {
+		pageName: 'pageNo' //页码的参数名称，默认：page
+		,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+      }
+      ,limits: [15,30,60,90,120]
+	  ,limit: 15
+	  ,size: 'sm'
+	  ,cols: [[
+		{checkbox: true, fixed: true}
+		,{field:'code', title: '编码', width:120}
+		,{field:'info', title: '描述', width:200}
+		,{field:'belong', title: '属于', width:80,templet: "<div>{{d.belong===0?'系统':'运营'}}</div>"}
+		,{fixed: 'right', width:70, title: '操作', toolbar: '#bar'}
+	  ]]
+	});
+
+	//操作
+	var active = {
+		add: function(){
+            common.editForm({
+                maxmin: false,
+                content: "${ctx}dict/group/getView",
+                title: "添加组信息",
+                area: ['600px','380px'],
+                yes: function (index, layero) {
+                    var formEm = $(layero).find('iframe').contents().find("#save-form");
+                    if (!form.onVerify(formEm)) {
+                        return false;
+                    }
+                    /**表单提交 **/
+                    $.post('${ctx}dict/group/add', formEm.serialize(), function (result) {
+                        if (result.code == 0) {
+                            dataSearch(); //刷新表格数据
+                            formEm[0].reset();	//清空弹框表单内容
+                            layer.close(index);	//关闭弹框
+                            return;
+                        }
+                        layer.msg(result.msg);
+                    });
+                }
+            })
+		},
+        edit: function(data){
+		    data = data || table.checkStatus('dict-group-table').data;
+            if (data == "") {
+                layer.msg("请选择一条数据进行编辑！");
+                return;
+            }
+            common.editForm({
+                maxmin: false,
+                content: "${ctx}dict/group/getView?code="+data[0].code,
+                title: "修改组信息",
+                area: ['600px','380px'],
+                yes: function (index, layero) {
+                    var formEm = $(layero).find('iframe').contents().find("#save-form");
+                    if (!form.onVerify(formEm)){
+                        return false;
+                    }
+                    /**表单提交 **/
+                    $.post('${ctx}dict/group/edit', formEm.serialize(), function(result){
+                        if(result.code == 0){
+                            dataSearch(); //刷新表格数据
+                            formEm[0].reset();	//清空弹框表单内容
+                            layer.close(index);	//关闭弹框
+							return;
+                        }
+                        layer.msg(result.msg);
+                    });
+                }
+            })
+        },
+		url: function(data){
+            common.addForm({
+                //在这里面输入任何合法的js语句
+                type: 2 //Page层类型
+                ,area: ['800px', '500px']
+                ,title: '字典项'
+                ,offset: 'r'
+				,shade:0
+				,maxmin: false
+                ,anim: 2 //0-6的动画形式，-1不开启
+				,btn: ''
+                ,cancel: function(index, layero){
+                    layer.close(index)
+                }
+                ,content: '${ctx}dict/item/index?code=' + data[0].code
+            });
+		},
+        search: function () {
+            dataSearch();
+        },
+		reset:function () {
+			var formEm = $("#filterForm");
+			formEm[0].reset();
+            dataSearch();
+        }
+	}
+
+	//绑定操作按钮
+  	$('.operator-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+  	});
+	//监听工具条
+	table.on('tool(dict-group-table)', function(obj){
+		var type = obj.event;
+		active[type] ? active[type].call(this, [obj.data]) : '';
+	});
+    //搜索
+    var dataSearch = function () {
+        tableIns.reload({
+            where: common.formatForm($('#filterForm')),page: {
+                pageNo: 1 //重新从第 1 页开始
+            }
+        });
+    }
+});
+</script>
+</@footer>

@@ -1,0 +1,165 @@
+<#include "../../../_layout/_layout2.0.html"><#t> <@header/>
+<div class="admin-main">
+	<blockquote class="layui-elem-quote" style="width: 1050px; overflow: hidden;">
+		<span class="font-bolder" style="height: 38px; line-height: 38px;">角色权限分配 ：</span>
+		<span id="tipe"> 当前正在对 <span id="activeRole" class="font-bolder" style="color:#F00;">--</span> 进行赋权操作，共赋予了<span class="font-bolder" style="color:#F00;" id="count">-</span>项权限</span>
+		<@shiro.hasPermission name="sysRoleAuth:editRoleAction">
+		<a href="javascript:void(0);" id="save" class="layui-btn layui-btn-danger" style="float: right">保存修改项</a>
+		</@shiro.hasPermission>
+		<input type="hidden" id="roleId" />
+	</blockquote>
+	<div class="chunk-wrap">
+		<div class="chunk role-chunk">
+			<div class="title">系统角色</div>
+			<#if roleList??>
+			<ul class="role-box" id="roleBox">
+				<#list roleList as items>
+					<li class="role-item" datas='{"name":"${items.name!''}","id":${items.id}}'>${items.name!''}<i class="layui-icon"></i></li>
+				</#list>
+			</ul>
+			</#if>
+		</div>
+		<div class="chunk action-chunk">
+			<div class="title">系统功能树</div>
+			<div class="action-box" id="actionBox"></div>
+		</div>
+		<div class="chunk action-detail-chunk">
+			<div class="title">系统功详情</div>
+			<form class="layui-form">
+				<div class="layui-form-item">
+					<label class="layui-form-label">功能名称:</label>
+					<div class="layui-input-inline">
+						<input type="text" value="" id="detail_name" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">功能URL:</label>
+					<div class="layui-input-inline">
+						<input type="text" value="" id="detail_url" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">功能类型:</label>
+					<div class="layui-input-inline">
+						<input type="text" value="" id="detail_type" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">图标:</label>
+					<div class="layui-input-inline">
+						<input type="text" value="" id="detail_icon" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">创建时间:</label>
+					<div class="layui-input-inline">
+						<input type="text" value="" id="detail_createTime" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">备注:</label>
+					<div class="layui-input-block">
+						<textarea class="layui-textarea" id="detail_remark" style="overflow: hidden; resize: none;"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-inline" id="user-role" style="width: 1000px">
+					</div>
+				</div>
+			</form>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<@footer>
+<script>
+	//初始化高度
+	var initChunk = function($) {
+		var _height = window.screen.height - 380;
+		_height = _height > 600 ? 600 : _height;
+		$('.chunk').css('height', _height + '.px');
+		$('#actionBox').css('height', (_height - 50) + '.px');
+		$('#roleBox').css('height', (_height - 50) + '.px');
+	}
+</script>
+<script>
+	layui.use(['tree','layer'], function() {
+
+		var $ = layui.jquery,
+		layer = layui.layer;
+		initChunk($); //初始化高度
+		var tree = layui.tree({
+			elem : '#actionBox',
+			check : 'checkbox',
+			skin : 'as',
+			click : function(item) {
+				showDetail(item.data.origin)
+			},
+			onchange: function (){
+				$('#count').text(getChecks().length);
+			},
+			nodes: ${treeNode!'{}'}
+		});
+		
+		//保存更改
+		$('#save').click(function() {
+			var roleId = $('#roleId').val();
+			if(!roleId){
+				layer.msg('请选择角色!');
+				return ;
+			}
+			var ids = getChecks();
+			if(!ids || ids.length < 1){
+				layer.msg('未选择功能！');
+				return ;
+			}
+			$.ajax({
+				url: 'editRoleAction',
+				type: 'post',
+				dataType: 'json',
+				data: {roleId:roleId,actionIds:getChecks()},
+				success: function(result) {
+					layer.msg(result.msg);
+				}
+			})
+		});
+
+		//获取勾选值
+		var getChecks = function(){
+			var ids = [];
+			$.each($('#actionBox input:checkbox:checked'), function() {
+				ids.push($(this).val());
+			});
+			return ids;
+		}
+		//选择角色
+		var $roleBox = $('#roleBox');
+		$roleBox.children('.role-item').bind('click', function() {
+			$roleBox.children('.role-item').removeClass('active');
+			$(this).addClass('active');
+			var role = $.parseJSON($(this).attr('datas')) || {};
+			$('#activeRole').html(role.name)
+			$('#roleId').val(role.id);
+			$.get("getRoleAction", {roleId: role.id},function(result){
+				if(result.code == 0){
+					tree.uncheckAll();
+					tree.check(result.data.arr);
+					$('#user-role').html(result.data.userRole[0].name+":"+result.data.userRole[0].num)
+				}else{
+					tree.uncheckAll();
+				}
+				$('#count').text(getChecks().length);
+			});
+		})
+		var showDetail = function(data){
+			$('#detail_name').val(data.name)
+			$('#detail_url').val(data.url)
+			$('#detail_type').val(data.type == 1? '系统功能 ' : '导航菜单')
+			$('#detail_icon').val(data.icon)
+			$('#detail_createTime').val(data.createTime)
+			$('#detail_remark').val(data.remark)
+		}
+	});
+</script>
+</@footer>

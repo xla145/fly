@@ -1,0 +1,152 @@
+#include("../layout/_layout.html")
+<!-- 导航栏  -->
+#define body()
+<div class="layui-container fly-marginTop">
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+            <ul class="layui-tab-title">
+                <li><a href="login.html">登入</a></li>
+                <li class="layui-this">注册</li>
+            </ul>
+            <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form layui-form-pane">
+                        <form method="post" id="user-reg" action="#(ctx)user/reg">
+                            <div class="layui-form-item">
+                                <label for="L_email" class="layui-form-label">邮箱</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="L_email" name="email" required lay-verify="email"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">将会成为您唯一的登入名</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="L_username" class="layui-form-label">昵称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="L_username" name="nickname" required lay-verify="username"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="L_pass" class="layui-form-label">密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" id="L_pass" name="password" required lay-verify="password"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">6到16个字符</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="L_repass" class="layui-form-label">确认密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" id="L_repass" name="repass" required lay-verify="repass"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <!--<div class="layui-form-item">-->
+                                <!--<label for="L_vercode" class="layui-form-label">人类验证</label>-->
+                                <!--<div class="layui-input-inline">-->
+                                    <!--<input type="text" id="L_vercode" name="vercode" required lay-verify="required"-->
+                                           <!--placeholder="请回答后面的问题" autocomplete="off" class="layui-input">-->
+                                <!--</div>-->
+                                <!--<div class="layui-form-mid">-->
+                                    <!--<span style="color: #c00;">{{d.vercode}}</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="userReg" lay-submit>立即注册</button>
+                            </div>
+                            <div class="layui-form-item fly-form-app">
+                                <span>或者直接使用社交账号快捷注册</span>
+                                <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
+                                   class="iconfont icon-qq" title="QQ登入"></a>
+                                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})"
+                                   class="iconfont icon-weibo" title="微博登入"></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+#end
+#define js()
+<script>
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '#(resource)/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "3.1.2"
+        , base: '#(resource)/modules/'
+    }).extend({
+        fly: 'index'
+    }).use(['fly','form'],function () {
+        var $ = layui.jquery, fly = layui.fly, form = layui.form;
+        // 表单验证
+        form.verify({
+            username: [/^[\S]{5,18}$/, '用户名不合法(5-18位)'],
+            password: [/^[\S]{6,20}$/, '密码必须6到20位，且不能出现空格'],
+            repass: function(value){
+                var pwd = $('#L_pass').val();
+                if(value != pwd){
+                    return '两次密码不正确';
+                }
+            }
+        });
+
+        form.on('submit(userReg)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            //表单提交
+            fly.json('#(ctx)user/reg',JSON.stringify(data.field),function(result){
+                if(result.code == 0){
+                    layer.close(index);	//关闭弹框
+                    layer.msg("注册成功！！", {icon: 1, time: 1200});
+                    setInterval(function () {
+                        window.parent.location.href='#(ctx)index.html';
+                    },1000);
+                    return;
+                }
+            },{
+                contentType: 'application/json; charset=utf-8'
+            });
+            return false;
+        });
+
+        // //监听提交
+        // var active = {
+        //     reg: function () {
+        //         var $form = $('#user-reg');
+        //         if (!form.onVerify($form)) {
+        //             return false;
+        //         }
+        //         //表单提交
+        //         fly.json('#(ctx)user/reg',$form.serialize(),function(result){
+        //             if(result.code == 0){
+        //                 layer.close(index);	//关闭弹框
+        //                 layer.msg("注册成功！！", {icon: 1, time: 1200});
+        //                 setInterval(function () {
+        //                     window.parent.location.href='#(ctx)index.html';
+        //                 },1000);
+        //                 return;
+        //             }
+        //         });
+        //     }
+        // }
+        //
+        // //绑定操作按钮
+        // $('.operator-btn').on('click', function () {
+        //     var type = $(this).data('type');
+        //     active[type] ? active[type].call(this, this) : '';
+        // });
+    });
+
+
+
+</script>
+#end

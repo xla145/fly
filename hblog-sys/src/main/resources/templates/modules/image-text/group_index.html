@@ -1,0 +1,226 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="admin-main">
+	<!-- 按钮组 -->
+	<@shiro.hasPermission name="imageTextGroup:add">
+	<blockquote class="layui-elem-quote">
+		<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
+	</blockquote>
+	</@shiro.hasPermission>
+<!-- 筛选组 -->
+	<blockquote class="layui-elem-quote filter-bar">
+		<form class="layui-form" id="filterForm">
+			<div class="layui-inline">
+				<label class="layui-filtrate-title">组编码：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="layui-input" id="code" name="code">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-filtrate-title">状态：</label>
+				<div class="layui-input-inline">
+					<select name="status">
+						<option value=" ">全部</option>
+						<option value="0"></option>
+						<option value="1">启动</option>
+						<option value="0">停用</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="search"><i class="layui-icon layui-icon-search"></i>搜索</a>
+				<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="reset"><i class="layui-icon layui-icon-refresh-3"></i>重置</a>
+			</div>
+		</form>
+	</blockquote>
+	<!-- 表格区域 -->
+	<table id="image-text-group-table" lay-filter="image-text-group-table"></table>
+	<script type="text/html" id="bar">
+		<@shiro.hasPermission name="imageTextGroup:getView,imageTextGroup:edit">
+		{{# if(d.status === 0){ }}
+		  {{
+			'<a class="layui-btn layui-btn-xs operator-btn layui-btn-normal" lay-event="edit">编&nbsp;&nbsp;辑</a>'
+		  }}
+		{{# } }}
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="imageTextGroup:startOrStop">
+		{{# if(d.status === 1){ }}
+		  {{
+			'<a class="layui-btn layui-btn-xs operator-btn layui-btn-danger" lay-event="stop">停&nbsp;&nbsp;用</a>'
+		  }}
+		{{# } }}
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="imageTextGroup:startOrStop">
+		{{# if(d.status === 2 || d.status === 0){ }}
+		  {{ '<a class="layui-btn layui-btn-xs operator-btn" lay-event="start">启&nbsp;&nbsp;用</a>'}}
+		{{# } }}
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="imageTextItem:index">
+		<a class="layui-btn layui-btn-xs operator-btn" lay-event="url">图文链接</a>
+		</@shiro.hasPermission>
+	</script>
+</div>
+<@footer>
+<script>
+//入口
+layui.use(['table','layer','form','laydate','common'], function(){
+	var table = layui.table, layer = layui.layer, form = layui.form,common = layui.common;
+    //自定义验证规则
+    form.verify({
+        purpose: function (value) {
+            if(!/^.{5,250}$/.test(value)){
+                return '组用途必须在5到250个字符之内！';
+            }
+        }
+    });
+	//列表渲染
+	var tableIns = table.render({
+	  id: 'image-text-group-table',
+	  elem: '#image-text-group-table'
+	  ,url: '${ctx}imageTextGroup/list'
+	  ,height: 'full-140'
+	  ,page: true
+	  ,method: 'post'
+	  ,request: {
+		pageName: 'pageNo' //页码的参数名称，默认：page
+		,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+      }
+      ,limits: [15,30,60,90,120]
+	  ,limit: 15
+	  ,size: 'sm'
+	  ,cols: [[
+		{checkbox: true, fixed: true}
+		,{field:'id', title: 'ID', width:50, sort: true}
+		,{field:'name', title: '名字', minWidth:100}
+		,{field:'code', title: '编码', width:200}
+		,{field:'purpose', title: '用途', minWidth:200}
+		,{field:'status', title: '状态', width:120,templet: "<div>{{d.status===1?'<span style=\"color: green;\">启用</span>':'<span style=\"color: red;\">停用</span>'}}</div>"}
+		,{field:'createTime', title: '创建时间', width:150,sort: true,templet: '<div>{{dateFormat(d.createTime)}}</div>'}
+		,{fixed: 'right', width:200, title: '操作', toolbar: '#bar'}
+	  ]],
+	});
+
+	//操作
+	var active = {
+		add: function(){
+			layer.open({
+			   content: "${ctx}imageTextGroup/getView",
+			   type: 2,
+			   title: '添加组信息',
+			   area:['600px','350px'],
+			   btn: ['保存', '取消'],
+			   maxmin: false,
+			   yes: function(index, layero) {
+				   var formEm = $(layero).find('iframe').contents().find("#save-form");
+				   if (!form.onVerify(formEm)){
+						return false;
+				   }
+				   /**表单提交 **/
+				   $.post('${ctx}imageTextGroup/add', formEm.serialize(), function(result){
+					  if(result.code == 0){
+						  dataSearch(); //刷新表格数据
+						  formEm[0].reset();	//清空弹框表单内容
+						  layer.close(index);	//关闭弹框
+						  return;
+					  }
+					  layer.msg(result.msg);
+				   });
+			  }
+			})
+		},
+        edit: function(data){
+            if (data == "") {
+                layer.msg("请选择一条数据进行编辑！");
+                return;
+            }
+            if (data.status === 10) {
+                layer.msg("启用的组不能编辑！");
+                return;
+            }
+			layer.open({
+				content: "${ctx}imageTextGroup/getView?id="+data.id,
+				type: 2,
+				title: '修改组信息',
+				btn: ['保存', '取消'],
+				area:['600px','350px'],
+				maxmin: false,
+				yes: function(index, layero) {
+					var formEm = $(layero).find('iframe').contents().find("#save-form");
+					if (!form.onVerify(formEm)){
+						return false;
+					}
+					/**表单提交 **/
+					$.post('${ctx}imageTextGroup/edit', formEm.serialize(), function(result){
+						if(result.code == 0){
+                            dataSearch(); //刷新表格数据
+							formEm[0].reset();	//清空弹框表单内容
+							layer.close(index);	//关闭弹框
+						}
+						layer.msg(result.msg);
+					});
+				}
+			})
+
+        },
+		url: function(data){
+			layer.full(layer.open({
+			  type: 2,
+			  title: '图文链接信息',
+			  content: '${ctx}imageTextItem/index?groupId=' + data.id,
+			  maxmin: true
+			}));
+		},
+		start: function (data) {
+            layer.confirm("你确定要启用图文组？", function(index){
+                layer.close(index)
+                startOrStop(data.id,data.status);
+            });
+        },
+		stop: function (data) {
+            layer.confirm("你确定要停用图文组？", function(index){
+                layer.close(index)
+                startOrStop(data.id,data.status);
+            });
+        },
+        search: function () {
+            dataSearch();
+        },
+		reset:function () {
+			var formEm = $("#filterForm");
+			formEm[0].reset();
+            dataSearch();
+        }
+	}
+
+	//绑定操作按钮
+  	$('.operator-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+  	});
+	//监听工具条
+	table.on('tool(image-text-group-table)', function(obj){
+		var type = obj.event;
+		active[type] ? active[type].call(this, obj.data) : '';
+	});
+    //搜索
+    var dataSearch = function () {
+        tableIns.reload({
+            where: common.formatForm($('#filterForm')),page: {
+                pageNo: 1 //重新从第 1 页开始
+            }
+        });
+    }
+  	// 启用或停用组
+	var startOrStop = function (id,status) {
+		common.post("${ctx}imageTextGroup/startOrStop",{id: id,status: status},function (result) {
+			if (result.code == 0) {
+                dataSearch(); //刷新表格数据
+				return;
+			}
+			layer.msg(result.msg);
+        })
+    }
+	  
+});
+</script>
+</@footer>

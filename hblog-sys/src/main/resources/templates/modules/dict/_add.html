@@ -1,0 +1,52 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div style="margin: 15px;">
+	<form class="layui-form" id="save-form">
+		<input type="hidden" name="id" value="${data.id!''}" id="groupId">
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span>*</span>组编码</label>
+			<div class="layui-input-inline">
+				<input type="text" name="code" placeholder="请输入组编码" autocomplete="off" class="layui-input" lay-verify="required" value="${data.code!''}" id="code">
+			</div>
+			<div class="layui-form-mid layui-word-aux layui-code-msg"></div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">属于：</label>
+			<div class="layui-input-block">
+				<#if data.belong??>
+					<input type="radio" name="belong" value="0" title="系统" <#if data.belong == 0>checked</#if>>
+					<#else>
+					<input type="radio" name="belong" value="0" title="系统" checked>
+				</#if>
+				<input type="radio" name="belong" value="1" title="运营" <#if data.belong?? && data.belong == 1>checked</#if>>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span>*</span>组描述</label>
+			<div class="layui-input-block">
+				<textarea name="info" placeholder="请输入备注信息(250个字符之内)" class="layui-textarea" lay-verify="info">${data.info!''}</textarea>
+			</div>
+		</div>
+	</form>
+</div>
+<@footer>
+<script>
+	//入口
+	layui.use(['form'], function() {
+	    var $ = layui.jquery;
+		var form = layui.form;
+		$("#code").on('blur',function () {
+			var code = $(this).val();
+			$.post("${ctx}dict/group/checkCode",{code: code,groupId: $("#groupId").val()},function (result) {
+			    var html = "";
+				if (result.code == 0) {
+                    html = "<span style='color: green;'>该编码可用</span>";
+				} else {
+                    html = "<span style='color: red;'>该编码不可用</span>";
+				}
+                $(".layui-code-msg").html(html)
+            });
+        });
+	});
+</script>
+</@footer>

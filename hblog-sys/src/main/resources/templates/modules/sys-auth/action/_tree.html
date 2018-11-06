@@ -1,0 +1,36 @@
+<#include "../../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div style="margin: 15px;" id="add-role-form">
+	<div class="action-box" id="actionBox"></div>
+	<input type="hidden" id="parent-name">
+	<input type="hidden" id="parent-id">
+</div>
+<@footer>
+<script>
+	//入口
+	layui.use(['form','tree'], function(){
+		var $ = layui.jquery;
+
+		// 编辑 删除
+		let arr = ${treeNode!'{}'}
+		let json = {checkboxValue: "2", children: '',data:{id:-1,origin:{id: -1,name: "一级菜单"}}, id: -1, name: "一级菜单"}
+        arr.splice(0, 0, json)
+        var tree = layui.tree({
+            elem : '#actionBox',
+//            check : 'checkbox',
+            skin : 'as',
+            click : function(item) {
+                showDetail(item.data.origin)
+            },
+            onchange: function (){
+//                $('#count').text(getChecks().length);
+            },
+            nodes: arr
+        });
+
+        var showDetail = function(data){
+            parent._tool.setParentName(data.name,data.id)
+        }
+	});
+</script>
+</@footer>

@@ -1,0 +1,174 @@
+<#assign isLogin = 'login' />
+<#include "_layout/_layout2.0.html"><#t>
+<@header>
+<link rel="stylesheet" href="${assets}css/login.css?v=20180108"/>
+</@header>
+<div class="beg-login-bg">
+    <div class="beg-login-box">
+        <header><h1>后台登录</h1></header>
+        <div class="beg-login-main">
+            <form action="${ctx}sys/login" id="loginForm" class="layui-form" method="post">
+                <div class="layui-tab layui-tab-brief">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">账号登录</li>
+                        <li>手机号登录</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-form-item">
+                                <label class="beg-login-icon"><i class="layui-icon layui-icon-username"></i></label>
+                                <input type="text" name="userName" lay-verify="userName"
+                                       placeholder="请输入登录名" class="layui-input" lay-verType="tips">
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="beg-login-icon"><i class="layui-icon layui-icon-password"></i></label>
+                                <input type="password" name="password" lay-verify="password"
+                                       placeholder="请输入密码" class="layui-input" lay-verType="tips">
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-row">
+                                    <div class="layui-col-xs7">
+                                        <label class="beg-login-icon"><i class="layui-icon layui-icon-vercode"></i></label>
+                                        <input type="text" name="code"  lay-verify="required" placeholder="验证码" class="layui-input layui-codes">
+                                    </div>
+                                    <div class="layui-col-xs5">
+                                        <div style="margin-left: 10px;">
+                                            <img alt="验证码" id="scode" src="${ctx}captcha.jpg" class="operator-btn" data-type="flushCode"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-row">
+                                    <div class="layui-col-xs12">
+                                        <button type="button" class="layui-btn operator-btn layui-btn-login" data-type="login" ><i class="layui-icon">&#x1005;</i> 登录</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            <div class="mobile-login">
+                                <div class="layui-form-item">
+                                    <label class="beg-login-icon"><i class="layui-icon layui-icon-cellphone"></i></label>
+                                    <input type="text" name="mobile" autocomplete="off" placeholder="请输入手机号"
+                                           class="layui-input" id="mobile">
+                                </div>
+                                <div class="layui-form-item">
+                                     <div class="layui-row">
+                                        <div class="layui-col-xs7">
+                                            <label class="beg-login-icon"><i class="layui-icon layui-icon-vercode"></i></label>
+                                            <input type="text" name="vcode" autocomplete="off" class="layui-input layui-codes" placeholder="输入验证码" id="vcode">
+                                        </div>
+                                         <div class="layui-col-xs5">
+                                             <div style="margin-left: 10px;">
+                                                 <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid operator-btn" data-type="getVcode">验证码</button>
+                                             </div>
+                                         </div>
+                                     </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-row">
+                                        <div class="layui-col-xs12">
+                                            <button type="button" class="layui-btn operator-btn layui-btn-login" data-type="loginByMobile"><i class="layui-icon">&#x1005;</i>登录 </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<footer><p>2019 @XXXXXXXXXXXXXXXXXXXXXX</p></footer>
+<@footer>
+<script>
+    layui.use(['layer', 'form', 'element','common'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form,
+            common = layui.common,
+            element = layui.element;
+
+        // 表单验证
+        form.verify({
+            userName: [/^[\S]{5,18}$/, '用户名不合法(5-18位)'],
+            password: [/^[\S]{6,20}$/, '密码必须6到20位，且不能出现空格']
+        });
+
+        var active = {
+            login: function () {
+                var $form = $('#loginForm');
+                if (!form.onVerify($form)) {
+                    return false;
+                }
+                //add表单提交
+                $.post($form.attr('action'), $form.serialize(), function (result) {
+                    if (result.code == 0) {
+                        window.location.href = '${ctx}index.html';
+                        common.clearNaverCache();
+                        return;
+                    }
+                    layer.msg(result.msg, {icon: 2, time: 1000});
+                    active.flushCode();
+                });
+                return false;
+            },
+            loginByMobile: function () {
+                var mobile = $("#mobile").val();
+                var code = $("#vcode").val();
+                if (!/^(13[0-9]|15[012356789]|17[013678]|18[0-9]|14[57])[0-9]{8}$/.test(mobile)) {
+                    layer.msg("手机号无效！")
+                    return;
+                }
+
+                $.post("${ctx}sys/loginByMobile", {mobile: mobile, code: code}, function (result) {
+                    if (result.code == 0) {
+                        window.location.href = '${ctx}index.html';
+                        common.clearNaverCache();
+                        return;
+                    }
+                    layer.msg(result.msg, {icon: 2, time: 1000});
+                })
+            },
+            getVcode: function (that) {
+                var mobile = $("#mobile").val();
+                if (!/^(13[0-9]|15[012356789]|17[013678]|18[0-9]|14[57])[0-9]{8}$/.test(mobile)) {
+                    layer.msg("手机号无效！")
+                    return;
+                }
+                $.get("${ctx}sms/getVcode", {mobile: mobile, cmd: "sysLogin"}, function (result) {
+                    if (result.code == 0) {
+                        layer.msg(result.msg)
+                        var second = 60;
+                        var timer = setInterval(function () {
+                            if (second > 0) {
+                                $(that).addClass("layui-disabled").html(second + "s");
+                            } else {
+                                $(that).removeClass("layui-disabled").html("验证码");
+                                clearInterval(timer);
+                            }
+                            second--;
+                        }, 1000);
+                        return;
+                    }
+                    layer.msg(result.msg);
+                })
+
+            },
+            flushCode: function () {
+                // 每次刷新的时候获取当前时间，防止浏览器缓存刷新失败
+                var time = new Date();
+                $("#scode").attr("src", "${ctx}captcha.jpg?time=" + time);
+            }
+        }
+
+        //绑定操作按钮
+        $('.operator-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this, this) : '';
+        });
+    });
+</script>
+</@footer>

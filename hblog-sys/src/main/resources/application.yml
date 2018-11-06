@@ -1,0 +1,22 @@
+# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-threads: 1000
+        min-spare-threads: 30
+    port: 8080
+    connection-timeout: 1200000
+spring:
+    # 环境 dev|pro
+    profiles:
+        active: dev
+    # jackson时间格式化
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+    freemarker:
+        content-type: text/html; charset=utf-8
+        suffix: .html
+        template-loader-path: classpath:/templates/
+        cache: false
+

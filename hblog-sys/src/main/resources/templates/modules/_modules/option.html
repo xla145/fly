@@ -1,0 +1,9 @@
+<#if options??>
+	<#list options as items>
+		<#if checked??>
+			<option value="${items.id!''}" <#if items.id?? && items.id=checked>selected </#if>>${items.name!''}</option>
+			<#else>
+			<option value="${items.id!''}">${items.name!''}</option>
+		</#if>
+	</#list>
+</#if>

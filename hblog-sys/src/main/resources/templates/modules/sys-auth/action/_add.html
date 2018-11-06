@@ -1,0 +1,127 @@
+<#include "../../../_layout/_layout2.0.html"><#t>
+<@header>
+	<link rel="stylesheet" href="${assets}css/iconpick.css?v=20180108" media="all" />
+</@header>
+<div style="margin: 15px; " id="add-form">
+	<form class="layui-form" id="edit-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">功能名称：</label>
+			<div class="layui-input-inline">
+				<input name="id" id="id" value="${data.id!''}" type="hidden">
+				<input type="text" name="name" placeholder="请输入功能名称" autocomplete="off" class="layui-input" value="${data.name!''}" lay-verify="required">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">功能类型：</label>
+			<div class="layui-input-inline">
+				<select name="type" lay-verify="required" lay-filter="type" id="type">
+					<option value="">请选择</option>
+					<option value="2" <#if data.type?? && data.type == 2>selected</#if>>导航菜单</option>
+					<option value="3" <#if data.type?? && data.type == 3>selected</#if>>按钮</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">授权标识：</label>
+			<div class="layui-input-inline">
+				<input type="text" name="perms" placeholder="多个用逗号分隔，如：user:list,user:add" autocomplete="off" class="layui-input" value="${data.perms!''}" >
+			</div>
+			<div class="layui-form-mid layui-word-aux">注意：多个用逗号分隔，如：user:list,user:add</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">父级节点：</label>
+			<div class="layui-input-inline">
+				<input type="hidden" name="parentId" placeholder="上级菜单" autocomplete="off" class="layui-input" value="${data.parentId!''}" id="parentId">
+				<input type="text" name="parentName" autocomplete="off" class="layui-input" value="${data.parentName!''}" id="parent-name">
+			</div>
+			<div class="layui-form-mid layui-word-aux">注意：如果是一级菜单则为空</div>
+		</div>
+		<div class="layui-action">
+			<div class="layui-form-item">
+				<label class="layui-form-label">功能URL：</label>
+				<div class="layui-input-inline">
+					<input type="text" name="url" placeholder="请输入功能url" autocomplete="off" class="layui-input" value="${data.url!''}">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">图标：</label>
+				<div class="layui-icon-click"><i class="layui-icon layui-icon-list" style="font-size: 31px;color: #676e6e;"></i></div>
+				<div class="layui-input-inline">
+					<input type="text" readonly name="icon" placeholder="请输入图标" autocomplete="off" class="layui-input icon" value="${data.icon!''}">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">权重：</label>
+				<div class="layui-input-inline">
+					<input type="number" name="weight" class="layui-input" value="${data.weight!''}">
+				</div>
+				<div class="layui-form-mid layui-word-aux">越小越靠前</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">备注：</label>
+			<div class="layui-input-block">
+				<textarea name="remark" placeholder="请输入备注信息" class="layui-textarea" lay-verify="required">${data.remark!''}</textarea>
+			</div>
+		</div>
+	</form>
+</div>
+<@footer>
+<script>
+	//入口
+	layui.use(['form','common','iconshow'], function(){
+		var $ = layui.jquery,form = layui.form,common = layui.common,layer = layui.layer,iconshow = layui.iconshow;
+        // 渲染图标列表
+        iconshow.render({
+			e: $(".layui-icon-click"),
+			el: $(".icon")
+		})
+        var type = $("#type").find("option:selected").val();
+        if (type == 3) {
+            $(".layui-action").css("display","none");
+        } else {
+            $(".layui-action").css("display","");
+        }
+        form.on('select(type)', function(data){
+            var type = $(data.elem).find("option:selected").val();
+            if (type == 3) {
+                $(".layui-action").css("display","none");
+			} else {
+                $(".layui-action").css("display","");
+			}
+        });
+		$("#parent-name").on("click",function () {
+			common.editForm({
+				content: "${ctx}sysAction/tree",
+				title: "菜单列表",
+				area: ['500px','500px'],
+				btn:'',
+                cancel: ''
+			});
+        })
+        //绑定操作按钮
+        $('.operator-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+		window._tool = {
+		    setParentName: function (name,id) {
+                $("#parent-name").val(name);
+                $("#parentId").val(id);
+                layer.closeAll();
+            }
+		}
+	});
+</script>
+</@footer>
+	<style type="text/css">
+		.layui-input-inline{
+			width: 250px !important;
+		}
+		.layui-icon-click {
+			border: 1px solid #e6e6e6;
+			height: 33px;
+			margin-right: 5px;
+			float: left;
+		}
+	</style>

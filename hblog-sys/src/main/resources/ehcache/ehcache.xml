@@ -1,0 +1,81 @@
+
+<ehcache>
+    <diskStore path="java.io.tmpdir/shiro-ehcache"/>
+
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="false"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"/>
+
+    <cache name="authorizationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="shiro-activeSessionCache"
+           maxElementsInMemory="10000"
+           overflowToDisk="true"
+           eternal="true"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="600"/>
+
+    <cache name="org.apache.shiro.realm.text.PropertiesRealm-0-accounts"
+           maxElementsInMemory="1000"
+           eternal="true"
+           overflowToDisk="true"/>
+
+    <!--
+     一些业务缓存
+    timeToIdleSeconds: The maximum amount of time between accesses before an element expires
+    timeToLiveSeconds = "x" 创建一个元素后，间隔x后缓存失效；
+    timeToIdleSeconds 和 timeToLiveSeconds 同时存在，最长的实效时间以timeToLiveSeconds为准
+    -->
+    <cache name="serviceCache-30"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="30"
+           timeToLiveSeconds="30"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+
+
+    <cache name="serviceCache-90"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="90"
+           timeToLiveSeconds="90"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+
+
+    <cache name="serviceCache-150"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="150"
+           timeToLiveSeconds="150"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+
+
+    <cache name="dict-cache"
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToIdleSeconds="150"
+           timeToLiveSeconds="150"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+</ehcache>

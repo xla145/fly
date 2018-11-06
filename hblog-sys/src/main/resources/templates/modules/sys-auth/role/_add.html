@@ -1,0 +1,38 @@
+<#include "../../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div style="margin: 15px;" id="add-role-form">
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色名字</label>
+			<div class="layui-input-inline">
+				<input type="hidden" name="id" class="layui-input" value="${data.id!''}">
+				<input type="text" name="name" placeholder="请输入角色名字" autocomplete="off" class="layui-input" value="${data.name!''}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">描述</label>
+			<div class="layui-input-inline">
+				<input type="text" name="describe" placeholder="请输入描述" autocomplete="off" class="layui-input" value="${data.describe!''}">
+			</div>
+		</div>
+	</form>
+</div>
+<@footer>
+<script>
+	//入口
+	layui.use(['form','table','common'], function(){
+		var $ = layui.jquery;
+		var common = layui.common;
+		// 编辑 删除
+		var $ = layui.$, active = {
+			add: function () {
+			}
+		}
+		//绑定操作按钮
+		$('.operator-btn').on('click', function(){
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		});
+	});
+</script>
+</@footer>

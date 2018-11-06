@@ -1,0 +1,172 @@
+<#include "../../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="admin-main">
+	<!-- 按钮组 -->
+	<blockquote class="layui-elem-quote">
+		<@shiro.hasPermission name="sysRole:getView,sysRole:add">
+		<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="sysRole:getView,sysRole:edit">
+		<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-normal operator-btn" data-type="edit"><i class="layui-icon">&#xe642;</i> 编辑</a>
+		</@shiro.hasPermission>
+	</blockquote>
+	<!-- 筛选组 -->
+	<blockquote class="layui-elem-quote filter-bar">
+		<form class="layui-form" id="filterForm">
+			<div class="layui-inline">
+				<label class="layui-filtrate-title">角色名称：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="layui-input" id="release-time" name="name" style="width: 250px;">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="search"><i class="layui-icon layui-icon-search"></i>搜索</a>
+				<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="reset"><i class="layui-icon layui-icon-refresh-3"></i>重置</a>
+			</div>
+		</form>
+	</blockquote>
+	<!-- 表格区域 -->
+	<table class="layui-table" id="table-role" lay-filter="table-role"></table>
+	<script type="text/html" id="barDemo">
+		<@shiro.hasPermission name="sysRole:getView,sysRole:edit">
+		<a class='layui-btn layui-btn-xs layui-btn-normal' lay-event='edit'>编辑</a>
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="sysRole:del">
+		<a class='layui-btn layui-btn-danger layui-btn-xs' lay-event='del'>删除</a>
+		</@shiro.hasPermission>
+	</script>
+</div>
+<@footer>
+<script>
+	//入口
+	layui.use(['form','table','common'], function(){
+		var $ = layui.jquery;
+		var table = layui.table,
+            form = layui.form,
+			common = layui.common;
+		var tableIns = table.render({ //其它参数在此省略
+			id: 'table-role',
+			elem: '#table-role',
+			url: '${ctx}sysRole/list',
+			request: {
+				pageName: 'pageNo' //页码的参数名称，默认：page
+				,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+			},
+			method: 'post',
+			cols: [[
+				{checkbox: true, fixed: true}
+				,{field:'name', title: '角色名称', width:150, sort: true, fixed: true}
+				,{field:'describe', title: '角色描述', width:150}
+				,{fixed: 'right', title: '操作',width:120, align:'left', toolbar: '#barDemo'}
+			]],
+			height: 'full-140',
+			size: 'sm',
+			even: true,
+			page: true,
+			limits: [15,30,60,90,120]
+			,limit: 15 //默认采用15
+		});
+		// 编辑 删除
+		var $ = layui.$, active = {
+			search: function () {
+				dataReload();
+			},
+			reset: function () {
+				$('#filterForm')[0].reset();
+				dataReload();
+			},
+			add: function () {
+				common.editForm({
+					content: '${ctx}sysRole/getView',
+					title:'添加角色',
+					area:['300px','250px'],
+					yes: function (index, layero) {
+                        var formEm = $(layero).find('iframe').contents().find("#add-role-form").find('form');
+                        if (!form.onVerify(formEm)) {
+                            return false;
+                        }
+                        $.post("${ctx}sysRole/add",formEm.serialize(),function(result){
+                            if(result.code == 0){
+                                layer.close(index)
+                                dataReload(true);
+                                return;
+                            }
+                            layer.msg(result.msg);
+                        });
+
+                    }
+				});
+			},
+			edit: function (data) {
+				data = data || table.checkStatus('table-list').data;
+				if(data.length != 1){
+					layer.msg("请选择一条数据进行编辑！");
+					return;
+				}
+                common.editForm({
+                    content: "${ctx}sysRole/getView?roleId="+data[0].id,
+                    title:'修改角色',
+                    area:['300px','250px'],
+                    yes: function (index, layero) {
+                        var formEm = $(layero).find('iframe').contents().find("#add-role-form").find('form');
+                        if (!form.onVerify(formEm)) {
+                            return false;
+                        }
+                        $.post("${ctx}sysRole/edit",formEm.serialize(),function(result){
+                            if(result.code == 0){
+                                layer.close(index)
+                                dataReload(true);
+                                return;
+                            }
+                            layer.msg(result.msg);
+                        });
+                    }
+                });
+			},
+            del: function (data) {
+                data = data || table.checkStatus('table-role').data
+                if(data.length < 1){
+                    layer.msg("请选择一条数据进行删除！");
+                    return;
+                }
+                let ids = new Array();
+                layui.each(data,function (index,value) {
+					ids.push(value.id);
+                })
+                layer.confirm('真的删除该角色吗？', function(index){
+                    layer.close(index);
+                    common.post("${ctx}sysRole/del",{roleIds: ids},function (result) {
+                        if (result.code != 0) {
+                            layer.msg(result.msg)
+                            return;
+                        }
+                        dataReload(true);
+                    })
+                });
+            }
+		}
+		//加载数据
+		var dataReload = function (isEdit) {
+            if (isEdit) {
+                $(".layui-laypage-btn")[0].click();
+                return;
+            }
+			tableIns.reload({
+				where: common.formatForm($('#filterForm')),page: {
+					pageNo: 1 //重新从第 1 页开始
+                }
+			});
+		}
+		//绑定操作按钮
+		$('.operator-btn').on('click', function(){
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		});
+        //监听工具条
+        table.on('tool(table-role)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, [obj.data]) : '';
+        });
+	});
+</script>
+</@footer>

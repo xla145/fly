@@ -1,0 +1,21 @@
+<div style="margin: 15px; display:none" id="update-pwd-form">
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label layui-title">新的登录密码:</label>
+			<div class="layui-input-inline">
+				<input type="password" name="pswd" placeholder="请输入新密码" class="layui-input" lay-verify="required" id="pwd">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label layui-title">确认新的登录密码:</label>
+			<div class="layui-input-inline">
+				<input type="password" placeholder="请输入新密码" class="layui-input" lay-verify="use_pwd">
+			</div>
+		</div>
+	</form>
+</div>
+<style type="text/css">
+	.layui-title{
+		width: 120px;
+	}
+</style>

@@ -1,0 +1,115 @@
+.layui-steps--horizontal {
+    white-space: nowrap;
+}
+.layui-steps {
+    display: flex;
+}
+.layui-step {
+    position: rlayuiative;
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+}
+.layui-step.is-horizontal {
+    display: inline-block;
+}
+.layui-step.is-center .layui-step__head, .layui-step.is-center .layui-step__main {
+    text-align: center;
+}
+.layui-step__head {
+    position: relative;
+    width: 100%;
+}
+.layui-step__head.is-finish {
+    color: #009688;
+    border-color: #009688;
+}
+.layui-step__line {
+    position: absolute;
+    border-color: inherit;
+    background-color: #c0c4cc;
+}
+.layui-step.is-horizontal .layui-step__line {
+    height: 2px;
+    top: 11px;
+    left: 0;
+    right: 0;
+}
+.layui-step.is-center .layui-step__line {
+    left: 50%;
+    right: -50%;
+}
+.layui-step__line-inner {
+    display: block;
+    border-width: 1px;
+    border-style: solid;
+    border-color: inherit;
+    -webkit-transition: .15s ease-out;
+    transition: .15s ease-out;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 0;
+    height: 0;
+}
+.layui-step__icon-inner {
+    display: inline-block;
+    -ms-user-slayuiect: none;
+    user-select: none;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1;
+    color: inherit;
+}
+.layui-step__icon.is-text {
+    border-radius: 50%;
+    border: 2px solid;
+    border-color: inherit;
+}
+.layui-step__icon {
+    position: relative;
+    z-index: 1;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #fff;
+    -webkit-transition: .15s ease-out;
+    transition: .15s ease-out;
+}
+.layui-step:last-of-type .layui-step__line {
+    display: none;
+}
+.layui-step__main {
+    white-space: normal;
+    text-align: left;
+}
+.layui-step__title.is-finish {
+    color: #009688;
+}
+.layui-step__title {
+    font-size: 16px;
+    line-height: 38px;
+}
+.layui-step.is-center .layui-step__description {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+.layui-step__description.is-finish {
+    color: #009688;
+}
+.layui-step__description {
+    padding-right: 10%;
+    margin-top: -5px;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 400;
+}

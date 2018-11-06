@@ -1,0 +1,235 @@
+/* 布局 */
+#admin-body {
+    left: 200px;
+    border-left: 0px;
+    bottom: 0px;
+}
+
+#admin-side {
+    border-right: 2px solid #1AA094;
+}
+
+/* 头部 */
+.header {
+    border-bottom: 1px solid #404553;
+    background-color: #393D49;
+    color: #fff;
+}
+
+.admin-contextmenu {
+    position: absolute;
+    line-height: 36px;
+    padding: 5px 0;
+    border: 1px solid #d2d2d2;
+    background-color: white;
+    z-index: 19940201;
+    border-radius: 2px;
+    white-space: nowrap;
+    top: 30px;
+    /*width: 100px;height: 200px; */
+}
+
+.admin-contextmenu ul li {
+    padding: 0 15px;
+}
+
+.admin-contextmenu ul li:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+
+/* 控制菜单按钮样式*/
+.layui-header .layui-main .side-menu-switch {
+    float: left;
+    margin-right: 10px;
+}
+
+.layui-header .layui-main .side-menu-switch span.switch {
+    display: block;
+    width: 27px;
+    height: 30px;
+    margin-top: 17px;
+    margin-left: 5px;
+    padding: 0px;
+    background: url('../images/menu.png') center center no-repeat;
+    background-color: #ffffff;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+.layui-layout-admin .layui-main {
+    margin: 0;
+}
+
+.logo {
+    float: left;
+    padding: 0 10px;
+}
+
+.weather {
+    color: #fff;
+    float: left;
+    margin: 15px 0 0 25px;
+}
+
+.layui-form-select dl {
+    max-height: 200px !important;
+}
+
+.layui-nav .layui-nav-item > a {
+    color: #fff;
+}
+
+.top_menu {
+    position: absolute;
+    right: 0;
+    background: none
+}
+
+.top_menu.layui-nav .layui-this:after {
+    width: 0px;
+}
+
+.top_menu.layui-nav .layui-this, .closeBox.layui-nav .layui-this {
+    background-color: transparent;
+}
+
+.top_menu.layui-nav .layui-this a, .closeBox.layui-nav .layui-this a {
+    color: #c2c2c2;
+}
+
+.top_menu.layui-nav dd.layui-this a, .closeBox.layui-nav dd.layui-this a {
+    color: #333;
+}
+
+.top_menu.layui-nav .layui-nav-child a:hover, .closeBox.layui-nav .layui-nav-child a:hover {
+    color: #fff;
+    background-color: #5FB878;
+}
+
+.top_menu .iconfont {
+    font-size: 14px !important;
+}
+
+.top_menu .layui-nav-bar {
+    top: 60px !important;
+    background-color: rgba(0, 0, 0, 0.7)
+}
+
+/* 底部 */
+.footer {
+    padding: 30px 0;
+    line-height: 30px;
+    text-align: center;
+    background-color: #eee;
+    color: #666;
+    font-weight: 300;
+}
+
+.footer a {
+    padding: 0 5px;
+}
+
+
+.admin-nav-card {
+    margin-top: 5px;
+}
+
+.admin-nav-card .layui-icon {
+    position: relative;
+}
+
+.admin-nav-card .layui-tab-item iframe {
+    width: 100%;
+    border: 0;
+    height: 100%;
+}
+
+.admin-nav-card > .layui-tab-title {
+    border-bottom: 1px solid #1AA094;
+}
+
+.admin-nav-card .layui-tab-title cite {
+    font-style: normal;
+    padding-left: 5px;
+}
+
+.admin-nav-card > .layui-tab-title .layui-this {
+    color: white;
+    background-color: #1AA094;
+}
+
+.admin-nav-card > .layui-tab-title .layui-this:after {
+    border-bottom: 0;
+}
+
+.layui-nav-tree .layui-nav-child a {
+    cursor: pointer;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 12px;
+}
+.layui-nav-item .layui-icon {
+    position: relative; /*font-size: 20px;*/
+}
+
+.layui-nav-item a cite {
+    padding: 0 10px;
+}
+
+.admin-header-user img {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+
+.admin-header-user .layui-nav-mored {
+    top: 26px;
+}
+
+/* 适配多设备 */
+@media screen and (max-width: 750px) {
+    .layui-main {
+        width: auto;
+        margin: 0 10px;
+    }
+
+    .logo,
+    .header-demo .logo {
+        left: 10px;
+    }
+
+    .site-nav-layim {
+        display: none !important;
+    }
+
+    .header .layui-nav .layui-nav-item {
+        margin: 0;
+    }
+
+    .header .layui-nav .layui-nav-item a {
+        padding: 0 15px;
+    }
+}
+.layui-nav .layui-nav-item::hover {
+    background-color: #009688;
+}
+
+/** 导航栏字体 **/
+.layui-nav * {
+    font-size: 13px;
+}
+
+ul, ol, dl {
+    margin-top: 0 !important;
+    margin-bottom: 0px !important;
+}
+
+dd {
+    margin-left: 0 !important;
+}
+
+.admin-main {
+    margin: 10px;
+}

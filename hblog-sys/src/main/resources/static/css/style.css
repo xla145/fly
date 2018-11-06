@@ -1,0 +1,592 @@
+body {
+    font-size: 12px;
+}
+
+.admin-wrap {
+    margin: 5px;
+}
+
+.site-title {
+    padding: 8px 10px;
+    font-weight: bold;
+}
+
+/**筛选标题*/
+.layui-filtrate-title {
+    margin-left: 5px;
+}
+
+.layui-elem-quote {
+    padding: 5px;
+}
+
+#admin-main .layui-table-view {
+    position: relative;
+    margin: 0px 0;
+    overflow: hidden;
+}
+
+.layui-form-pane .layui-form-label {
+    width: 110px;
+    height: 35px;
+    line-height: 18px;
+    border: 1px solid #e6e6e6;
+    border-radius: 2px 0 0 2px;
+    text-align: center;
+    background-color: #FBFBFB;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+.layui-form-item {
+    margin-bottom: 6px;
+    clear: both;
+}
+
+.layui-input, .layui-textarea, .layui-select {
+    height: 35px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.layui-upload-drag {
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    border: 1px dashed #e2e2e2;
+    background-color: #fff;
+    text-align: center;
+    cursor: pointer;
+    color: #999;
+}
+
+.layui-upload-img {
+    width: 150px;
+    max-height: 130px;
+    margin: 0 10px 10px 0;
+}
+
+.layui-img-item {
+    /*width: 150px;*/
+    float: left;
+    position: relative;
+}
+
+.layui-upload-list {
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+/*div#img-list {*/
+/*height: 130px;*/
+/*}*/
+.layui-fun-list {
+    width: 150px;
+    position: absolute;
+    background-color: rgba(239, 234, 234, 0.53);
+    top: 0px;
+}
+
+span.del-img {
+    margin-left: 70px;
+    cursor: pointer;
+}
+
+.layui-form-label span {
+    color: red;
+    font-weight: bold;
+}
+
+/**筛选条件 加一个外边距*/
+#filterForm .layui-inline {
+    margin-bottom: 5px;
+}
+
+/**旅游样式*/
+.layui-form-save {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.layui-form-item .layui-input-travel {
+    width: 350px;
+}
+
+.layui-block.layui-add-day {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+    z-index: 8000;
+}
+
+.layui-form-label span {
+    color: red;
+    font-weight: bold;
+}
+
+div#img-url {
+    width: 222px;
+}
+
+div.icon-url {
+    width: 122px;
+}
+
+.coupon-name {
+    width: 120px;
+}
+
+.coupon-count {
+    padding: 0 10px 0 0;
+    color: #ed0d0d;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+h2.layui-colla-title {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 12px;
+}
+
+i.layui-icon.layui-colla-icon {
+    font-size: 12px;
+}
+
+.layui-colla-content {
+    display: none;
+    padding: 6px 5px;
+    line-height: 22px;
+    border-top: 1px solid #e2e2e2;
+    color: #666;
+}
+
+/*.layui-tab-content {*/
+/*padding: 0px;*/
+/*}*/
+.layui-form-pane .layui-form-text .layui-textarea {
+    min-height: 75px;
+    border-radius: 0px 0px 2px 2px;
+}
+
+/*下拉多选*/
+.layui-form-item select[multiple] + .layui-form-select dd {
+    padding: 0;
+}
+
+.layui-form-item select[multiple] + .layui-form-select .layui-form-checkbox[lay-skin=primary] {
+    margin: 0 !important;
+    display: block;
+    line-height: 36px !important;
+    position: relative;
+    padding-left: 26px;
+}
+
+.layui-form-item select[multiple] + .layui-form-select .layui-form-checkbox[lay-skin=primary] span {
+    line-height: 36px !important;
+    float: none;
+}
+
+.layui-form-item select[multiple] + .layui-form-select .layui-form-checkbox[lay-skin=primary] i {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    margin-top: 9px;
+}
+
+.multiSelect {
+    line-height: normal;
+    height: auto;
+    padding: 4px 10px;
+    overflow: hidden;
+    min-height: 35px;
+    margin-top: -35px;
+    left: 0;
+}
+
+.multiSelect a {
+    padding: 2px 5px;
+    background: #908e8e;
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    line-height: 20px;
+    height: 20px;
+    margin: 2px 5px 2px 0;
+    float: left;
+}
+
+.multiSelect a span {
+    float: left;
+}
+
+.multiSelect a i {
+    line-height: 17px;
+    font-size: 14px !important;
+    float: left;
+    margin: 2px 0 0 2px;
+    padding: 0 3px;
+    border-radius: 2px;
+}
+
+.multiSelect a i:hover {
+    background: #545556;
+}
+
+.quote-mini {
+    padding: 5px 0 5px 5px;
+}
+
+.item-right {
+    padding-right: 10px;
+    float: right;
+}
+
+.font-bolder {
+    font-weight: bolder;
+}
+
+.chunk-wrap.chunk-wrap-role {
+    width: 614px;
+}
+
+.chunk-wrap .chunk {
+    padding-bottom: 10px;
+    border: 1px solid #009688;
+    float: left;
+    margin-right: 10px;
+    overflow: auto;
+}
+
+.chunk-wrap .chunk .title {
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #009688;
+    text-align: center;
+    color: #fff;
+}
+
+.chunk-wrap.chunk-wrap-role .chunk.role-chunk {
+    height: 356px;
+}
+
+.chunk-wrap .chunk.role-chunk {
+    width: 200px;
+    text-align: center;
+}
+
+.chunk-wrap.chunk-wrap-role .chunk.action-chunk {
+    height: 356px;
+    margin-right: 0;
+}
+
+.chunk-wrap .chunk.action-chunk {
+    width: 400px;
+}
+
+.chunk-wrap .chunk.action-detail-chunk {
+    width: 460px;
+}
+
+.chunk-wrap.chunk-wrap-role .action-box, .role-box {
+    height: 300px;
+}
+
+.chunk-wrap .chunk.action-detail-chunk form {
+    width: 90%;
+}
+
+.chunk-wrap .chunk.action-detail-chunk .layui-form-item {
+    margin-bottom: 5px;
+}
+
+.chunk-wrap .chunk.action-detail-chunk .layui-form-label {
+    padding: 5px 15px;
+}
+
+.chunk-wrap .chunk.action-detail-chunk form .layui-input, .layui-select, .layui-textarea {
+    height: 26px;
+    line-height: 26px;
+
+    color: #ccc;
+}
+
+.chunk-wrap .chunk .role-item {
+    padding: 0 10px;
+    color: #fff;
+    background: #999;
+    border-bottom: 1px solid #fff;
+    height: 36px;
+    line-height: 36px;
+    cursor: pointer;
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+.chunk-wrap .chunk .role-item-plain {
+    height: 36px;
+    padding: 0 10px;
+    text-align: left;
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+.chunk-wrap .chunk .role-item .layui-icon {
+    float: right;
+}
+
+.chunk-wrap .chunk .role-item:hover {
+    background: #009688;
+}
+
+.chunk-wrap .chunk .role-item.active {
+    background: #009688;
+}
+
+.chunk-wrap .chunk .action-box, .role-box {
+    margin: 0 10px;
+    overflow: auto;
+}
+
+#actionBox input {
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+}
+
+#actionBox .layui-icon {
+    width: 24px;
+    font-size: 18px;
+}
+
+.jOrgChart .line {
+    height: 20px;
+    width: 2px;
+}
+
+.jOrgChart .down {
+    background-color: #FF5722;
+    margin: 0px auto;
+}
+
+.jOrgChart .top {
+    border-top: 2px solid #FF5722;
+}
+
+.jOrgChart .left {
+    border-right: 1px solid #FF5722;
+}
+
+.jOrgChart .right {
+    border-left: 1px solid #FF5722;
+}
+
+.jOrgChart td {
+    padding: 0;
+    text-align: center;
+    vertical-align: top;
+    font-size: 0;
+}
+
+.jOrgChart table {
+    width: 100%;
+    border-collapse: inherit;
+}
+
+.jOrgChart .node {
+    position: relative;
+    display: inline-block;
+    margin: 0 8px;
+    padding: 0 10px;
+    background: #009688;
+    min-width: 96px;
+    height: 52px;
+    line-height: 52px;
+    z-index: 10;
+    border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+}
+
+.jOrgChart .node-cell {
+    position: relative;
+}
+
+.jOrgChart .node a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+    text-decoration: none;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.jOrgChart .drag-active {
+    border-style: dotted !important;
+}
+
+.jOrgChart .drop-hover {
+    border-style: solid !important;
+    border-color: #E05E00 !important;
+}
+
+.jOrgChart .pucker {
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    margin-left: -7px;
+    top: 53px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    -webkit-background-size: 14px 14px;
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+}
+
+.jOrgChart .pucker.fold {
+    background-image: url(../images/fold.png);
+}
+
+.jOrgChart .pucker.unfold {
+    background-image: url(../images/unfold.png);
+}
+
+.layui-table-flex {
+    margin: 10px 0;
+}
+
+.layui-table-flex table {
+    width: auto;
+}
+
+.layui-table-flex table td, th {
+    padding: 0px 15px;
+    min-height: 20px;
+    line-height: initial;
+}
+
+.layui-table-wrap {
+    position: relative;
+    overflow: hidden;
+}
+
+.layui-table-wrap .layui-table {
+    padding: 0;
+    margin: 0;
+}
+
+.layui-table-wrap .fixed-left .layui-table, .fixed-right .layui-table {
+    table-layout: fixed;
+}
+
+.layui-table-wrap .layui-table-float {
+    padding-bottom: 5px;
+    width: 100%;
+    overflow: auto;
+}
+
+.layui-table-wrap .layui-table-fixed {
+    position: absolute;
+    top: 0;
+}
+
+.layui-table-wrap .layui-table-fixed.fixed-left {
+    left: 0;
+    width: 200px;
+}
+
+.layui-table-wrap .layui-table-fixed.fixed-right {
+    right: 0;
+    width: 200px;
+}
+
+.layui-table-wrap .float-box {
+    width: 100000px;
+}
+
+.layui-table-wrap .left-box {
+    position: relative;
+    overflow: hidden;
+    left: 0;
+    float: left;
+    width: 100%;
+    box-shadow: 1px 0 8px #c2c2c2;
+    table-layout: fixed;
+}
+
+.layui-table-wrap .right-box {
+    position: relative;
+    overflow: hidden;
+    left: 0;
+    float: right;
+    width: 100%;
+    box-shadow: -1px 0 8px #c2c2c2;
+    table-layout: fixed;
+}
+
+.layui-table-wrap .fixed-right .layui-table {
+    float: right;
+}
+
+.layui-textarea {
+    height: 26px;
+    line-height: 26px;
+    color: #0C0C0C;
+}
+
+/**预览按钮*/
+#travel-preview {
+    position: fixed;
+    top: 20px;
+    right: 40px;
+    z-index: 198910163000;
+}
+
+/** 表单页面 样式*/
+.form-content {
+    margin: 10px 0px 0px 100px;
+}
+
+.layui-form-item.layui-fixed {
+    margin-top: 20px;
+    position: fixed;
+    right: 20px;
+    bottom: 10px;
+}
+.layui-value-list a {
+    padding: 2px 5px;
+    background: #908e8e;
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    line-height: 20px;
+    height: 20px;
+    margin: 5px 5px 2px 0;
+    float: left;
+}
+.layui-value-list a span {
+    float: left;
+}
+.layui-value-list a i {
+    line-height: 17px;
+    font-size: 14px !important;
+    float: left;
+    margin: 2px 0 0 2px;
+    padding: 0 3px;
+    border-radius: 2px;
+}

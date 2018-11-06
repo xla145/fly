@@ -1,0 +1,45 @@
+*{margin:0; padding:0;}
+ul,li{ list-style: none; }
+.tree-table-content{position: relative; border:1px solid #e2e2e2;}
+.treetable-node{ font-size: 0 }
+.treetable-node .tree-table-spread{ display: inline-block; vertical-align: -1px; margin-left: 3px; }
+.tree-table-header{font-size: 0;}
+.tree-table-header ul li {background: #f2f2f2;}
+.tree-table-header .node-treetable-label{ border-top:0; }
+.tree-table-cell{display: inline-block;font-size: 13px; height:34px; line-height: 34px; padding: 0px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;}
+.tree-table-cell.title span{padding:0 5px;}
+.tree-table-cell i{ font-size: 16px; }
+.node-treetable-label{display: inline-block; border-right: 1px solid #e2e2e2; box-sizing: border-box; border-top:1px solid #e2e2e2;}
+.treetable-node-content{display: inline-block; transition: background .2s;}
+.treetable-node-content:hover{ background: #fbfbfb; }
+.treetable-node-chilrden{display: none;}
+.treetable-node-chilrden .treetable-node-content .title{ padding-left: 34px; }
+.treetable-node-chilrden .treetable-node-chilrden .treetable-node-content .title{ padding-left: 51px; }
+.treetable-node-chilrden .treetable-node-chilrden .treetable-node-chilrden .treetable-node-content .title{ padding-left: 68px; }
+.treetable-node-chilrden .treetable-node-chilrden .treetable-node-chilrden .treetable-node-chilrden .treetable-node-content .title{ padding-left: 85px; }
+.treetable-node .layui-icon.active{ transform: rotate(90deg);}
+.treetable-node .tree-table-show{ display: block; }
+
+
+.treetable-node div.treetableTableCheck{position: relative; width: 16px; height: 16px; display: inline-block; vertical-align: -3px; }
+.treetable-node div.treetableTableCheck input,
+.treetable-node div.treetableTableCheck i{ display: block; position: absolute; width: 100%; height: 100%; border-radius: 2px;}
+.treetable-node div.treetableTableCheck input{ opacity: 0; z-index: 1 }
+.treetable-node div.treetableTableCheck i{z-index: 0 }
+.treetable-node div.treetableTableCheck i{ border:1px solid #bdbdbd; box-sizing: border-box;}
+.treetable-node div.treetableTableCheck input:hover ~ i{ border-color:#5FB878; }
+.treetable-node div.treetableTableCheck input:checked ~ i{ background: #5FB878;border-color:#5FB878; }
+.treetable-node div.treetableTableCheck input ~ i:after{position: absolute; content: ""; left:4px;top:1px; border:2px solid #fff; border-top:none;border-left: none; width: 4px; height: 8px;
+  transform:-webkit-transform: rotate(45deg) scale(0);
+    -ms-transform: rotate(45deg) scale(0);
+    -o-transform: rotate(45deg) scale(0);
+    transform: rotate(45deg) scale(0);
+    transition:all .2s; }
+
+.treetable-node div.treetableTableCheck input:checked ~ i:after{
+  transform:-webkit-transform: rotate(45deg) scale(1);
+      -ms-transform: rotate(45deg) scale(1);
+      -o-transform: rotate(45deg) scale(1);
+      transform: rotate(45deg) scale(1); }
+
+.treetable-node div.treetableTableCheck input[type="radio"] ~ i{border-radius: 50%;}

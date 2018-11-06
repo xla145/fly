@@ -1,0 +1,48 @@
+<div class="layui-header header">
+	<div class="layui-main">
+		<div class="logo">
+			<a href="${ctx}index.html">
+				<img src="${assets}images/logo.png" width="200px">
+			</a>
+		</div>
+		<!-- 显示/隐藏菜单 -->
+		<div class="side-menu-switch posb" id="toggle"><span class="switch"  ara-hidden="true"></span></div>
+		<!-- 天气信息 -->
+		<div class="weather" pc>
+			<div id="tp-weather-widget"></div>
+			<script>(function(T,h,i,n,k,P,a,g,e){g=function(){P=h.createElement(i);a=h.getElementsByTagName(i)[0];P.src=k;P.charset="utf-8";P.async=1;a.parentNode.insertBefore(P,a)};T["ThinkPageWeatherWidgetObject"]=n;T[n]||(T[n]=function(){(T[n].q=T[n].q||[]).push(arguments)});T[n].l=+new Date();if(T.attachEvent){T.attachEvent("onload",g)}else{T.addEventListener("load",g,false)}}(window,document,"script","tpwidget","//widget.seniverse.com/widget/chameleon.js"))</script>
+			<script>tpwidget("init", {
+                "flavor": "slim",
+                "location": "WX4FBXXFKE4F",
+                "geolocation": "enabled",
+                "language": "zh-chs",
+                "unit": "c",
+                "theme": "chameleon",
+                "container": "tp-weather-widget",
+                "bubble": "disabled",
+                "alarmType": "badge",
+                "color": "#FFFFFF",
+                "uid": "U9EC08A15F",
+                "hash": "039da28f5581f4bcb5c799fb4cdfb673"
+            });
+            tpwidget("show");</script>
+		</div>
+		<!-- 顶部右侧菜单 -->
+		<ul class="layui-nav top_menu">
+			<!--<li class="layui-nav-item lockcms">-->
+				<!--<a href="javascript:;"><i class="layui-icon icon-password"></i><cite>锁屏</cite></a>-->
+			<!--</li>-->
+			<li class="layui-nav-item">
+				<a href="javascript:;">
+					<img src="${assets}test/1.png" class="layui-circle" width="35" height="35">
+					<cite><@shiro.principal property="realName"/></cite>
+				</a>
+				<dl class="layui-nav-child">
+					<dd><a href="javascript:void(0);" class="operator-btn" data-type="userInfo" data-url="${ctx}sysuser/getUserInfo"> 个人资料</a></dd>
+					<dd><a href="javascript:void(0);" class="operator-btn" data-type="clearCache"><i class="fa fa-clear-cache" aria-hidden="true"></i> 清除缓存</a></dd>
+					<dd><a href="javascript:void(0);" class="operator-btn" data-type="loginOut"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a></dd>
+				</dl>
+			</li>
+		</ul>
+	</div>
+</div>

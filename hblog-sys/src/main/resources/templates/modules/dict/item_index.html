@@ -1,0 +1,139 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="admin-main">
+	<blockquote class="layui-elem-quote">
+		<@shiro.hasPermission name="dict:item:getView,dict:item:add">
+		<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
+		</@shiro.hasPermission>
+		<span style="font-weight: bold;color: #E05E00">&nbsp;&nbsp;当前的组信息：(&nbsp;&nbsp;ID：${data.id!''} &nbsp;&nbsp;|&nbsp;&nbsp; 组描述：${data.info!''} &nbsp;|&nbsp; 组编码：${data.code!''})</span>
+	    <input type="hidden" id="groupId" value="${data.id!''}">
+		<input type="hidden" id="groupCode" value="${data.code!''}">
+	</blockquote>
+	<!-- 表格区域 -->
+	<table id="dict-item-table" lay-filter="image-text-item-table"></table>
+	<script type="text/html" id="bar">
+		<@shiro.hasPermission name="dict:item:getView,dict:item:edit">
+		<a class="layui-btn layui-btn-xs operator-btn" lay-event="edit">编&nbsp;&nbsp;辑</a>
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="dict:item:del">
+		<a class="layui-btn layui-btn-xs operator-btn layui-btn-danger" lay-event="del">删&nbsp;&nbsp;除</a>
+		</@shiro.hasPermission>
+	</script>
+</div>
+<@footer>
+<script>
+//入口
+layui.use(['table','layer','form','common'], function(){
+	var table = layui.table, layer = layui.layer, form = layui.form,common = layui.common;
+    //自定义验证规则
+    form.verify({
+        remark: function (value) {
+            if(!/^.{5,250}$/.test(value)){
+                return '备注必须在5到250个字符之内！';
+            }
+        },
+    });
+	//列表渲染
+	var tableIns = table.render({
+	  elem: '#dict-item-table'
+	  ,id: 'dict-item-table'
+	  ,url: '${ctx}dict/item/list'
+	  ,height: 'full-130'
+	  ,page: true
+      ,method: 'post'
+	  ,request: {
+		pageName: 'pageNo' //页码的参数名称，默认：page
+		,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+      },
+	  where: {code: $("#groupCode").val()}
+      ,limits: [15,30,60,90,120]
+	  ,limit: 15
+	  ,size: 'sm'
+	  ,cols: [[
+	            {checkbox: true, fixed: true}
+	            ,{field:'name', title: '项名称', minWidth:100}
+	            ,{field:'value', title: '项值', minWidth:200,}
+	            ,{field:'info', title: '描述', width:150}
+	            ,{fixed: 'right', width:150, title: '操作', toolbar: '#bar'}
+	        ]],
+	});
+	
+	//操作
+	var active = {
+        add: function(){
+            common.editForm({
+                maxmin: false,
+				content: "${ctx}dict/item/getView",
+				title: "添加组信息",
+				area: ['600px','350px'],
+                yes: function (index, layero) {
+                    var formEm = $(layero).find('iframe').contents().find("#save-form");
+                    if (!form.onVerify(formEm)) {
+                        return false;
+                    }
+                    /**表单提交 **/
+                    $.post('${ctx}dict/item/add', formEm.serialize() + "&groupId=" + $("#groupId").val() + "&groupCode=" + $("#groupCode").val(), function (result) {
+                        if (result.code == 0) {
+                            tableIns.reload();
+                            layer.close(index);	//关闭弹框
+                            return;
+                        }
+                        layer.msg(result.msg);
+                    });
+                }
+            })
+        },
+        edit: function(data){
+            if (data == "") {
+                layer.msg("请选择一条数据进行编辑！");
+                return;
+            }
+            common.editForm({
+                maxmin: false,
+                content: "${ctx}dict/item/getView?id="+data.id,
+                title: "添加组信息",
+                area: ['600px','350px'],
+                yes: function (index, layero) {
+                    var formEm = $(layero).find('iframe').contents().find("#save-form");
+                    if (!form.onVerify(formEm)) {
+                        return false;
+                    }
+                    /**表单提交 **/
+                    $.post('${ctx}dict/item/edit', formEm.serialize() + "&groupCode=" + $("#groupCode").val(), function (result) {
+                        if (result.code == 0) {
+                            tableIns.reload();
+                            layer.close(index);	//关闭弹框
+                            return;
+                        }
+                        layer.msg(result.msg);
+                    });
+                }
+            })
+        },
+		del: function (data) {
+            layer.confirm('真的删除行么', function(index){
+                layer.close(index);
+                common.post("${ctx}dict/item/del",{id: data.id},function (result) {
+                    if (result.code == 0) {
+                        tableIns.reload();
+                        return;
+                    }
+                    layer.msg(result.msg);
+                })
+            });
+        }
+	}
+
+	//绑定操作按钮
+  	$('.operator-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+  	});
+    //监听工具条
+    table.on('tool(image-text-item-table)', function(obj){
+        var type = obj.event;
+        active[type] ? active[type].call(this, obj.data) : '';
+    });
+});
+</script>
+</@footer>

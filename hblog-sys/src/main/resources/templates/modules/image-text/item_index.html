@@ -1,0 +1,171 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="admin-main">
+	<blockquote class="layui-elem-quote">
+		<@shiro.hasPermission name="imageTextItem:add,imageTextItem:getView">
+		<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
+		</@shiro.hasPermission>
+		<span style="font-weight: bold;color: #E05E00">&nbsp;&nbsp;当前的组信息：(&nbsp;&nbsp;ID：${data.id!''} &nbsp;&nbsp;|&nbsp;&nbsp; 组名：${data.name!''} &nbsp;|&nbsp; 组编码：${data.code!''})</span>
+	    <input type="hidden" id="groupId" value="${data.id!''}">
+		<input type="hidden" id="groupCode" value="${data.code!''}">
+	</blockquote>
+	<!-- 表格区域 -->
+	<table id="image-text-item-table" lay-filter="image-text-item-table"></table>
+	<script type="text/html" id="bar">
+		<@shiro.hasPermission name="imageTextItem:edit,imageTextItem:getView">
+		<a class="layui-btn layui-btn-xs operator-btn" lay-event="edit">编&nbsp;&nbsp;辑</a>
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name="imageTextItem:del">
+		<a class="layui-btn layui-btn-xs operator-btn layui-btn-danger" lay-event="del">删&nbsp;&nbsp;除</a>
+		</@shiro.hasPermission>
+	</script>
+</div>
+<@footer>
+<script>
+//入口
+layui.use(['table','layer','form','common'], function(){
+	var table = layui.table, layer = layui.layer, form = layui.form,common = layui.common;
+    //自定义验证规则
+    form.verify({
+        purpose: function (value) {
+            if(!/^.{5,250}$/.test(value)){
+                return '组用途必须在5到250个字符之内！';
+            }
+        },
+        url: function (value) {
+            if (value !="" && !/(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/.test(value)) {
+                return '链接格式不正确';
+            }
+        }
+    });
+	//列表渲染
+	var tableIns = table.render({
+	  elem: '#image-text-item-table'
+	  ,url: '${ctx}imageTextItem/list'
+	  ,height: 'full-130'
+	  ,page: true
+      ,method: 'post'
+	  ,request: {
+		pageName: 'pageNo' //页码的参数名称，默认：page
+		,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+      },
+	  where: {groupId: $("#groupId").val()}
+      ,limits: [15,30,60,90,120]
+	  ,limit: 15
+	  ,size: 'sm'
+	  ,cols: [[
+	            {checkbox: true, fixed: true}
+	            ,{field:'title', title: '文字标题', minWidth:100}
+	            ,{field:'imgUrl', title: '图片信息', width:130,templet: '#imgUrlTpl',event: 'showImage'}
+	            ,{field:'url', title: '链接地址', minWidth:200,}
+	            ,{field:'weight', title: '权重', width:80, sort: true}
+	            ,{field:'createTime', title: '创建时间', width:150, templet: '<div>{{dateFormat(d.createTime)}}</div>'}
+				,{field:'updateTime', title: '更新时间', width:150, templet: '<div>{{dateFormat(d.updateTime)}}</div>'}
+	            ,{field:'remark', title: '备注', width:150}
+	            ,{fixed: 'right', width:150, title: '操作', toolbar: '#bar'}
+	        ]],
+	});
+	
+	//操作
+	var active = {
+        add: function(){
+            common.editForm({
+				content:'${ctx}imageTextItem/getView',
+				title:'添加组信息',
+				yes:function (index, layero) {
+                    var formEm = $(layero).find('iframe').contents().find("#save-form");
+                    if (!form.onVerify(formEm)){
+                        return false;
+                    }
+                    /**表单提交 **/
+                    $.post('${ctx}imageTextItem/add', formEm.serialize()+"&groupId="+$("#groupId").val()+"&groupCode="+$("#groupCode").val(), function(result){
+                        if(result.code == 0){
+                            dataSearch(); //刷新表格数据
+                            formEm[0].reset();	//清空弹框表单内容
+                            layer.close(index);	//关闭弹框
+                            return;
+                        }
+                        layer.msg(result.msg);
+                    });
+                },
+				isFull: true
+			});
+        },
+        edit: function(data){
+            if (data == "") {
+                layer.msg("请选择一条数据进行编辑！");
+                return;
+            }
+            common.editForm({
+				content:'${ctx}imageTextItem/getView?id='+data.id,
+				title:'修改组信息',
+				yes:function (index, layero) {
+                    var formEm = $(layero).find('iframe').contents().find("#save-form");
+                    if (!form.onVerify(formEm)){
+                        return false;
+                    }
+                    /**表单提交 **/
+                    $.post('${ctx}imageTextItem/edit', formEm.serialize(), function(result){
+                        if(result.code == 0){
+                            dataSearch(true);
+                            formEm[0].reset();	//清空弹框表单内容
+                            layer.close(index);	//关闭弹框
+                            return;
+                        }
+                        layer.msg(result.msg);
+                    });
+                },
+				isFull: true
+			});
+        },
+		search: function () {
+			dataSearch();
+        },
+        showImage: function (data) {
+            var url = data.imgUrl;
+            common.showImage(url,500)
+        },
+		del: function (data) {
+            layer.confirm('真的删除行么', function(index){
+                layer.close(index);
+                common.post("${ctx}imageTextItem/del",{id: data.id},function (result) {
+                    if (result.code == 0) {
+                        dataSearch(true);
+                        return;
+                    }
+                    layer.msg(result.msg);
+                })
+            });
+        }
+	}
+
+	//搜索
+	var dataSearch = function (isEdit) {
+	    if (isEdit) {
+            $(".layui-laypage-btn")[0].click();
+            return;
+		}
+        tableIns.reload({
+            where: {groupId: $("#groupId").val(),page: {
+                pageNo: 1 //重新从第 1 页开始
+            }}
+        });
+    }
+	//绑定操作按钮
+  	$('.operator-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+  	});
+    //监听工具条
+    table.on('tool(image-text-item-table)', function(obj){
+        var type = obj.event;
+        active[type] ? active[type].call(this, obj.data) : '';
+    });
+});
+</script>
+</@footer>
+<script type="text/html" id="imgUrlTpl">
+	{{# if(d.imgUrl !== null){ }}
+		<img width="150px" src="{{ d.imgUrl }}"/>
+	{{# } }}
+</script>

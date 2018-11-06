@@ -1,0 +1,97 @@
+<#include "_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="layui-layout layui-layout-admin" style="border-bottom: solid 5px #1aa094;">
+    <#include "_layout/common/layout/top-nav.html"><#t>
+    <#include "_layout/common/layout/left-menu.html"><#t>
+    <#include "_layout/common/layout/body.html"><#t>
+    <#include "_layout/common/layout/bottom.html"><#t>
+</div>
+<@footer>
+<script>
+    layui.config({
+        base: '/static/' // 其他js 目录
+    }).extend({
+        index: 'lib/index'
+    }).use(['index'], function () {
+        var $ = layui.jquery, layer = layui.layer,admin = layui.index;
+        //操作
+        var active = {
+            //退出登录
+            loginOut: function () {
+                layer.confirm('您确定要退出该系统？', function () {
+                    $.get("${ctx}sys/loginOut", function (result) {
+                        if (result.code == 0) {
+                            layer.msg(result.msg, {icon: 1, time: 1200});
+                            setInterval(function () {
+                                window.location.href = '${ctx}login.html';
+                            }, 1000)
+                        }
+                    });
+                });
+            },
+            //清除缓存
+            clearCache: function () {
+                layer.confirm('您确定要清除缓存？', function () {
+                    admin.cleanCached();
+                    $.get("${ctx}clearCache", function (result) {
+                        if (result.code == 0) {
+                            layer.msg(result.msg, {icon: 1, time: 1000});
+                            return;
+                        }
+                        layer.msg(result.msg, {icon: 2, time: 1000});
+                    });
+                });
+            },
+            userInfo: function () {
+                var href = $(this).data('url');
+                var data = {
+                    field: {
+                        href: href,
+                        icon: "",
+                        title: "个人信息"
+                    }
+                }
+                admin.tabAdd(data);
+            }
+        }
+        //绑定操作按钮
+        $('.operator-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        // 顶部左侧导航控制开关
+        $('#toggle').on('click', function () {
+            var sideWidth = $('#admin-side').width();
+            var bodyW = $('#admin-body').width();
+            if (sideWidth === 200) {
+                bodyW += 202;
+                $('#admin-body').animate({
+                    left: '0',
+                    width: bodyW
+                });
+                $('#admin-footer').animate({
+                    left: '0',
+                    width: bodyW
+                });
+                $('#admin-side').animate({
+                    width: '0'
+                });
+            } else {
+                bodyW -= 202;
+                $('#admin-body').animate({
+                    left: '202px',
+                    width: bodyW
+                });
+                $('#admin-footer').animate({
+                    left: '202px',
+                    width: bodyW
+                });
+                $('#admin-side').animate({
+                    width: '200px'
+                });
+            }
+        });
+    });
+</script>
+</@footer>

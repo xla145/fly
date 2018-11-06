@@ -1,0 +1,93 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div style="margin: 15px;" id="edit-form">
+	<form class="layui-form layui-form-pane">
+		<input type="hidden" name="uid" value="${data.uid!''}">
+		<div class="layui-form-item">
+	      <label class="layui-form-label">登录名</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="name" class="layui-input" value="${data.name!''}" readonly>
+	      </div>
+		  <a href="javascript:void(0)" class="layui-btn layui-btn-normal" id="update-pwd"></i>修改密码</a>
+	    </div>
+	    <div class="layui-form-item">
+	      <label class="layui-form-label">真实姓名</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="realName" class="layui-input" value="${data.realName!''}" readonly>
+	      </div>
+	    </div>
+	    <div class="layui-form-item">
+	      <label class="layui-form-label">手机号</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="mobile" class="layui-input" value="${data.mobile!''}" readonly>
+	      </div>
+	    </div>
+	    <div class="layui-form-item">
+	      <label class="layui-form-label">联系qq</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="qq" class="layui-input" value="${data.qq!''}" readonly>
+	      </div>
+	    </div>
+	     <div class="layui-form-item">
+	      <label class="layui-form-label">联系邮箱</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="email" class="layui-input" value="${data.email!''}" readonly>
+	      </div>
+	    </div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">个人介绍</label>
+			<div class="layui-input-block">
+				<textarea name="remark" placeholder="请输入内容" class="layui-textarea" readonly>${data.remark!''}</textarea>
+			</div>
+		</div>
+	</form>
+</div>
+<#include "update_pwd.html"><#t>
+<@footer>
+<script>
+	//入口
+	layui.use(['layer','form'], function(){
+		var $ = layui.jquery;
+		var form = layui.form
+			,layer = layui.layer;
+		//添加
+		//自定义验证规则
+        form.verify({
+            use_pwd: function(value){
+                var pwd = $('#pwd').val();
+                if(value != pwd){
+                    return '两次密码不正确';
+                }
+            }
+        });
+		$('#update-pwd').bind('click', function(){
+		    var formEm = $('#update-pwd-form').find('form');
+			layer.open({
+				title:'修改密码'
+                ,type: 1
+                ,content: $('#update-pwd-form')
+				,area: ['500px', '250px']
+                ,btn: ['确定', '取消',]
+                ,yes: function(index, layero){
+				    if (!form.onVerify(formEm)){
+                        return;
+                    }
+                    //表单提交
+                    $.post('updatePwd',formEm.serialize(),function(result){
+                        if(result.code == 0){
+                            formEm[0].reset();	//清空弹框表单内容
+                            layer.close(index);	//关闭弹框
+							layer.msg("修改密码成功！", {icon: 1, time: 1200});
+							setInterval(function () {
+								window.parent.location.href='${ctx}login.html';
+							},1000);
+							return;
+                        }
+                        layer.msg(result.msg);
+                    });
+                }
+			});
+		})
+	});
+</script>
+</@footer>

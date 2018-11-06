@@ -1,0 +1,113 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+	<@header/>
+	<div style="margin: 15px;">
+		<form class="layui-form" id="save-form">
+			<input type="hidden" name="id" value="${data.id!''}" id="itemId">
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span>*</span>项名称</label>
+				<div class="layui-input-block">
+					<input type="text" name="name" placeholder="请输入项名称" autocomplete="off" class="layui-input" lay-verify="required" value="${data.name!''}">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span>*</span>项值</label>
+				<div class="layui-input-inline">
+					<input type="hidden" name="value" id="realItems" value="${data.value!''}">
+					<input type="text" placeholder="请输入项值" autocomplete="off" class="layui-input layui-value-item">
+				</div>
+				<div class="layui-inline">
+					<a class='layui-btn layui-btn-sm layui-btn-normal operator-btn' data-type='add' style="margin-top: 2px;">添加</a>
+				</div>
+			</div>
+			<div class="layui-input-block layui-value-list">
+
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span>*</span>项描述</label>
+				<div class="layui-input-block">
+					<textarea name="info" placeholder="请输入项描述(250个字符之内)" class="layui-textarea" lay-verify="remark">${data.info!''}</textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+	<@footer>
+	<script>
+        //入口
+        layui.use(['form','common'], function() {
+            var $ = layui.jquery,form = layui.form,common = layui.common;
+            var realItems = $("#realItems").val();
+            if (realItems != "") {
+                let html = "";
+                layui.each(realItems.split(","),function (i,j) {
+					html+="<a href=\"javascript:;\" class=\"operator-btn\" data-type='del'><span>"+j+"</span><i class=\"layui-icon layui-icon-close\"></i></a>"
+                })
+                $(".layui-value-list").empty().append(html);
+			}
+
+			var active = {
+                add: function () {
+                    let item = $(".layui-value-item").val();
+                    if (item.toString().trim() === "") {
+                        layer.msg("内容不能为空！");
+                        return;
+                    }
+                    let realItems = $("#realItems").val();
+                    let items = realItems.split(",")
+                    let index = $.inArray(item,items);
+                    if (index >= 0) {
+                        layer.msg("内容信息已存在！");
+                        return;
+                    }
+                    let html = '<a href="javascript:;" class="operator-btn" data-type="del"><span>'+item+'</span><i class="layui-icon layui-icon-close"></i></a>';
+                    let i = $(".layui-spec-list a").index();
+                    if (i < 0) {
+                        $(".layui-value-list").append(html);
+                    } else {
+                        $(".layui-value-list a").eq(i).after(html);
+                    }
+                    if (realItems === "") {
+                        $("#realItems").val(item);
+                    } else {
+                        $("#realItems").val(realItems+","+item);
+                    }
+                },
+                del: function (that) {
+                    var text = $(that).find("span").text();
+                    $(that).remove();
+                    let realItems = $("#realItems").val();
+                    let items = realItems.split(",").filter(item=>item !== text)
+                    $("#realItems").val(items.join(","));
+                }
+			}
+            //绑定操作按钮
+            $(document).on('click','.operator-btn', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this,this) : '';
+            });
+        });
+	</script>
+</@footer>
+<style type="text/css">
+	.layui-value-list a {
+		padding: 2px 5px;
+		background: #908e8e;
+		border-radius: 2px;
+		color: #fff;
+		display: block;
+		line-height: 20px;
+		height: 20px;
+		margin: 5px 5px 2px 0;
+		float: left;
+	}
+	.layui-value-list a span {
+		float: left;
+	}
+	.layui-value-list a i {
+		line-height: 17px;
+		font-size: 14px !important;
+		float: left;
+		margin: 2px 0 0 2px;
+		padding: 0 3px;
+		border-radius: 2px;
+	}
+</style>

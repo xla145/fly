@@ -1,0 +1,78 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div style="margin: 15px;">
+	<form class="layui-form layui-form-pane" id="save-form">
+		<input type="hidden" name="id" value="${data.id!''}">
+		<div class="layui-form-item">
+			<label class="layui-form-label">文字标题</label>
+			<div class="layui-input-block">
+				<input type="text" name="title" placeholder="请输入文字标题" autocomplete="off" class="layui-input" value="${data.title!''}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<fieldset class="layui-elem-field layui-field-title">
+				<legend>上传图片：</legend>
+			</fieldset>
+			<div class="layui-input-inline">
+				<div class="layui-upload-drag" id="img-url">
+					<#if data.imgUrl??>
+						<input type='hidden' name='imgUrl' value="${data.imgUrl!''}"> <img width='200' src="${data.imgUrl!''}">
+						<#else>
+							<i class="layui-icon"></i>
+							<p>点击上传</p>
+					</#if>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">链接：</label>
+			<div class="layui-input-block">
+				<input type="url" name="url" placeholder="请输入链接" autocomplete="off" class="layui-input" lay-verify="url" value="${data.url!''}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span></span>权重：</label>
+			<div class="layui-input-inline">
+				<input type="number" name="weight" placeholder="请输入权重" autocomplete="off" class="layui-input" lay-verify="required" value="${data.weight!''}">
+			</div>
+			<div class="layui-form-mid layui-word-aux"><span style="color: red;">注意：越小越靠前</span></div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<textarea name="remark" placeholder="请输入备注信息" class="layui-textarea" lay-verify="remark">${data.remark!''}</textarea>
+			</div>
+		</div>
+	</form>
+</div>
+<@footer>
+	<script>
+        //入口
+        layui.use(['upload','form'], function() {
+            var form = layui.form,upload = layui.upload;
+            //拖拽上传
+            upload.render({
+                elem: '#img-url'
+                ,url: '${ctx}oss/product/upload'
+				,size: 1024 //限制文件大小，单位 KB
+                ,acceptMime: 'image/*'
+                ,done: function(res){
+                    if (res.code == -1) {
+                        layer.msg(res.msg);
+                        return;
+                    }
+                    var html = "<input type='hidden' name='imgUrl' value="+res.data[0]+"> <img width='200' src="+res.data[0]+">";
+                    $("#img-url").html(html)
+                }
+            });
+        });
+	</script>
+</@footer>
+<style type="text/css">
+	.layui-elem-field legend {
+		margin-left: 20px;
+		padding: 0 10px;
+		font-size: 12px;
+		font-weight: 500;
+	}
+</style>

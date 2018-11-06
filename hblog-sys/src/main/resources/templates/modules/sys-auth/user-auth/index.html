@@ -1,0 +1,109 @@
+<#include "../../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div class="admin-main">
+	<blockquote class="layui-elem-quote quote-mini">
+		<input type="hidden" id="targetUid" value="${sysUser.uid!''}">
+		<span id="tipe"> 当前正在对 <span id="activeRole" class="font-bolder" style="color:#F00;">${sysUser.name!''}</span> 进行赋权操作，共赋予了<span class="font-bolder" style="color:#F00;" id="count">--</span>项权限</span>
+		<span class="item-right">
+
+			<a href="javascript:void(0);" id="authSave" class="layui-btn layui-btn-xs layui-btn-danger">保存修改项</a>
+		</span>
+	</blockquote>
+	<div class="chunk-wrap chunk-wrap-role">
+		<div class="chunk role-chunk">
+			<div class="title">系统角色</div>
+			<#if roleList??>
+			<div class="role-box layui-form" id="roleBox">
+				<#list roleList as items>
+					<div class="role-item-plain">
+						<input type="checkbox" name="role-${items.id}" value="${items.id}" title="${items.name!''}" lay-skin="primary" <#if items.checked>checked</#if>>
+					</div>
+				</#list>
+			</div>
+			</#if>
+		</div>
+		<div class="chunk action-chunk">
+			<div class="title">已分配系统功能树</div>
+			<div class="action-box" id="actionBox"></div>
+		</div>
+	</div>
+</div>
+<@footer>
+<script>
+	layui.use(['tree','layer','form'], function() {
+		var $ = layui.jquery,
+		layer = layui.layer;
+		var tree = layui.tree({
+			elem : '#actionBox',
+			check : 'checkbox',
+			skin : 'as'
+		});
+		//获取勾选值
+		var getChecks = function($checkbox){
+			var ids = [];
+			$.each($checkbox, function() {
+				ids.push($(this).val());
+			});
+			return ids;
+		}
+
+        //获取勾选值
+        var getCheckChilds = function($checkbox){
+            var ids = new Array();
+            $.each($checkbox, function() {
+                let map = {};
+                map["roleId"] = $(this).data("role-id");
+                map["id"] = $(this).val();
+                ids.push(map)
+            });
+            return ids;
+        }
+		//选择角色
+		$('#roleBox .layui-form-checkbox').bind('click', function() {
+			loadUserAution();
+		})
+
+		//保存权限赋值
+		$('#authSave').bind('click', function(){
+			var roleIds = getChecks($('#roleBox input:checkbox:checked'));
+            var actionIds = getCheckChilds($('#actionBox input:checkbox:checked'));
+			var tips = '您确定要保存对【<span class="font-bolder" style="color:#F00;">${sysUser.name!""}</span>】的角色分配？'+
+						'<br>当前已分配【<span class="font-bolder" style="color:#F00;">' + roleIds.length + '</span>】个角色'+
+						'共【<span class="font-bolder" style="color:#F00;">'+actionIds.length+'</span>】项操作权限！' ;
+			layer.confirm(tips, {
+				btn: ['确认','取消']
+			}, function(){
+				$.ajax({
+					url: 'authSave',
+					type: 'post',
+					dataType: 'json',
+					data: {targetUid:$('#targetUid').val(),roleIds:roleIds,actionIds:JSON.stringify(actionIds)},
+					success: function(result) {
+						layer.msg(result.msg);
+					}
+				})
+			});
+		})
+
+		var loadUserAution = function(){
+			var roleIds = getChecks($('#roleBox input:checkbox:checked'));
+			if(!roleIds || roleIds.length < 1){
+				$('#actionBox').empty();
+				return ;
+			}
+
+			$.post("getRoleActionTree", {roleIds: roleIds,targetUid:$('#targetUid').val()},function(result){
+				if(result.code == 0){
+					tree.reload($.parseJSON(result.data));
+					// tree.checkAll();
+					// tree.disabledAll();
+					$('#count').text(getChecks($('#actionBox input[type=checkbox]')).length);
+				} else {
+					$('#actionBox').empty();
+				}
+			});
+		}
+		loadUserAution();
+	});
+</script>
+</@footer>

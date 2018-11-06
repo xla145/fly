@@ -1,0 +1,57 @@
+<#include "../../_layout/_layout2.0.html"><#t>
+<@header/>
+<div style="margin: 15px;">
+	<form class="layui-form layui-form-pane" id="edit-form">
+		<input type="hidden" name="uid" value="${data.uid!''}">
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span>*</span>登录名</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="name" class="layui-input" value="${data.name!''}" lay-verify="required">
+	      </div>
+	    </div>
+	    <div class="layui-form-item">
+	      <label class="layui-form-label"><span>*</span>真实姓名</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="realName" class="layui-input" value="${data.realName!''}" lay-verify="required">
+	      </div>
+	    </div>
+	    <div class="layui-form-item">
+	      <label class="layui-form-label"><span>*</span>手机号</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="mobile" class="layui-input" value="${data.mobile!''}" lay-verify="phone">
+	      </div>
+	    </div>
+	    <div class="layui-form-item">
+	      <label class="layui-form-label">联系qq</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="qq" class="layui-input" value="${data.qq!''}">
+	      </div>
+	    </div>
+	     <div class="layui-form-item">
+	      <label class="layui-form-label"><span>*</span>联系邮箱</label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="email" class="layui-input" value="${data.email!''}" lay-verify="email">
+	      </div>
+	    </div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">是否有效</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="isValid" lay-skin="switch"  lay-text="有效|无效" value="1" <#if data.isValid?? && data.isValid == 1>checked</#if>>
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">一句话介绍</label>
+			<div class="layui-input-block">
+				<textarea name="remark" placeholder="请输入内容" class="layui-textarea">${data.remark!''}</textarea>
+			</div>
+		</div>
+	</form>
+</div>
+<@footer>
+<script>
+	//入口
+	layui.use(['form'], function() {
+        var form = layui.form;
+    });
+</script>
+</@footer>

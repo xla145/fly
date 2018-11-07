@@ -1,5 +1,6 @@
 package com.xula;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -15,15 +16,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @SpringBootApplication
 public class HblogWebApplication extends SpringBootServletInitializer {
 
-
-
-
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(HblogWebApplication.class);
     }
-
-
 
     public static void main(String[] args) {
         SpringApplication.run(HblogWebApplication.class, args);

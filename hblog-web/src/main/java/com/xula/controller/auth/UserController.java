@@ -8,11 +8,13 @@ import com.xula.base.utils.RecordBean;
 import com.xula.controller.WebController;
 import com.xula.entity.Member;
 import com.xula.service.member.IMemberService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 用户处理
@@ -39,8 +41,19 @@ public class UserController extends WebController {
      * @return
      */
     @RequestMapping(value = "login",method = RequestMethod.POST)
-    public JSONObject login() {
-        return null;
+    @ResponseBody
+    public JSONObject login(@RequestBody Member member) {
+        RecordBean<String> recordBean = userValidation(member);
+        if (!recordBean.isSuccessCode()) {
+            return JsonBean.error(recordBean.getMsg());
+        }
+        String password = member.getPassword();
+        String email = member.getEmail();
+        RecordBean<Member> result = iMemberService.login(password,email);
+        if (result.isSuccessCode()) {
+            return JsonBean.success("success!");
+        }
+        return JsonBean.error(result.getMsg());
     }
 
     /**
@@ -53,16 +66,19 @@ public class UserController extends WebController {
     }
 
     /**
-     * 注册
+     * 注册  验证
      * @return
      */
     @RequestMapping(value = "reg",method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject registered(@RequestBody Member member) {
-
+        RecordBean<String> recordBean = userValidation(member);
+        if (!recordBean.isSuccessCode()) {
+            return JsonBean.error(recordBean.getMsg());
+        }
         String password = member.getPassword();
         String email = member.getEmail();
         String nickname = member.getNickname();
-
         RecordBean result = iMemberService.registered(nickname,password,email);
         if (result.isSuccessCode()) {
             JsonBean.success("success",result.getData());
@@ -70,6 +86,18 @@ public class UserController extends WebController {
         return JsonBean.error(result.getMsg());
     }
 
-
-
+    /**
+     * 用户验证
+     * @param member
+     * @return
+     */
+    private RecordBean<String> userValidation(Member member) {
+        if (StringUtils.isEmpty(member.getEmail())) {
+            return RecordBean.error("email不能为空！");
+        }
+        if (StringUtils.isEmpty(member.getPassword())) {
+            return RecordBean.error("密码不能为空！");
+        }
+        return RecordBean.success("success！");
+    }
 }

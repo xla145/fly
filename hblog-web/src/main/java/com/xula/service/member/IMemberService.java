@@ -20,4 +20,13 @@ public interface IMemberService {
     RecordBean<Member> registered(String nickname,String password,String email);
 
 
+    /**
+     * 注册
+     * @param password
+     * @param email
+     * @return
+     */
+    RecordBean<Member> login(String password,String email);
+
+
 }

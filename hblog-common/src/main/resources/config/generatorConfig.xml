@@ -18,10 +18,10 @@
         <javaModelGenerator targetPackage="com.xula.entity"
                             targetProject="src/main/java"/>
         <!-- xml映射文件   -->
-        <sqlMapGenerator targetPackage="mapper"
+        <sqlMapGenerator targetPackage="one/mapper"
                          targetProject="src/main/resources" />
         <!--  mapper接口    -->
-        <javaClientGenerator targetPackage="com.xula.dao"
+        <javaClientGenerator targetPackage="com.xula.dao.one"
                              targetProject="src/main/java" type="XMLMAPPER" />
 
         <!-- 数据库表 以及是否生成example-->

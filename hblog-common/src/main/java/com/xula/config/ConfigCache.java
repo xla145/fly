@@ -2,7 +2,6 @@ package com.xula.config;
 
 
 import com.xula.base.cache.MCacheKit;
-import com.xula.base.helper.SpringFactory;
 import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.XMemcachedClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,11 +35,5 @@ public class ConfigCache {
     @Bean
     public MCacheKit mCacheKit() throws IOException {
         return new MCacheKit(create());
-    }
-
-
-    @Bean
-    public SpringFactory springFactory() {
-        return new SpringFactory();
     }
 }

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 /**
  * 过滤登录态
  * 
- * @author caixb
+ * @author xla
  *
  */
 @Retention(RetentionPolicy.RUNTIME)  

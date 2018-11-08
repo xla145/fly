@@ -17,13 +17,13 @@ import java.util.Map;
 /**
  * 登录成功事件处理
  *
- * @author caixb
+ * @author xla
  *
  */
 @Component
 public class LoginListener implements ApplicationListener<LoginEvent> {
+
 	Logger logger = LoggerFactory.getLogger(LoginListener.class);
-	Logger loginLog = LoggerFactory.getLogger("login_log");
 
 	@Async
 	@Override

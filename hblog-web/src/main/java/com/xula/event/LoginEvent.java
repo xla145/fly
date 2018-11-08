@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 /**
  * 登录事件
  * 
- * @author caixb
+ * @author xla
  *
  */
 public class LoginEvent extends ApplicationEvent {

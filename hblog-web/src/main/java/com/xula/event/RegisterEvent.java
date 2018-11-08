@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEvent;
 /**
  * 注册事件
  * 
- * @author caixb
+ * @author xla
  *
  */
 public class RegisterEvent extends ApplicationEvent {

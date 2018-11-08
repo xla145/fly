@@ -1,7 +1,7 @@
 package com.xula.service.dict.cache;
 
 
-import com.xula.base.helper.SpringFactory;
+import com.xula.base.utils.SpringFactory;
 import com.xula.service.dict.vo.Item;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;

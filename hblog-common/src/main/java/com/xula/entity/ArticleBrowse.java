@@ -1,55 +1,41 @@
 package com.xula.entity;
 
+import cn.assist.easydao.annotation.Id;
+import cn.assist.easydao.annotation.Temporary;
+import cn.assist.easydao.pojo.BasePojo;
+import lombok.Data;
+
 import java.util.Date;
 
-public class ArticleBrowse {
-    private Integer id;
 
-    private Integer uid;
-
-    private Integer articleId;
-
-    private Date createTime;
-
-    private String reamark;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUid() {
-        return uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
-
-    public Integer getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getReamark() {
-        return reamark;
-    }
-
-    public void setReamark(String reamark) {
-        this.reamark = reamark;
-    }
+/**
+ * 
+ * 文章浏览
+ * @author xla
+ * @email xla@yuelinghui.com
+ * @date 2018-11-02 17:19:31
+ */
+@Data
+public class ArticleBrowse extends BasePojo {
+    @Temporary
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	private Integer id;
+	/**
+	 * 浏览文章用户
+	 */
+	private Integer uid;
+	/**
+	 * 文章编号
+	 */
+	private Integer articleId;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+	/**
+	 * 备注
+	 */
+	private String reamark;
 }

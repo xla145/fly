@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * response json格式
  * 
- * @author caixb
+ * @author xla
  *
  */
 public class JsonBean {

@@ -1,7 +1,6 @@
 package com.xula.base.engine.impl;
 
 import com.xula.base.engine.ModuleData;
-import com.xula.entity.Adv;
 import com.xula.entity.extend.ArticleList;
 
 import java.util.ArrayList;

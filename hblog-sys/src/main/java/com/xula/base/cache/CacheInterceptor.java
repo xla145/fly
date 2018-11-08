@@ -1,7 +1,7 @@
 package com.xula.base.cache;
 
-import com.xula.base.helper.SpringFactory;
 import com.xula.base.utils.Md5Utils;
+import com.xula.base.utils.SpringFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;

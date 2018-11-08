@@ -1,65 +1,46 @@
 package com.xula.entity;
 
+import cn.assist.easydao.annotation.Temporary;
+import cn.assist.easydao.pojo.BasePojo;
+import lombok.Data;
+
 import java.util.Date;
 
-public class ArticleComment {
-    private Integer id;
 
-    private Integer articleId;
+/**
+ * 
+ * 文章评论
+ * @author xla
+ * @email xla@yuelinghui.com
+ * @date 2018-11-02 17:19:31
+ */
+@Data
+public class ArticleComment extends BasePojo {
+    @Temporary
+	private static final long serialVersionUID = 1L;
 
-    private String content;
-
-    private Integer uid;
-
-    private Date createTime;
-
-    private String remark;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Integer getUid() {
-        return uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+	/**
+	 * ID
+	 */
+	private Integer id;
+	/**
+	 * 评论的文章
+	 */
+	private Integer articleId;
+	/**
+	 * 评论内容
+	 */
+	private String content;
+	/**
+	 * 评论用户uid
+	 */
+	private Integer uid;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+	/**
+	 * 备注
+	 */
+	private String remark;
 }

@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
  * 登出事件
  * 
  * 
- * @author caixb
+ * @author xla
  *
  */
 public class LoginOutEvent extends ApplicationEvent {

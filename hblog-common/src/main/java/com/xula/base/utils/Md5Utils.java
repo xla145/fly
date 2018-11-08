@@ -4,7 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 /**
  * MD5算法加密
  * 
- * @author caixb
+ * @author xla
  *
  */
 public class Md5Utils {

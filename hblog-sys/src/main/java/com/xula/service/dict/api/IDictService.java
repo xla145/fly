@@ -7,7 +7,7 @@ import java.util.Map;
  * 
  * 字典服务接口
  *
- * @author caixb
+ * @author xla
  */
 public interface IDictService {
 

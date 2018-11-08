@@ -20,7 +20,7 @@ import java.util.Map;
  * 
  * 字典服务接口
  *
- * @author caixb
+ * @author xla
  */
 @Service("IDictService")
 public class DictServiceImpl implements IDictService {

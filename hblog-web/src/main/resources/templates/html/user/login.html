@@ -15,14 +15,14 @@
                             <div class="layui-form-item">
                                 <label for="L_email" class="layui-form-label">邮箱</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="L_email" name="email" required lay-verify="required"
+                                    <input type="text" id="L_email" name="email" required lay-verify="email"
                                            autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label for="L_pass" class="layui-form-label">密码</label>
                                 <div class="layui-input-inline">
-                                    <input type="password" id="L_pass" name="pass" required lay-verify="required"
+                                    <input type="password" id="L_pass" name="password" required lay-verify="required"
                                            autocomplete="off" class="layui-input">
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                 <!--</div>-->
                             <!--</div>-->
                             <div class="layui-form-item">
-                                <button class="layui-btn" lay-filter="*" lay-submit>立即登录</button>
+                                <button class="layui-btn" lay-filter="userLogin" lay-submit>立即登录</button>
                                 <span style="padding-left:20px;">
                   <a href="forget.html">忘记密码？</a>
                 </span>
@@ -72,9 +72,28 @@
         , base: '#(resource)/modules/'
     }).extend({
         fly: 'index'
-    }).use('fly',function () {
-        var fly = layui.fly;
+    }).use(['fly','form'],function () {
+        var $ = layui.jquery, fly = layui.fly, form = layui.form;
+        // 表单验证
+        form.verify({
+            password: [/^[\S]{6,20}$/, '密码必须6到20位，且不能出现空格']
+        });
 
+        form.on('submit(userLogin)', function (data) {
+            //表单提交
+            fly.json('#(ctx)user/login', JSON.stringify(data.field), function (result) {
+                if (result.code == 0) {
+                    layer.msg("登录成功！！", {icon: 1, time: 1200});
+                    setInterval(function () {
+                        window.parent.location.href = '#(ctx)index.html';
+                    }, 1000);
+                    return;
+                }
+            }, {
+                contentType: 'application/json; charset=utf-8'
+            });
+            return false;
+        });
     });
 </script>
 #end

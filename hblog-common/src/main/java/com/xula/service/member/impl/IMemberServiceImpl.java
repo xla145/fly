@@ -7,10 +7,10 @@ import com.xula.base.constant.MemberConstant;
 import com.xula.base.utils.Md5Utils;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Member;
+import com.xula.entity.MemberInfo;
 import com.xula.service.member.IMemberService;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
 import java.util.Date;
 
 /**
@@ -22,7 +22,7 @@ public class IMemberServiceImpl implements IMemberService {
 
 
     /**
-     * 注册
+     * 注册送积分
      * @param nickname
      * @param password
      * @param email
@@ -45,7 +45,24 @@ public class IMemberServiceImpl implements IMemberService {
         member.setChannelId(MemberConstant.CHANNEL_SELF);
         member.setPlatform("网站");
         member.setLastTime(new Date());
-        int result = BaseDao.dao.insert(member);
+        int uid = BaseDao.dao.insertReturnId(member);
+        if (uid == -1) {
+            return RecordBean.error("用户注册失败！");
+        }
+
+        MemberInfo memberInfo = new MemberInfo();
+
+        memberInfo.setUid(uid);
+        memberInfo.setVip(1);
+        memberInfo.setVipName("普通会员");
+        memberInfo.setGrowthValue(0L);
+        memberInfo.setPointValue(0L);
+        memberInfo.setCreateTime(new Date());
+        memberInfo.setUpdateTime(new Date());
+
+        member.setUid(uid);
+        int result = BaseDao.dao.insert(memberInfo);
+
         if (result != 1) {
             return RecordBean.error("用户注册失败！");
         }
@@ -79,6 +96,29 @@ public class IMemberServiceImpl implements IMemberService {
             return RecordBean.error("账号或密码错误！");
         }
 
-        return RecordBean.success("success!");
+        return RecordBean.success("success!",member);
+    }
+
+
+    /**
+     * 获取用户基本信息
+     * @param uid
+     * @return
+     */
+    @Override
+    public MemberInfo getMemberInfo(int uid) {
+        Conditions conn = new Conditions("uid",SqlExpr.EQUAL,uid);
+        return BaseDao.dao.queryForEntity(MemberInfo.class,conn);
+    }
+
+    /**
+     * 获取用户信息
+     * @param uid
+     * @return
+     */
+    @Override
+    public Member getMember(int uid) {
+        Conditions conn = new Conditions("uid",SqlExpr.EQUAL,uid);
+        return BaseDao.dao.queryForEntity(Member.class,conn);
     }
 }

@@ -1,10 +1,12 @@
 package com.xula.base.engine.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xula.base.engine.ModuleData;
-import com.xula.base.helper.SpringFactory;
+import com.xula.base.utils.SpringFactory;
 import com.xula.base.utils.WebReqUtils;
-import com.xula.entity.extend.MemberInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.xula.entity.Member;
+import com.xula.entity.MemberInfo;
+import com.xula.service.member.IMemberService;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,6 +19,9 @@ import java.util.Map;
  */
 public class GetUserInfo extends ModuleData {
 
+
+    private IMemberService iMemberService = SpringFactory.getBean("IMemberService");
+
     @Override
     public Map<String, Object> getModelData(Map<String, Object> params) throws Exception {
 
@@ -25,12 +30,14 @@ public class GetUserInfo extends ModuleData {
             root.put("data", null);
             return root;
         }
-        MemberInfo member = new MemberInfo();
-
-        member.setAvatar("https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg");
-        member.setNickname("贤心");
-        member.setVipName("vip会员");
-        root.put("data", member);
+        JSONObject object = new JSONObject();
+        Member member = iMemberService.getMember(uid);
+        MemberInfo memberInfo = iMemberService.getMemberInfo(uid);
+        object.put("vipName",memberInfo.getVipName());
+        object.put("uid",uid);
+        object.put("nickname",member.getNickname());
+        object.put("avatar",member.getAvatar());
+        root.put("data", object);
         return root;
     }
 

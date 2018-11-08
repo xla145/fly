@@ -2,7 +2,7 @@
 //
 //
 //import com.xula.base.constant.GlobalConstant;
-//import com.xula.base.helper.SpringFactory;
+//import com.xula.base.utils.SpringFactory;
 //import com.xula.base.utils.CookieUtil;
 //import com.xula.base.utils.RecordBean;
 //import com.xula.base.utils.ReqUtils;
@@ -25,7 +25,7 @@
 ///**
 // * 登录、注册、登出 base方法
 // *
-// * @author caixb
+// * @author xla
 // *
 // */
 //public class BaseAuth extends BaseController {

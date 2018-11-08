@@ -3,7 +3,7 @@ package com.xula.base.constant;
 /**
  * 全局 Constant
  *
- * @author caixb
+ * @author xla
  */
 public class GlobalConstant {
 	

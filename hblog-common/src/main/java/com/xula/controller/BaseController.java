@@ -39,6 +39,6 @@ public class BaseController {
      */
     public String renderTips(Model model, String msg) {
         model.addAttribute("msg", msg);
-        return "common/notice";
+        return "other/error";
     }
 }

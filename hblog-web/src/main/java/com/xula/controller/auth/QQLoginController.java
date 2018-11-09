@@ -3,13 +3,20 @@ package com.xula.controller.auth;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xula.base.utils.HttpUtil;
+import com.xula.base.constant.GlobalConfig;
+import com.xula.base.constant.GlobalConstant;
+import com.xula.base.constant.LoginWayConstant;
+import com.xula.base.constant.MemberConstant;
+import com.xula.base.utils.*;
+import com.xula.entity.Member;
 import com.xula.entity.UserInfo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -22,7 +29,7 @@ import java.util.*;
  * @date 20181025
  */
 @Controller
-public class QQLoginController {
+public class QQLoginController extends BaseAuth{
 
 
     private final static String APP_ID = "101392599";
@@ -35,25 +42,36 @@ public class QQLoginController {
 
     static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-    @RequestMapping("/qqTest")
-    public String qqTest() {
-        return "login";
-    }
-
-
     /**
      * qq 授权
      *
      * @return
      */
     @RequestMapping("/qqLogin")
-    public String index() {
+    public String index(HttpServletRequest request, HttpServletResponse response) {
+        /**
+         * 如果是用户已经登录了，对微博进行绑定我们是直接在存在的用户进行绑定
+         */
+        int uid = WebReqUtils.getSessionUid(request);
+        String referrer = request.getParameter("referrer"); // 来路地址
+        String fr = request.getParameter("fr"); // 渠道标识
+        String userIp = WebReqUtils.getIp(request); // 登录请求ip
+
+        // 临时存储用户发起数据
+        JSONObject json = new JSONObject();
+        json.put("referrer", referrer);
+        json.put("fr", fr);
+        json.put("userIp", userIp);
+        json.put("authWay", LoginWayConstant.weibo.getWay());
+        json.put("uid", uid);
         try {
+            String state = Md5Utils.md5(json.toString());
+            CookieUtil.setCookie(response, state, Base64Helper.encode(json.toString(), "utf-8"), 60 * 60 * 3);
             StringBuffer authUrl = new StringBuffer(GET_CODE_URL);
             authUrl.append("?client_id=" + APP_ID);
             authUrl.append("&redirect_uri=" + URLEncoder.encode(loginCallback, "utf-8"));
             authUrl.append("&response_type=code");
-            authUrl.append("&state=" + "TEST");
+            authUrl.append("&state=" + state);
             return ("redirect:" + authUrl);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -68,19 +86,30 @@ public class QQLoginController {
      * @return
      */
     @RequestMapping("/afterlogin")
-    public String afterlogin(HttpServletRequest request) {
-        // state 用户携带的信息
-        String state = request.getParameter("state");
-        String code = request.getParameter("code");
-        String api = "https://graph.qq.com/oauth2.0/token";
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("client_id", APP_ID);
-        data.put("client_secret", APP_KEY);
-        data.put("code", code);
-        data.put("grant_type", "authorization_code");
-        data.put("redirect_uri", loginCallback);
-        String result = null;
-        try {
+    public String afterlogin(HttpServletRequest request, Model model, HttpServletResponse response) {
+        try {// state 用户携带的信息
+            String state = request.getParameter("state");
+            String code = request.getParameter("code");
+            String userParamStr = CookieUtil.getCookie(request, state);
+            // 解析参数
+            JSONObject userParam = JSONObject.parseObject(Base64Helper.decode(userParamStr, "utf-8"));
+
+            if (GlobalConfig.dev) {
+                logger.info("微信授权确认-处理用户数据逻辑：state：" + state + ", code:" + code + ",param:" + userParam);
+            }
+            String referrer = userParam.getString("referrer");
+            if (StringUtils.isBlank(referrer)) {
+                referrer = "http://www.xulian.net.cn:8088/index";
+            }
+            String api = "https://graph.qq.com/oauth2.0/token";
+            Map<String, String> data = new HashMap<String, String>();
+            data.put("client_id", APP_ID);
+            data.put("client_secret", APP_KEY);
+            data.put("code", code);
+            data.put("grant_type", "authorization_code");
+            data.put("redirect_uri", loginCallback);
+            String result = null;
+
             result = HttpUtil.httpGet(api, data, null);
             Map<String, Object> map = stringToMap(result);
             if (result != null) {
@@ -94,16 +123,26 @@ public class QQLoginController {
 
                 // 将 {"client_id":"YOUR_APPID","openid":"YOUR_OPENID"} 转成对象
                 JSONObject jsonObject = JSONObject.parseObject(result);
-
                 // 获取用户信息
                 UserInfo userInfo = getUserInfo(map.get("access_token").toString(), jsonObject.get("openid").toString());
-
-                System.out.println(JSON.toJSONString(userInfo));
+                String openId = jsonObject.get("openid").toString();
+                String ip = WebReqUtils.getIp(request);
+                RecordBean<Member> recordBean1 = boforeReg(openId,MemberConstant.CHANNEL_BY_QQ);
+                // 如果已经授权的用户直接登录
+                if (recordBean1.isSuccessCode()) {
+                    request.getSession().setAttribute(GlobalConstant.SESSION_UID, recordBean1.getData().getUid());
+                    return ("redirect:" + referrer);
+                }
+                RecordBean<Member> recordBean = iMemberService.registered(userInfo.getNickname(),openId,userInfo.getCity(),userInfo.getAvatar(),userInfo.getGender(),ip, MemberConstant.CHANNEL_BY_QQ);
+                if (recordBean.isSuccessCode()) {
+                    gotoReg(request,response,ac,recordBean.getData(), LoginWayConstant.qq.getWay());
+                }
             }
+            return ("redirect:" + referrer);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
+        return renderTips(model,"授权失败");
     }
 
 

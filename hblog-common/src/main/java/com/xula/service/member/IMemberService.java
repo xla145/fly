@@ -3,6 +3,8 @@ package com.xula.service.member;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Member;
 import com.xula.entity.MemberInfo;
+import com.xula.entity.MemberQq;
+import com.xula.entity.MemberWb;
 
 /**
  * 用户服务层
@@ -19,6 +21,7 @@ public interface IMemberService {
      * @return
      */
     RecordBean<Member> registered(String nickname, String password, String email);
+
 
 
     /**
@@ -46,4 +49,59 @@ public interface IMemberService {
     Member getMember(int uid);
 
 
+
+    /**
+     * 微博授权登录，注册用户
+     * @param nickname
+     * @param uuid
+     * @return
+     */
+    RecordBean<Member> registered(String nickname,String uuid,String city,String avatar,String sex,String ip,Integer loginWay);
+
+
+    /**
+     * qq授权登录，注册用户
+     * @param openId
+     * @param nickname
+     * @param uuid
+     * @param city
+     * @param avatar
+     * @param sex
+     * @param ip
+     * @param loginWay
+     * @return
+     */
+    RecordBean<Member> registered(String openId,String nickname,String uuid,String city,String avatar,String sex,String ip,Integer loginWay);
+
+
+    /**
+     * 创建微博授权信息
+     * @param memberWb
+     * @return
+     */
+    RecordBean<MemberWb> createMemberWb(MemberWb memberWb);
+
+
+    /**
+     * 创建QQ授权信息
+     * @param memberQq
+     * @return
+     */
+    RecordBean<MemberQq> createMemberQq(MemberQq memberQq);
+
+    /**
+     * 更新微博授权信息。当用户解绑的时候，修改状态
+     * @param memberWb
+     * @return
+     */
+    RecordBean<MemberWb> updateMemberWb(MemberWb memberWb);
+
+
+    /**
+     * 获取用户信息
+     * @param uuid
+     * @param loginWay
+     * @return
+     */
+    Member getMemberByUuid(String uuid, Integer loginWay);
 }

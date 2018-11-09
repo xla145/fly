@@ -9,7 +9,7 @@ server:
 spring:
     # 环境 dev|pro
     profiles:
-        active: dev
+        active: pro
     # jackson时间格式化
     jackson:
         time-zone: GMT+8
@@ -22,5 +22,7 @@ spring:
     cache:
       ehcache:
         config: classpath:cached/ehcache.xml
+is:
+ dev: true
 
 

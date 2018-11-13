@@ -40,7 +40,7 @@
         <dependency>
             <groupId>cn.assist</groupId>
             <artifactId>easy-dao</artifactId>
-            <version>1.1.9</version>
+            <version>1.2.0</version>
         </dependency>
 
         <dependency>
@@ -118,6 +118,13 @@
             </plugin>
         </plugins>
     </build>
-
+    <!-- 配置部署构建到私服 -->
+    <distributionManagement>
+        <repository>
+            <id>xula-releases</id>
+            <name>xula-releases</name>
+            <url>http://123.207.50.166:8888/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

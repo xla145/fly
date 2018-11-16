@@ -9,7 +9,7 @@ server:
 spring:
     # 环境 dev|pro
     profiles:
-        active: pro
+        active: dev
     # jackson时间格式化
     jackson:
         time-zone: GMT+8
@@ -19,9 +19,6 @@ spring:
         suffix: .html
         template-loader-path: classpath:/templates/
         cache: false
-    cache:
-      ehcache:
-        config: classpath:cached/ehcache.xml
 is:
  dev: true
 

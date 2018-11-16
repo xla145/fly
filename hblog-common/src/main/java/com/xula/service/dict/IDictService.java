@@ -1,4 +1,4 @@
-package com.xula.service.dict.api;
+package com.xula.service.dict;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -7,7 +7,7 @@ import java.util.Map;
  * 
  * 字典服务接口
  *
- * @author xla
+ * @author caixb
  */
 public interface IDictService {
 

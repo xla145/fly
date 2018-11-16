@@ -4,9 +4,9 @@ import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.common.SqlExpr;
 import cn.assist.easydao.common.SqlJoin;
 import cn.assist.easydao.dao.BaseDao;
-import com.xula.service.dict.api.IDictService;
+import com.xula.entity.dict.Item;
+import com.xula.service.dict.IDictService;
 import com.xula.service.dict.cache.DictCache;
-import com.xula.service.dict.vo.Item;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,31 +17,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 
+ *
  * 字典服务接口
  *
- * @author xla
+ * @author caixb
  */
 @Service("IDictService")
 public class DictServiceImpl implements IDictService {
-	
+
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	/**
 	 * 根据code 和 name获取String值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @return
 	 */
 	@Override
 	public String getStringValue(String code, String name){
 		return getStringValue(code, name, null);
 	}
-	
+
 	/**
 	 * 根据code 和 name获取String值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @param defaultValue
 	 * @return
 	 */
@@ -53,11 +53,11 @@ public class DictServiceImpl implements IDictService {
 		}
 		return item.getValue();
 	}
-	
+
 	/**
-	 * 根据code 和 name获取String值 
+	 * 根据code 和 name获取String值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @param regex 切分正则分隔符
 	 * @return
 	 */
@@ -74,11 +74,11 @@ public class DictServiceImpl implements IDictService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 根据code 和 name获取int值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @return
 	 */
 	@Override
@@ -94,11 +94,11 @@ public class DictServiceImpl implements IDictService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 根据code 和 name获取Integer值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @param defaultValue
 	 * @return
 	 */
@@ -115,11 +115,11 @@ public class DictServiceImpl implements IDictService {
 		}
 		return defaultValue;
 	}
-	
+
 	/**
 	 * 根据code 和 name获取Boolean值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @return
 	 */
 	@Override
@@ -135,11 +135,11 @@ public class DictServiceImpl implements IDictService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 根据code 和 name获取boolean值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @param defaultValue
 	 * @return
 	 */
@@ -156,22 +156,22 @@ public class DictServiceImpl implements IDictService {
 		}
 		return defaultValue;
 	}
-	
+
 	/**
 	 * 根据code 和 name获取BigDecimal值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @return
 	 */
 	@Override
 	public BigDecimal getBigDecimalValue(String code, String name){
 		return getBigDecimalValue(code, name, null);
 	}
-	
+
 	/**
 	 * 根据code 和 name获取BigDecimal值
 	 * @param code
-	 * @param name 
+	 * @param name
 	 * @param defaultValue
 	 * @return
 	 */
@@ -188,7 +188,7 @@ public class DictServiceImpl implements IDictService {
 		}
 		return defaultValue;
 	}
-	
+
 	/**
 	 * 根据code获取字典
 	 * @param code
@@ -198,20 +198,20 @@ public class DictServiceImpl implements IDictService {
 		if(StringUtils.isBlank(code) || StringUtils.isBlank(name)){
 			return null;
 		}
-		Item item = DictCache.get(code, name);
+		Item item = DictCache.getCache().get(code, name);
 		if(item != null){
 			return item;
 		}
-		
+
 		Conditions conn = new Conditions("group_code", SqlExpr.EQUAL, code);
 		conn.add(new Conditions("name", SqlExpr.EQUAL, name), SqlJoin.AND);
-		
+
 		//添加缓存策略
 		item = BaseDao.dao.queryForEntity(Item.class, conn);
 		if(item != null){
-			DictCache.put(code, name, item);
+			DictCache.getCache().put(code, name, item);
 		}
-		
+
 		return item;
 	}
 

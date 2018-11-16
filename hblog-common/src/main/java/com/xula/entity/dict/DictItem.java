@@ -1,5 +1,5 @@
 
-package com.xula.service.dict.vo;
+package com.xula.entity.dict;
 
 import cn.assist.easydao.annotation.Id;
 import cn.assist.easydao.annotation.Temporary;

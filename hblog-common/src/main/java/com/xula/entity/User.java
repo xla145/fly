@@ -1,8 +1,15 @@
 package com.xula.entity;
 
+import cn.assist.easydao.annotation.Temporary;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
+
+    @Temporary
+    private static final long serialVersionUID = 1L;
+
     private Integer id;
 
     private String username;

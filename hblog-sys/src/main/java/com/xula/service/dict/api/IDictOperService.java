@@ -3,9 +3,8 @@ package com.xula.service.dict.api;
 import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.pojo.PagePojo;
 import com.xula.base.utils.RecordBean;
-import com.xula.service.dict.vo.DictGroup;
-import com.xula.service.dict.vo.DictItem;
-
+import com.xula.entity.dict.DictGroup;
+import com.xula.entity.dict.DictItem;
 
 import java.util.List;
 

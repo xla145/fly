@@ -40,7 +40,7 @@ public class IMemberServiceImpl implements IMemberService {
      */
     @Override
     public RecordBean<Member> registered(String nickname, String password, String email) {
-        Conditions conn = new Conditions("email", SqlExpr.EQUAL,email);
+        Conditions conn = new Conditions("sms", SqlExpr.EQUAL,email);
         Member member1 =  BaseDao.dao.queryForEntity(Member.class,conn);
         if (member1 != null) {
             return RecordBean.error("该邮箱已经被注册！");
@@ -91,7 +91,7 @@ public class IMemberServiceImpl implements IMemberService {
 
         String passwd = Md5Utils.md5(password);
 
-        Conditions conn = new Conditions("email", SqlExpr.EQUAL,email);
+        Conditions conn = new Conditions("sms", SqlExpr.EQUAL,email);
 
         Member member =  BaseDao.dao.queryForEntity(Member.class,conn);
 

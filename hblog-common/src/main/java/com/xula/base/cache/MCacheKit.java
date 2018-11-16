@@ -7,9 +7,13 @@ import net.rubyeye.xmemcached.exception.MemcachedException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
@@ -18,16 +22,18 @@ import java.util.concurrent.TimeoutException;
  *
  * @author caibin
  */
-public class MCacheKit {
+@Repository("mCacheKit")
+public class MCacheKit<T> {
 
     private static Logger logger = LoggerFactory.getLogger(MCacheKit.class);
-    public static final int TIMEOUT = 1500;//操作超时时间，单位 毫秒
 
-    static MemcachedClient memcachedClient;
+    /**
+     * 默认超时时间
+     */
+    public static final int TIMEOUT = 1500;
 
-    public MCacheKit(MemcachedClient memcachedClient) {
-        MCacheKit.memcachedClient = memcachedClient;
-    }
+    @Autowired
+    private RedisTemplate<String, T> redisTemplate;
 
     /**
      * 添加数据缓存到
@@ -36,8 +42,7 @@ public class MCacheKit {
      * @param exp   超时时间,单位秒
      * @param value
      */
-    @SuppressWarnings("rawtypes")
-    public static void add(String key, int exp, Object value) {
+    public void add(String key, int exp, T value) {
         try {
             if (value == null) {
                 return;
@@ -49,7 +54,7 @@ public class MCacheKit {
                 return;
             }
             if (!BaseConstant.isDev) {
-                memcachedClient.set(key, exp, value, TIMEOUT);
+                redisTemplate.boundValueOps(key).set(value,exp,TimeUnit.SECONDS);
             }
         } catch (Exception e) {
             logger.error("memcache operate error: ", e);
@@ -62,13 +67,13 @@ public class MCacheKit {
      * @param key
      * @return
      */
-    public static <T> T get(String key) {
+    public T get(String key) {
         T value = null;
         if (StringUtils.isBlank(key)) {
-            return value;
+            return null;
         }
         try {
-            value = memcachedClient.get(key, TIMEOUT);
+            value = redisTemplate.boundValueOps(key).get();
         } catch (Exception e) {
             logger.error("memcache operate error: ", e);
         }
@@ -80,32 +85,14 @@ public class MCacheKit {
      *
      * @param key
      */
-    public static void delete(String key) {
+    public void delete(String key) {
         if (StringUtils.isBlank(key)) {
             return;
         }
         try {
-            memcachedClient.delete(key);
+            redisTemplate.delete(key);
         } catch (Exception e) {
             logger.error("memcache operate error: ", e);
-        }
-    }
-
-    /**
-     * 清除所有缓存
-     */
-    public static void clearAll() {
-        try {
-            memcachedClient.flushAll();
-        } catch (TimeoutException e) {
-            logger.error("memcache operate TimeoutException" + e.getMessage());
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            logger.error("memcache operate InterruptedException" + e.getMessage());
-            e.printStackTrace();
-        } catch (MemcachedException e) {
-            logger.error("memcache operate TimeoutException" + e.getMessage());
-            e.printStackTrace();
         }
     }
 }

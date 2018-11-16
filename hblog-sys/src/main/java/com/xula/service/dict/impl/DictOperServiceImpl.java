@@ -8,10 +8,10 @@ import cn.assist.easydao.dao.BaseDao;
 
 import cn.assist.easydao.pojo.PagePojo;
 import com.xula.base.utils.RecordBean;
+import com.xula.entity.dict.DictGroup;
+import com.xula.entity.dict.DictItem;
 import com.xula.service.dict.api.IDictOperService;
 import com.xula.service.dict.cache.DictCache;
-import com.xula.service.dict.vo.DictGroup;
-import com.xula.service.dict.vo.DictItem;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * 字典服务
+ * @author xla
  */
 @Service("IDictOperService")
 public class DictOperServiceImpl implements IDictOperService {
@@ -62,7 +63,7 @@ public class DictOperServiceImpl implements IDictOperService {
     @Override
     public RecordBean<String> checkGroupCode(String code, Integer id) {
         DictGroup dictGroup = getDictGroup(code);
-        if (dictGroup == null || dictGroup.getId() == id) {
+        if (dictGroup == null || id.equals(dictGroup.getId())) {
             return RecordBean.success("success!");
         }
         return RecordBean.error("code码重复");
@@ -111,7 +112,7 @@ public class DictOperServiceImpl implements IDictOperService {
         if (result != 1) {
             return RecordBean.error("修改失败！");
         }
-        DictCache.invalidate(dictItem.getGroupCode(),dictItem.getName());
+        DictCache.getCache().invalidate(dictItem.getGroupCode(),dictItem.getName());
         return RecordBean.success("success",dictItem);
     }
 

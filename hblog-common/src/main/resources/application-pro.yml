@@ -1,4 +1,11 @@
 spring:
+    mail:
+        host: smtp.qq.com
+        username: 1379960679@qq.com
+        password: uungoqqnvlqcjecf
+        default-encoding: UTF-8
+        port: 465
+        protocol: stmp
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:

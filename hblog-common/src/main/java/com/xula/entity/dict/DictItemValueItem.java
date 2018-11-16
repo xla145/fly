@@ -1,4 +1,4 @@
-package com.xula.service.dict.vo;
+package com.xula.entity.dict;
 
 
 /**

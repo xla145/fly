@@ -116,4 +116,12 @@ public interface ISysActionService {
      */
      RecordBean<String> delSysAction(String[] ids);
 
+
+    /**
+     * 获取系统功能
+     * @param uid
+     * @return
+     */
+    List<SysAction> getSysUserAction(Integer uid);
+
 }

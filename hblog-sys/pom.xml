@@ -6,7 +6,7 @@
     <groupId>com.xula</groupId>
     <artifactId>hblog-sys</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>hblog-sys</name>
     <description>博客后台管理模块</description>

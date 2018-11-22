@@ -6,6 +6,7 @@ import com.xula.entity.SysAction;
 import com.xula.event.EventModel;
 import com.xula.event.LoginEvent;
 import com.xula.service.auth.IAuthService;
+import com.xula.service.auth.ISysActionService;
 import com.xula.service.sys.sysuser.ISysUserService;
 import com.xula.base.utils.ReqUtils;
 import com.xula.base.utils.ShiroUtils;
@@ -24,6 +25,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author xla
@@ -35,7 +39,7 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     private ISysUserService sysUserService;
     @Autowired
-    private IAuthService iAuthService;
+    private ISysActionService iSysActionService;
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -48,27 +52,13 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SysAction.SysUser user = (SysAction.SysUser) principalCollection.getPrimaryPrincipal();
         Integer userId = user.getUid();
+        List<SysAction> menuList = iSysActionService.getSysUserAction(userId);
 
-        List<String> permsList;
-        List<SysAction> menuList;
-        //系统管理员，拥有最高权限
-        if (userId == 1) {
-            menuList = iAuthService.getSysUserAction(1);
-        } else {
-            menuList = iAuthService.getSysUserAction(userId);
-        }
-        permsList = new ArrayList<>(menuList.size());
-        for (SysAction menu : menuList) {
-            permsList.add(menu.getPerms());
-        }
+        List<String> permsList = menuList.stream().map(SysAction::getPerms).collect(Collectors.toList());
+
+
         //用户权限列表
-        Set<String> permsSet = new HashSet<>();
-        for (String perms : permsList) {
-            if (StringUtils.isBlank(perms)) {
-                continue;
-            }
-            permsSet.addAll(Arrays.asList(perms.trim().split(",")));
-        }
+        Set<String> permsSet = permsList.stream().parallel().filter(s -> StringUtils.isNotBlank(s)).map(String::trim).map(s -> s.split(",")).map(Arrays::asList).flatMap(Collection::stream).collect(Collectors.toSet());
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setStringPermissions(permsSet);
         return info;

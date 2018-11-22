@@ -6,6 +6,7 @@ import cn.assist.easydao.pojo.PagePojo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.xula.base.cache.RedisKit;
 import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.SysAction;
@@ -21,10 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -292,5 +292,46 @@ public class SysActionServiceImpl implements ISysActionService {
             return RecordBean.success("success");
         }
         return RecordBean.error("删除系统功能失败！");
+    }
+
+
+
+    private static String DEFAULTAUTHKEY = "com.xula.service.auth.impl.SysActionServiceImpl";
+
+    @Autowired
+    private RedisKit<List<SysAction>> redisKit;
+
+    /**
+     * 获取用户的菜单功能
+     * @param uid
+     * @return
+     */
+    @Override
+    public List<SysAction> getSysUserAction(Integer uid) {
+        String key = DEFAULTAUTHKEY + ".getSysUserAction." + uid;
+        List<SysAction> list = redisKit.get(key);
+        if (CollectionUtils.isEmpty(list)) {
+            list = this.getSysUserAction(uid,key);
+        }
+        return list;
+    }
+
+    /**
+     * 获取用户的菜单信息
+     * @param uid
+     * @param key
+     * @return
+     */
+    public List<SysAction> getSysUserAction(Integer uid,String key) {
+        List<SysAction> list ;
+        if (uid == 1) {
+            list =  this.getAllAction();
+        } else {
+            list = this.getSysUserActionByUid(uid);
+        }
+        if (!list.isEmpty()) {
+            redisKit.add(key, 60 * 60, list);
+        }
+        return list;
     }
 }

@@ -3,9 +3,12 @@ package com.xula.config.redis;
 import com.xula.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -21,6 +24,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Import(DataJedisProperties.class)
 @Configuration
 public class RedisConfig {
+
     /**
      * redis参数信息
      */

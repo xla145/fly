@@ -1,10 +1,11 @@
 package com.xula.service.dict.cache;
 
+import com.xula.base.cache.MCache;
+import com.xula.base.cache.RedisKit;
 import com.xula.entity.dict.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 用于字典数据缓存处理
@@ -29,7 +30,7 @@ public class DictCache {
      * 2：
      */
 	@Autowired
-	private RedisTemplate<String,Item> redisTemplate;
+	private RedisKit<Item> mCacheKit;
 
 
 	/**
@@ -44,7 +45,7 @@ public class DictCache {
 	public void put(String code, String name, Item item){
 		try {
 			if(item != null){
-				redisTemplate.boundValueOps(getKey(code,name)).set(item);
+				mCacheKit.add(getKey(code,name),-1,item);
 			}
 		} catch (Exception e) {
 			logger.error("", e);
@@ -61,7 +62,7 @@ public class DictCache {
 	 */
 	public Item get(String code, String name){
 		try {
-			return redisTemplate.boundValueOps(getKey(code,name)).get();
+			return mCacheKit.get(getKey(code,name));
 		} catch (Exception e) {
 			logger.error("", e);
 		}
@@ -78,7 +79,7 @@ public class DictCache {
 	 */
 	public void invalidate(String code, String name){
 		try {
-			redisTemplate.delete(getKey(code, name));
+			mCacheKit.delete(getKey(code, name));
 		} catch (Exception e) {
 			logger.error("", e);
 		}

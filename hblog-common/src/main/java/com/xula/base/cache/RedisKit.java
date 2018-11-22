@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,14 +19,14 @@ import java.util.concurrent.TimeoutException;
 
 
 /**
- * memcacheed 操作
+ * redis 操作
  *
- * @author caibin
+ * @author xla
  */
-@Repository("mCacheKit")
-public class MCacheKit<T> {
+@Repository("redisKit")
+public class RedisKit<T> {
 
-    private static Logger logger = LoggerFactory.getLogger(MCacheKit.class);
+    private static Logger logger = LoggerFactory.getLogger(RedisKit.class);
 
     /**
      * 默认超时时间
@@ -57,7 +58,7 @@ public class MCacheKit<T> {
                 redisTemplate.boundValueOps(key).set(value,exp,TimeUnit.SECONDS);
             }
         } catch (Exception e) {
-            logger.error("memcache operate error: ", e);
+            logger.error("redis operate error: ", e);
         }
     }
 
@@ -75,7 +76,7 @@ public class MCacheKit<T> {
         try {
             value = redisTemplate.boundValueOps(key).get();
         } catch (Exception e) {
-            logger.error("memcache operate error: ", e);
+            logger.error("redis operate error: ", e);
         }
         return value;
     }
@@ -92,7 +93,7 @@ public class MCacheKit<T> {
         try {
             redisTemplate.delete(key);
         } catch (Exception e) {
-            logger.error("memcache operate error: ", e);
+            logger.error("redis operate error: ", e);
         }
     }
 }

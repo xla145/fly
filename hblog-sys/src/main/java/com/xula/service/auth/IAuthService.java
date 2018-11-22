@@ -29,15 +29,6 @@ public interface IAuthService {
      JSONArray getMenu(int uid);
 
     /**
-     * 判断用户的动作是否有权限调用
-     *
-     * @param uid
-     * @param actionId
-     * @return
-     */
-     boolean isCall(int uid, int actionId);
-
-    /**
      * 重新加载用户权限
      *
      * @param uid
@@ -45,11 +36,6 @@ public interface IAuthService {
      void reload(int uid);
 
 
-    /**
-     * 获取系统功能
-     * @param uid
-     * @return
-     */
-     List<SysAction> getSysUserAction(Integer uid);
+
 
 }

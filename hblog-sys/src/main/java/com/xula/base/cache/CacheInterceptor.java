@@ -2,6 +2,7 @@ package com.xula.base.cache;
 
 import com.xula.base.utils.Md5Utils;
 import com.xula.base.utils.SpringFactory;
+import com.xula.config.ShiroConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -12,11 +13,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 /**
  * 缓存拦截器 （memcache或ehcache）
@@ -26,6 +26,8 @@ import java.io.ObjectOutputStream;
  */
 @Aspect
 @Component
+@Import(RedisKit.class)
+@AutoConfigureAfter(ShiroConfig.class)
 public class CacheInterceptor {
 
     private Logger logger = LoggerFactory.getLogger(CacheInterceptor.class);
@@ -39,6 +41,8 @@ public class CacheInterceptor {
     private void theMethod() {
     }
 
+    @Autowired
+    private RedisKit redisKit;
 
     /**
      * 添加缓存
@@ -49,13 +53,13 @@ public class CacheInterceptor {
      */
     @Around(value = "@annotation(mcache)", argNames = "mcache")
     public Object doBasicProfiling(ProceedingJoinPoint pjp, MCache mcache) throws Throwable {
-        EhCacheManager cacheManager = SpringFactory.getBean("shiroEhcacheManager");
+        EhCacheManager cacheManager = SpringFactory.getBean("ehcacheManager");
         String key = StringUtils.isBlank(mcache.key()) ? createKey(pjp) : mcache.key();
         int expire = mcache.expire();
         boolean isPersistence = mcache.isPersistence();
         // serviceCache 默认存储一些业务缓存 使用ehcache
         if (isPersistence) {
-            Object object = MCacheKit.get(key);
+            Object object = redisKit.get(key);
             if (object != null ) {
                 return object;
             }
@@ -63,7 +67,7 @@ public class CacheInterceptor {
             object = pjp.proceed();
             //add 结果到缓存
             if (object != null && expire > 1 && StringUtils.isNotBlank(key)) {
-                MCacheKit.add(key, expire, object);
+                redisKit.add(key, expire, object);
             }
             return object;
         }
@@ -95,9 +99,9 @@ public class CacheInterceptor {
         boolean isPersistence = cleanCache.isPersistence();
         if (isPersistence) {
             //缓存去取
-            Object object = MCacheKit.get(key);
+            Object object = redisKit.get(key);
             if (object != null) {
-                MCacheKit.delete(key);
+                redisKit.delete(key);
             }
             return;
         }
@@ -110,38 +114,20 @@ public class CacheInterceptor {
 
     /**
      * 生成缓存key
-     *
      * @param pjp
      * @return
      */
     private String createKey(ProceedingJoinPoint pjp) {
-        StringBuffer crudeKey = new StringBuffer(pjp.getTarget().getClass().getName() + "." + pjp.getSignature().getName());
-        Object[] params = pjp.getArgs();
-        if (params != null) {
-            ByteArrayOutputStream byt = null;
-            ObjectOutputStream oos = null;
-            try {
-                byt = new ByteArrayOutputStream();
-                oos = new ObjectOutputStream(byt);
-                for (Object obj : params) {
-                    oos.writeObject(obj);
-                    String str = byt.toString("ISO-8859-1");
-                    str = java.net.URLEncoder.encode(str, "UTF-8");
-                    crudeKey.append("." + str);
-                    oos.reset();
-                    byt.reset();
-                }
-            } catch (Exception e) {
-                logger.error("生成 cache key 失败:" + e);
-                return null;
-            } finally {
-                try {
-                    oos.close();
-                    byt.close();
-                } catch (IOException e) {
-                }
-            }
+        StringBuffer key = new StringBuffer();
+        key.append(pjp.getTarget().getClass().getSimpleName());
+        key.append(".");
+        key.append(pjp.getSignature().getName());
+        key.append("[");
+        for (Object obj : pjp.getArgs()) {
+            key.append(obj.toString());
         }
-        return Md5Utils.md5(crudeKey.toString()); //防止　key 太长
+        key.append("]");
+        //防止　key 太长
+        return Md5Utils.md5(key.toString());
     }
 }  

@@ -21,7 +21,7 @@ public class Article extends BasePojo {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	private Integer id;
+	private String aid;
 	/**
 	 * 文章标题
 	 */

@@ -31,7 +31,6 @@ public class MemberConstant {
      **/
     public static final int USET_EMAIL_UNACTIVE = 2;
 
-
     /**
      * 用户有效
      **/

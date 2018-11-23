@@ -1,12 +1,15 @@
 package com.xula.config;
 
+import com.xula.Interceptor.UserInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
  * 静态资源配置
+ * @author xla
  */
 @Configuration
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
@@ -27,5 +30,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         super.addResourceHandlers(registry);
+    }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new UserInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**");
+        super.addInterceptors(registry);
     }
 }

@@ -23,7 +23,7 @@ public class GetArticleNodes extends ModuleData {
             articleList.setNickname("贤心");
             articleList.setCatName("公告");
             articleList.setTitle("基于 layui 的极简社区页面模版");
-            articleList.setId(3);
+            articleList.setAid("5555555");
             articleList.setVipName("vip会员");
             articleList.setPayPoint(30);
             articleList.setCommentNum(50);

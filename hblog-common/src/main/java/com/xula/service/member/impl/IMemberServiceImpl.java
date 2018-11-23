@@ -91,14 +91,14 @@ public class IMemberServiceImpl implements IMemberService {
 
         String passwd = Md5Utils.md5(password);
 
-        Conditions conn = new Conditions("sms", SqlExpr.EQUAL,email);
+        Conditions conn = new Conditions("email", SqlExpr.EQUAL,email);
 
         Member member =  BaseDao.dao.queryForEntity(Member.class,conn);
 
         if (member == null) {
             return RecordBean.error("账号或密码错误！");
         }
-        if (MemberConstant.USET_DALID_YES != member.getStatus().intValue()) {
+        if (member.getStatus().intValue() == MemberConstant.ZERO) {
             return RecordBean.error("账号或密码错误！");
         }
 

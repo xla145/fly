@@ -4,6 +4,7 @@ package com.xula.controller.auth;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.constant.GlobalConstant;
 import com.xula.base.constant.LoginWayConstant;
+import com.xula.base.constant.PageConstant;
 import com.xula.base.utils.JsonBean;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Member;
@@ -49,7 +50,7 @@ public class UserController extends BaseAuth {
      */
     @RequestMapping(value = "login",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject login(@RequestBody Member member,HttpServletRequest request,HttpServletResponse response) {
+    public JSONObject login(Member member,HttpServletRequest request,HttpServletResponse response) {
         RecordBean<String> recordBean = userValidation(member);
         if (!recordBean.isSuccessCode()) {
             return JsonBean.error(recordBean.getMsg());
@@ -59,7 +60,7 @@ public class UserController extends BaseAuth {
         RecordBean<Member> result = iMemberService.login(password,email);
         gotoLogin(request,response,ac,result.getData(), LoginWayConstant.email.getWay());
         if (result.isSuccessCode()) {
-            return JsonBean.success("success!");
+            return JsonBean.success("success!", PageConstant.INDEX);
         }
         return JsonBean.error(result.getMsg());
     }
@@ -79,7 +80,7 @@ public class UserController extends BaseAuth {
      */
     @RequestMapping(value = "reg",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject registered(@RequestBody Member member,HttpServletRequest request,HttpServletResponse response) {
+    public JSONObject registered(Member member,HttpServletRequest request,HttpServletResponse response) {
         RecordBean<String> recordBean = userValidation(member);
         if (!recordBean.isSuccessCode()) {
             return JsonBean.error(recordBean.getMsg());

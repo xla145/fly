@@ -1,7 +1,7 @@
 
 package com.xula;
 
-import com.xula.base.cache.MCacheKit;
+import com.xula.base.cache.RedisKit;
 import com.xula.base.utils.CommonUtil;
 import com.xula.entity.User;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class HblogWebApplicationTests {
 //    }
 
     @Autowired
-    private MCacheKit<User> mCacheKit;
+    private RedisKit<User> mCacheKit;
 
 
     @Test

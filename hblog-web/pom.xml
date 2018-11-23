@@ -47,6 +47,11 @@
             <artifactId>okhttp</artifactId>
             <version>3.10.0</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.jfinal</groupId>-->
+            <!--<artifactId>jfinal</artifactId>-->
+            <!--<version>3.5</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>

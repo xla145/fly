@@ -33,24 +33,24 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       '{{# for(var i = 0; i < d.rows.length; i++){ }}\
       <li>\
         {{# if(d.rows[i].collection_time){ }}\
-          <a class="jie-title" href="/jie/{{d.rows[i].id}}/" target="_blank">{{= d.rows[i].title}}</a>\
+          <a class="article-title" href="/article/{{d.rows[i].id}}/" target="_blank">{{= d.rows[i].title}}</a>\
           <i>{{ d.rows[i].collection_time }} 收藏</i>\
         {{# } else { }}\
           {{# if(d.rows[i].status == 1){ }}\
           <span class="fly-jing layui-hide-xs">精</span>\
           {{# } }}\
           {{# if(d.rows[i].accept >= 0){ }}\
-            <span class="jie-status jie-status-ok">已结</span>\
+            <span class="article-status article-status-ok">已结</span>\
           {{# } else { }}\
-            <span class="jie-status">未结</span>\
+            <span class="article-status">未结</span>\
           {{# } }}\
           {{# if(d.rows[i].status == -1){ }}\
-            <span class="jie-status">审核中</span>\
+            <span class="article-status">审核中</span>\
           {{# } }}\
-          <a class="jie-title" href="/jie/{{d.rows[i].id}}/" target="_blank">{{= d.rows[i].title}}</a>\
+          <a class="article-title" href="/article/{{d.rows[i].id}}/" target="_blank">{{= d.rows[i].title}}</a>\
           <i class="layui-hide-xs">{{ layui.util.timeAgo(d.rows[i].time, 1) }}</i>\
           {{# if(d.rows[i].accept == -1){ }}\
-          <a class="mine-edit layui-hide-xs" href="/jie/edit/{{d.rows[i].id}}" target="_blank">编辑</a>\
+          <a class="mine-edit layui-hide-xs" href="/article/edit/{{d.rows[i].id}}" target="_blank">编辑</a>\
           {{# } }}\
           <em class="layui-hide-xs">{{d.rows[i].hits}}阅/{{d.rows[i].comment}}答</em>\
         {{# } }}\
@@ -113,7 +113,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
             page: curr
           }, function(res){
             view(res);
-            gather.minelog['mine-jie-page-' + curr] = res;
+            gather.minelog['mine-article-page-' + curr] = res;
             now || laypage.render({
               elem: 'LAY_page'
               ,count: res.count

@@ -17,7 +17,7 @@ public class GetHotArticleNodes extends ModuleData {
         List<HotArticle> list = new ArrayList<HotArticle>();
         for (int i = 0; i < 6; i++) {
             HotArticle hot = new HotArticle();
-            hot.setUrl("jie/detail.html");
+            hot.setUrl("article/detail.html");
             hot.setTitle("基于 layui 的极简社区页面模版");
             hot.setMessageNum(20);
             list.add(hot);

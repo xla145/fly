@@ -73,21 +73,8 @@
 #end
 #define js()
 <script>
-    layui.cache.page = 'user';
-    layui.cache.user = {
-        username: '游客'
-        , uid: -1
-        , avatar: '#(resource)/images/avatar/00.jpg'
-        , experience: 83
-        , sex: '男'
-    };
-    layui.config({
-        version: "3.1.2"
-        , base: '#(resource)/modules/'
-    }).extend({
-        fly: 'index'
-    }).use(['fly','form'],function () {
-        var $ = layui.jquery, fly = layui.fly, form = layui.form;
+    layui.use(['form'],function () {
+        var $ = layui.jquery,form = layui.form;
         // 表单验证
         form.verify({
             username: [/^[\S]{2,18}$/, '用户名不合法(2-18位)'],
@@ -98,23 +85,6 @@
                     return '两次密码不正确';
                 }
             }
-        });
-        form.on('submit(userReg)', function(data){
-            //表单提交
-            fly.json('#(ctx)user/reg',JSON.stringify(data.field),function(result){
-                console.log(result)
-                if(result.code == 0){
-                    layer.close(index);	//关闭弹框
-                    layer.msg("注册成功！！", {icon: 1, time: 1200});
-                    setInterval(function () {
-                        window.parent.location.href='#(ctx)index.html';
-                    },1000);
-                    return;
-                }
-            },{
-                contentType: 'application/json; charset=utf-8'
-            });
-            return false;
         });
     });
 </script>

@@ -32,12 +32,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.googlecode.xmemcached</groupId>
-            <artifactId>xmemcached</artifactId>
-            <version>2.3.2</version>
-        </dependency>
-
-        <dependency>
             <groupId>cn.assist</groupId>
             <artifactId>easy-dao</artifactId>
             <version>1.2.0</version>
@@ -146,11 +140,6 @@
             <version>3.10.0</version>
             <scope>compile</scope>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-autoconfigure</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 
     <build>

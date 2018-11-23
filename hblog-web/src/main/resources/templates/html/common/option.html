@@ -1,0 +1,9 @@
+#if (data??)
+#for(items : data)
+#if (checked??)
+<option value="#(items.id??1)" selected>#(items.name??'')</option>
+#else
+<option value="#(items.id??1)">#(items.name??'')</option>
+#end
+#end
+#end

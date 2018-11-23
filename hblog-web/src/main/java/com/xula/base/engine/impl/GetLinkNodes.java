@@ -50,7 +50,7 @@ public class GetLinkNodes extends ModuleData {
         if (type == 2) {
             for (int i = 0; i < 6; i++) {
                 Link link = new Link();
-                link.setUrl("http://fly.layui.com/jie/5366/");
+                link.setUrl("http://fly.layui.com/article/5366/");
                 link.setName("layui 常见问题的处理和实用干货集锦");
                 list.add(link);
             }

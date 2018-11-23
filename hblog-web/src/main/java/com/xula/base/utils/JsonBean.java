@@ -69,6 +69,21 @@ public class JsonBean {
 		json.put("msg", msg);
 		return json;
 	}
+
+
+	/**
+	 * 设置跳转的地址
+	 * @param msg
+	 * @param action
+	 * @return
+	 */
+	public static JSONObject success(String msg,String action) {
+		JSONObject json = new JSONObject();
+		json.put("code", JsonBean.OK);
+		json.put("msg", msg);
+		json.put("action", action);
+		return json;
+	}
 	
 	public static JSONObject success(String msg, Object data) {
 		JSONObject json = new JSONObject();

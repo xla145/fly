@@ -15,5 +15,9 @@ public class Md5Utils {
     public static String md5(String plainText) {
     	return DigestUtils.md5Hex(plainText);
     }
+
+    public static void main(String[] args) {
+        System.out.println(md5("123456"));
+    }
    
 }

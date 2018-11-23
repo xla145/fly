@@ -27,6 +27,9 @@ public class SpringBootConfig {
 
 
     jfr.addDirective("module", ModuleDirective.class);
+
+
+
     
     jfr.setSuffix(".html");
     jfr.setContentType("text/html;charset=UTF-8");

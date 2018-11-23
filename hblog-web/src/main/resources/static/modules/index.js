@@ -128,7 +128,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         ,picture: function(editor){ //插入图片
           layer.open({
             type: 1
-            ,id: 'fly-jie-upload'
+            ,id: 'fly-article-upload'
             ,title: '插入图片'
             ,area: 'auto'
             ,shade: false
@@ -518,7 +518,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   });
 
   //新消息通知
-  fly.newmsg();
+  // fly.newmsg();
 
   //发送激活邮件
   fly.activate = function(email){
@@ -558,7 +558,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
           fly.form[action||button.attr('key')](data.field, data.form);
         }
       };
-      if(res.status == 0){
+      if(res.code == 0){
         button.attr('alert') ? layer.alert(res.msg, {
           icon: 1,
           time: 10*1000,
@@ -614,7 +614,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     ,click: function(type){
       if(type === 'bar1'){
         layer.msg('打开 index.js，开启发表新帖的路径');
-        //location.href = 'jie/add.html';
+        //location.href = 'article/add.html';
       }
     }
   });

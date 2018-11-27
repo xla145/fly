@@ -84,8 +84,15 @@ public class Article extends BasePojo {
 	private Integer isComment;
 
 	/**
+	 * 评论数
+	 */
+	private Integer commentNum;
+
+	/**
 	 * 状态对应的名称
 	 */
 	@Temporary
 	private String statusName;
+
+	private Integer isGood = 0;
 }

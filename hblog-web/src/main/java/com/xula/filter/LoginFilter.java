@@ -14,7 +14,7 @@ import java.io.IOException;
  * 登录过滤器
  * @author xla
  */
-@WebFilter(urlPatterns = {"/article/add.html,/article/edit"}, filterName = "LoginFilter")
+@WebFilter(urlPatterns = {"/article/add.html","/article/edit"}, filterName = "LoginFilter")
 public class LoginFilter implements Filter {
 
 

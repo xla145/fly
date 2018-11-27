@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class BaseConstant {
 
-    @Value("${is.dev}")
-    public static boolean isDev = false;
-
+    public static  boolean isDev = false;
     /**
      * 系统用户登录session标识
      */

@@ -1,17 +1,24 @@
 package com.xula.service.article.impl;
 
+import cn.assist.easydao.common.Conditions;
+import cn.assist.easydao.common.Sort;
+import cn.assist.easydao.common.SqlSort;
 import cn.assist.easydao.dao.BaseDao;
+import cn.assist.easydao.pojo.PagePojo;
 import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Article;
 import com.xula.entity.Category;
+import com.xula.entity.extend.ArticleList;
 import com.xula.service.article.BaseService;
 import com.xula.service.article.IArticleCategoryService;
 import com.xula.service.article.IArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -57,5 +64,28 @@ public class ArticleServiceImpl extends BaseService implements IArticleService {
     @Override
     public RecordBean<Article> update(String articleId, String title, String info) {
         return null;
+    }
+
+
+    /**
+     * 分页获取文章信息
+     * @param conn
+     * @param pageSize
+     * @param pageNo
+     * @return
+     */
+    @Override
+    public PagePojo<ArticleList> getArticlePage(Conditions conn, Integer pageNo, Integer pageSize) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT a.*,m.uid,m.avatar,m.nickname,mi.vip_name ");
+        sql.append("FROM article a JOIN member m ON(a.create_uid = m.uid) LEFT JOIN member_info mi ON(m.uid = mi.uid) ");
+        sql.append("WHERE 1=1 ");
+        List<Object> params = null;
+        if (conn != null && conn.getConnSql() != null) {
+            sql.append("AND "+ conn.getConnSql());
+            params = conn.getConnParams();
+        }
+        Sort sort = new Sort("a.create_time", SqlSort.DESC);
+        return BaseDao.dao.queryForListPage(ArticleList.class,sql.toString(),params,sort,pageNo,pageSize);
     }
 }

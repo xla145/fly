@@ -24,6 +24,7 @@ public class SpringBootConfig {
     jfr.addSharedFunction("common/filter.html");
     jfr.addSharedFunction("common/user-nav.html");
     jfr.addSharedFunction("layout/intro.html");
+    jfr.addSharedFunction("common/_paginate.html");
 
 
     jfr.addDirective("module", ModuleDirective.class);

@@ -102,7 +102,7 @@ public class JsonBean {
 		data.put("pageDate", new JSONArray());
 		
 		if(page != null){
-			List<?> list = page.getPgaeData();
+			List<?> list = page.getPageData();
 			data.put("pageNo", page.getPageNo());
 			data.put("pageSize", page.getPageSize());
 			data.put("total", page.getTotal());

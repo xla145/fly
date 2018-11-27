@@ -11,6 +11,7 @@ import com.xula.base.utils.*;
 import com.xula.entity.Member;
 import com.xula.entity.UserInfo;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,9 @@ public class QQLoginController extends BaseAuth{
     private final static String loginCallback = "http://www.xulian.net.cn:8088/afterlogin";
 
     static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    @Value("is.dev")
+    private String isDev;
 
     /**
      * qq 授权
@@ -94,7 +98,7 @@ public class QQLoginController extends BaseAuth{
             // 解析参数
             JSONObject userParam = JSONObject.parseObject(Base64Helper.decode(userParamStr, "utf-8"));
 
-            if (GlobalConfig.dev) {
+            if (stringToBoolean(isDev)) {
                 logger.info("微信授权确认-处理用户数据逻辑：state：" + state + ", code:" + code + ",param:" + userParam);
             }
             String referrer = userParam.getString("referrer");
@@ -210,5 +214,17 @@ public class QQLoginController extends BaseAuth{
         userInfo.setAvatar(figureurl);
 
         return userInfo;
+    }
+
+    /**
+     * 字符串 true，false 转 boolean
+     * @param t
+     * @return
+     */
+    public static boolean stringToBoolean(String t) {
+        if (t.equalsIgnoreCase("true")) {
+            return true;
+        }
+        return false;
     }
 }

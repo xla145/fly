@@ -1,7 +1,10 @@
 package com.xula.service.article;
 
+import cn.assist.easydao.common.Conditions;
+import cn.assist.easydao.pojo.PagePojo;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Article;
+import com.xula.entity.extend.ArticleList;
 
 /**
  * 文章管理
@@ -29,4 +32,15 @@ public interface IArticleService {
      * @return
      */
     RecordBean<Article> update(String aid,String title,String info);
+
+
+    /**
+     * 分页获取文章信息
+     * @param conn
+     * @param pageSize
+     * @param pageNo
+     * @return
+     */
+    PagePojo<ArticleList> getArticlePage(Conditions conn, Integer pageNo, Integer pageSize);
+
 }

@@ -1,14 +1,17 @@
+
 <div class="fly-panel-title fly-filter">
-    <a href="" class="layui-this">综合</a>
+    <a href="/column/#(data.column??'all')/" class="#(data.filter??'layui-this')">综合</a>
     <span class="fly-mid"></span>
-    <a href="">未结</a>
+    <a href="/column/#(data.column??'all')/unsolved" class="#(data.filter == 'unsolved' ?'layui-this':'')">未结</a>
     <span class="fly-mid"></span>
-    <a href="">已结</a>
+    <a href="/column/#(data.column??'all')/solved" class="#(data.filter == 'solved' ?'layui-this':'')">已结</a>
     <span class="fly-mid"></span>
-    <a href="">精华</a>
+    <a href="/column/#(data.column??'all')/wonderful" class="#(data.filter == 'wonderful' ?'layui-this':'')">精华</a>
+    #if(data.show)
     <span class="fly-filter-right layui-hide-xs">
-    <a href="" class="layui-this">按最新</a>
-    <span class="fly-mid"></span>
-    <a href="">按热议</a>
-  </span>
+        <a href="" class="layui-this">按最新</a>
+        <span class="fly-mid"></span>
+        <a href="">按热议</a>
+    </span>
+    #end
 </div>

@@ -5,6 +5,7 @@ import lombok.Data;
 
 /**
  * 文章列表
+ * @author xla
  */
 @Data
 public class ArticleList extends Article {
@@ -29,11 +30,6 @@ public class ArticleList extends Article {
      * 文章链接
      */
     private  String url;
-
-    /**
-     * 评论数
-     */
-    private  Integer commentNum;
 
     /**
      * vip名称

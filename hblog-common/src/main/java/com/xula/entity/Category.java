@@ -27,10 +27,21 @@ public class Category extends BasePojo {
 	 * 分类名称
 	 */
 	private String name;
+
+	/**
+	 * 别名
+	 */
+	private String alias;
+
 	/**
 	 * 状态 0：停用 1：启用
 	 */
 	private Integer status;
+
+	/**
+	 * 是否是热门
+	 */
+	private Integer isHot;
 	/**
 	 * 创建时间
 	 */

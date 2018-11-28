@@ -13,10 +13,12 @@ import com.xula.entity.extend.ArticleList;
 import com.xula.service.article.BaseService;
 import com.xula.service.article.IArticleCategoryService;
 import com.xula.service.article.IArticleService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +27,8 @@ import java.util.List;
  * 文章管理
  * @author xla
  */
-@Service
+@Service("iArticleService")
+@CacheConfig(cacheNames = "cache-time-30")
 public class ArticleServiceImpl extends BaseService implements IArticleService {
 
     @Autowired
@@ -74,6 +77,7 @@ public class ArticleServiceImpl extends BaseService implements IArticleService {
      * @param pageNo
      * @return
      */
+    @Cacheable(keyGenerator = "customKeyGenerator")
     @Override
     public PagePojo<ArticleList> getArticlePage(Conditions conn, Integer pageNo, Integer pageSize) {
         StringBuffer sql = new StringBuffer();
@@ -81,11 +85,22 @@ public class ArticleServiceImpl extends BaseService implements IArticleService {
         sql.append("FROM article a JOIN member m ON(a.create_uid = m.uid) LEFT JOIN member_info mi ON(m.uid = mi.uid) ");
         sql.append("WHERE 1=1 ");
         List<Object> params = null;
-        if (conn != null && conn.getConnSql() != null) {
+        if (conn != null && StringUtils.isNotEmpty(conn.getConnSql())) {
             sql.append("AND "+ conn.getConnSql());
             params = conn.getConnParams();
         }
         Sort sort = new Sort("a.create_time", SqlSort.DESC);
         return BaseDao.dao.queryForListPage(ArticleList.class,sql.toString(),params,sort,pageNo,pageSize);
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    @Cacheable
+    @Override
+    public List<Article> getArticleList(Conditions conn) {
+        return BaseDao.dao.queryForListEntity(Article.class,conn);
     }
 }

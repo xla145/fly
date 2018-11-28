@@ -6,6 +6,8 @@ import com.xula.base.utils.RecordBean;
 import com.xula.entity.Article;
 import com.xula.entity.extend.ArticleList;
 
+import java.util.List;
+
 /**
  * 文章管理
  * @author xla
@@ -42,5 +44,12 @@ public interface IArticleService {
      * @return
      */
     PagePojo<ArticleList> getArticlePage(Conditions conn, Integer pageNo, Integer pageSize);
+
+    /**
+     * 获取文章列表
+     * @param conn
+     * @return
+     */
+    List<Article> getArticleList(Conditions conn);
 
 }

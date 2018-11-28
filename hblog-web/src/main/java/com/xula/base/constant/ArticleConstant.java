@@ -6,12 +6,14 @@ package com.xula.base.constant;
  */
 public class ArticleConstant {
 
-
     public static final String WONDERFUL = "wonderful";
 
     public static final String UNSOLVED = "unsolved";
 
     public static final String SOLVED = "solved";
+
+
+
 
 
     /**

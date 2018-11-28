@@ -1,7 +1,6 @@
 package com.xula.controller;
 
 
-import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.pojo.PagePojo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -9,8 +8,6 @@ import com.xula.base.constant.GlobalConstant;
 import com.xula.base.utils.JsonBean;
 import com.xula.dao.one.MemberMapper;
 import com.xula.dao.two.UserMapper;
-import com.xula.entity.Article;
-import com.xula.entity.Link;
 import com.xula.entity.Member;
 import com.xula.entity.User;
 import com.xula.entity.extend.ArticleList;
@@ -22,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,8 +28,6 @@ import java.util.Map;
  */
 @Controller
 public class IndexController extends WebController{
-
-    private static List<Link> linkList = new ArrayList<>();
 
     @Autowired
     private MemberMapper memberMapper;
@@ -49,9 +42,8 @@ public class IndexController extends WebController{
     public String index(Model model) {
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
-//        map.put("column","");
-//        map.put("filter","");
-        PagePojo<ArticleList> page = iArticleService.getArticlePage(new Conditions(),1,15);
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(null,1,15);
+        map.put("type","all");
         model.addAttribute("page",page);
         model.addAttribute("data",map);
         return "index";
@@ -70,7 +62,4 @@ public class IndexController extends WebController{
         request.getSession().setAttribute(GlobalConstant.SESSION_UID,1);
         return JsonBean.success("success",1);
     }
-
-
-
 }

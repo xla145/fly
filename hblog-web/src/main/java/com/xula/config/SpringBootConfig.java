@@ -3,6 +3,9 @@ package com.xula.config;
 import com.jfinal.template.ext.spring.JFinalViewResolver;
 import com.jfinal.template.source.ClassPathSourceFactory;
 import com.xula.base.engine.ModuleDirective;
+import com.xula.base.utils.CustomKeyGenerator;
+import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +20,6 @@ public class SpringBootConfig {
 
     JFinalViewResolver.engine.setBaseTemplatePath("/templates/html/");
 
-    jfr.addSharedFunction("common/column.html");
     jfr.addSharedFunction("layout/footer.html");
     jfr.addSharedFunction("layout/header.html");
     jfr.addSharedFunction("common/link.html");
@@ -26,15 +28,17 @@ public class SpringBootConfig {
     jfr.addSharedFunction("layout/intro.html");
     jfr.addSharedFunction("common/_paginate.html");
 
-
     jfr.addDirective("module", ModuleDirective.class);
-
-
-
-    
     jfr.setSuffix(".html");
     jfr.setContentType("text/html;charset=UTF-8");
     jfr.setOrder(0);
     return jfr;
   }
+
+
+//
+//  @Bean("customKeyGenerator")
+//  public KeyGenerator keyGenerator() {
+//    return new CustomKeyGenerator();
+//  }
 }

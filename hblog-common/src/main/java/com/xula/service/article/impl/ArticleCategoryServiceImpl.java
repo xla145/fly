@@ -1,7 +1,9 @@
 package com.xula.service.article.impl;
 
 import cn.assist.easydao.common.Conditions;
+import cn.assist.easydao.common.SqlExpr;
 import cn.assist.easydao.dao.BaseDao;
+import com.xula.entity.Article;
 import com.xula.entity.Category;
 import com.xula.service.article.IArticleCategoryService;
 import org.springframework.cache.annotation.CacheConfig;
@@ -38,5 +40,27 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
     @Override
     public Category getCategory(Integer catId) {
         return BaseDao.dao.queryForEntity(Category.class,catId);
+    }
+
+
+    /**
+     *
+     * @param alias
+     * @return
+     */
+    @Cacheable(cacheNames = "cache-time-30")
+    @Override
+    public Category getCategoryByAlias(String alias) {
+        return BaseDao.dao.queryForEntity(Category.class,new Conditions("alias", SqlExpr.EQUAL,alias));
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Cacheable(keyGenerator = "customKeyGenerator")
+    @Override
+    public List<Article> getArticleList(Conditions conn) {
+        return BaseDao.dao.queryForListEntity(Article.class,conn);
     }
 }

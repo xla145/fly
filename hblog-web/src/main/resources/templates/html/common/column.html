@@ -1,21 +1,20 @@
-#define column()
 <div class="fly-panel fly-column">
     <div class="layui-container">
-        <ul class="layui-clear">
-            <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
-            <li><a href="jie/index.html">提问</a></li>
-            <li><a href="jie/index.html">分享<span class="layui-badge-dot"></span></a></li>
-            <li><a href="jie/index.html">讨论</a></li>
-            <li><a href="jie/index.html">建议</a></li>
-            <li><a href="jie/index.html">公告</a></li>
-            <li><a href="jie/index.html">动态</a></li>
-            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
 
+        <ul class="layui-clear">
+            #set(alias = checked??'')
+            <li class="layui-hide-xs #(alias == 'all'?'layui-this':'')"><a href="/">首页</a></li>
+            #for(item:data)
+            <li class="#(alias == item.alias ? 'layui-this':'')"><a href="#(ctx)column/list/#(item.alias)">#(item.name)<span class="#(item.isHot == 1?'layui-badge-dot':'')"></span></a></li>
+            #end
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
             <!-- 用户登入后显示 -->
+            #if(session.uid??)
             <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li>
-            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a>
-            </li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a></li>
+            #end
         </ul>
+
 
         <div class="fly-column-right layui-hide-xs">
             <span class="fly-search"><i class="layui-icon"></i></span>
@@ -27,4 +26,3 @@
         </div>
     </div>
 </div>
-#end

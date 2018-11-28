@@ -1,7 +1,7 @@
 #include("../layout/_layout.html")
 <!-- 导航栏  -->
 #define body()
-#@column()
+#module("/common/column.html",class="GetCategoryNodes",checked=data.type??'')
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md8">
@@ -10,7 +10,7 @@
                 <ul class="fly-list">
                     #include("../common/_list.html")
                 </ul>
-                #@paginate(page.pageNo, page.pageTotal, "/column/#(data.column??'all')/")
+                #@paginate(page.pageNo, page.pageTotal, "/column/#(data.type??'all')/")
             </div>
         </div>
         <div class="layui-col-md4">

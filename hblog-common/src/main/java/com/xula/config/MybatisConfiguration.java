@@ -1,14 +1,17 @@
 package com.xula.config;
 
 import com.github.pagehelper.PageHelper;
+import com.xula.base.utils.CustomKeyGenerator;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
 /**
- * Created by ruixin on 2017/12/20.
+ *
  * Description:注册MyBatis分页插件PageHelper
+ * @author xla
  */
 @Configuration
 public class MybatisConfiguration {
@@ -25,5 +28,8 @@ public class MybatisConfiguration {
     }
 
 
-
+    @Bean("customKeyGenerator")
+    public KeyGenerator keyGenerator() {
+        return new CustomKeyGenerator();
+    }
 }

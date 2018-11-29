@@ -14,4 +14,7 @@ public class PageConstant {
 
 
     public final static  String LOGIN = "/user/login";
+
+
+    public final static String USER_HOME = "/user/home";
 }

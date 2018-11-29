@@ -46,7 +46,6 @@ public class CustomKeyGenerator implements KeyGenerator {
         }
         key.append("]");
         //防止　key 太长
-        System.out.println(Md5Utils.md5(key.toString()));
         return Md5Utils.md5(key.toString());
     }
 }

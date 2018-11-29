@@ -44,6 +44,7 @@ public class IndexController extends WebController{
         Map<String,Object> map = new HashMap<>();
         PagePojo<ArticleList> page = iArticleService.getArticlePage(null,1,15);
         map.put("type","all");
+        map.put("filter","");
         model.addAttribute("page",page);
         model.addAttribute("data",map);
         return "index";

@@ -104,4 +104,5 @@ public interface IMemberService {
      * @return
      */
     Member getMemberByUuid(String uuid, Integer loginWay);
+
 }

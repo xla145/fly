@@ -6,6 +6,7 @@ import cn.assist.easydao.common.SqlJoin;
 import cn.assist.easydao.pojo.PagePojo;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.constant.ArticleConstant;
+import com.xula.base.constant.PageConstant;
 import com.xula.base.utils.JsonBean;
 import com.xula.base.utils.RecordBean;
 import com.xula.base.utils.WebReqUtils;
@@ -67,7 +68,7 @@ public class ArticleController extends WebController {
         }
         RecordBean<Article> result = iArticleService.add(catId,title,info,payPoint);
         if (result.isSuccessCode()) {
-            return JsonBean.success(result.getMsg());
+            return JsonBean.success(result.getMsg(), PageConstant.INDEX);
         }
         return JsonBean.error(result.getMsg());
     }

@@ -89,4 +89,9 @@ public class Member extends BasePojo {
 	 * 邮箱
 	 */
 	private String email;
+
+	/**
+	 * 签名
+	 */
+	private String signature;
 }

@@ -1,7 +1,7 @@
 #include("layout/_layout.html")
 <!-- 导航栏  -->
 #define body()
-#module("/common/column.html",class="GetCategoryNodes",checked=data.type)
+#module("/common/column.html",class="GetCategoryNodes",checked=data.type??'')
 <!-- 主体部分  -->
 <div class="layui-container">
     <div class="layui-row layui-col-space15">

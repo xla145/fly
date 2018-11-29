@@ -13,17 +13,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BaseService {
 
-
-
-    @Autowired
-    private HttpServletRequest request;
-
-
     /**
      * 获取用户uid
      * @return
      */
     public Integer getUid() {
-        return WebReqUtils.getSessionUid(request);
+        return WebReqUtils.getSessionUid();
     }
 }

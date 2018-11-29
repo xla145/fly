@@ -177,6 +177,6 @@ public class UserController extends BaseAuth {
     @RequestMapping(value = "logout",method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         request.getSession().removeAttribute(GlobalConstant.SESSION_UID);
-        return "/index";
+        return "redirect:/index";
     }
 }

@@ -13,11 +13,11 @@
 <script>
     layui.cache.page = '';
     layui.cache.user = {
-        username: '#(session.nickname??"游客")'
-        , uid: '#(session.uid??-1)'
-        , avatar: '#(session.avatar??"/static/images/avatar/00.jpg")'
-        , experience: '#(session.uid??5)'
-        , sex: '#(session.sex??"男")'
+        username: '#(member.nickname??"游客")'
+        , uid: '#(member.uid??-1)'
+        , avatar: '#(member.avatar??"/static/images/avatar/00.jpg")'
+        , experience: '#(member.pointValue??0)'
+        , sex: '#(member.sex??"男")'
     };
     layui.config({
         version: "3.0.0"

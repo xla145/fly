@@ -1,6 +1,6 @@
 package com.xula.config;
 
-import com.xula.Interceptor.UserInterceptor;
+import com.xula.interceptor.UserInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;

@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 启用easy-dao框架
@@ -28,10 +30,13 @@ public class ConfigDao {
      * @return
      */
     @Bean
-    public DataSourceHolder dataSourceHolder(@Qualifier("dataSourceOne") DataSource dataSource) {
+    public DataSourceHolder dataSourceHolder(@Qualifier("dataSourceOne") DataSource dataSource,@Qualifier("dataSourceTwo") DataSource dataSourceTwo) {
         DataSourceHolder dataSourceHolder = new DataSourceHolder();
-        dataSourceHolder.setDataSource(dataSource);
-        DataSourceHolder.setDev(true);
+        dataSourceHolder.setDefaultTargetDataSource(dataSource);
+        Map<Object, Object> targetDataSources = new HashMap<Object, Object>();
+        targetDataSources.put("base",dataSource);
+        targetDataSources.put("two",dataSourceTwo);
+        dataSourceHolder.setTargetDataSources(targetDataSources);
         return dataSourceHolder;
     }
 
@@ -39,8 +44,20 @@ public class ConfigDao {
     /**
      * 创建事务
      */
-    @Bean
-    public DataSourceTransactionManager txManager(@Qualifier("dataSourceOne") DataSource dataSource) {
+    @Bean("baseTxManager")
+    public DataSourceTransactionManager baseTxManager(@Qualifier("dataSourceOne") DataSource dataSource) {
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource);
+        return dataSourceTransactionManager;
+    }
+
+
+
+    /**
+     * 创建事务
+     */
+    @Bean("twoTxManager")
+    public DataSourceTransactionManager twoTxManager(@Qualifier("dataSourceTwo") DataSource dataSource) {
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
         dataSourceTransactionManager.setDataSource(dataSource);
         return dataSourceTransactionManager;

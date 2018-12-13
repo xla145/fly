@@ -50,7 +50,7 @@ public class JsonBean {
         JSONObject json = new JSONObject();
         json.put("code", JsonBean.OK);
         json.put("msg", "success");
-        json.put("data", JSONArray.toJSON(pagePojo.getPgaeData()));
+        json.put("data", JSONArray.toJSON(pagePojo.getPageData()));
         json.put("count", pagePojo.getTotal());
         return json;
     }
@@ -67,7 +67,7 @@ public class JsonBean {
         JSONObject json = new JSONObject();
         json.put("code", JsonBean.OK);
         json.put("msg", msg);
-        json.put("data", JSONArray.toJSON(pagePojo.getPgaeData()));
+        json.put("data", JSONArray.toJSON(pagePojo.getPageData()));
         json.put("count", pagePojo.getTotal());
         return json;
     }

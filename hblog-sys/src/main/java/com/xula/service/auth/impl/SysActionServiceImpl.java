@@ -61,6 +61,30 @@ public class SysActionServiceImpl implements ISysActionService {
         return treeNodes;
     }
 
+
+
+    /**
+     * 获取功能树
+     */
+    @Override
+    public List<TreeNode> getActionTrees(Integer type) {
+        Conditions conn = new Conditions("parent_id", SqlExpr.LT, 1);
+        conn.add(new Conditions("status",SqlExpr.UNEQUAL,-1),SqlJoin.AND);
+        conn.add(new Conditions("type",SqlExpr.EQUAL,type),SqlJoin.AND);
+        List<SysAction> list = BaseDao.dao.queryForListEntity(SysAction.class, conn);
+        List<TreeNode> treeNodes = new ArrayList<TreeNode>();
+        if (list != null) {
+            for (SysAction sysAction : list) {
+                TreeNode treeNode = getActionTree(sysAction);
+                treeNodes.add(treeNode);
+            }
+        }
+        if (treeNodes.size() > 0) {
+            treeNodes.get(0).setSpread(true);
+        }
+        return treeNodes;
+    }
+
     @Override
     public List<SysAction> getAllAction() {
 
@@ -82,6 +106,7 @@ public class SysActionServiceImpl implements ISysActionService {
         treeData.setOrigin(sysAction);
         treeNode.setData(treeData);
         Conditions childrenConn = new Conditions("parent_id", SqlExpr.EQUAL, id);
+        childrenConn.add(new Conditions("type",SqlExpr.EQUAL,2),SqlJoin.AND);
         childrenConn.add(new Conditions("status",SqlExpr.UNEQUAL,-1),SqlJoin.AND);
         List<SysAction> childrenSysActionList = BaseDao.dao.queryForListEntity(SysAction.class, childrenConn);
         for (SysAction childrenSysAction : childrenSysActionList) {
@@ -248,6 +273,7 @@ public class SysActionServiceImpl implements ISysActionService {
         }
         sysAction.setCreateTime(new Date());
         sysAction.setUpdateTime(new Date());
+        sysAction.setParentName(sysAction1.getParentName());
         int result = BaseDao.dao.insert(sysAction);
         if (result == 1) {
             return RecordBean.success("success",sysAction);
@@ -274,6 +300,7 @@ public class SysActionServiceImpl implements ISysActionService {
         int level = sysAction1.getLevel();
         sysAction.setLevel(level++); // 获取上一级的等级加一
         sysAction.setUpdateTime(new Date());
+        sysAction.setParentName(sysAction1.getParentName());
         int result = BaseDao.dao.update(sysAction);
         if (result == 1) {
             return RecordBean.success("success",sysAction);

@@ -1,6 +1,7 @@
 <#include "../../../_layout/_layout2.0.html"><#t>
 <@header>
 	<link rel="stylesheet" href="${assets}css/iconpick.css?v=20180108" media="all" />
+	<link rel="stylesheet" href="${assets}css/formSelects-v4.css" />
 </@header>
 <div style="margin: 15px; " id="add-form">
 	<form class="layui-form" id="edit-form">
@@ -31,8 +32,11 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">父级节点：</label>
 			<div class="layui-input-inline">
-				<input type="hidden" name="parentId" placeholder="上级菜单" autocomplete="off" class="layui-input" value="${data.parentId!''}" id="parentId">
-				<input type="text" name="parentName" autocomplete="off" class="layui-input" value="${data.parentName!''}" id="parent-name">
+				<select name="parentId" xm-select="action-node" xm-select-radio="">
+					<option value=""></option>
+				</select>
+				<!--<input type="hidden" name="parentId" placeholder="上级菜单" autocomplete="off" class="layui-input" value="${data.parentId!''}" id="parentId">-->
+				<!--<input type="text" name="parentName" autocomplete="off" class="layui-input" value="${data.parentName!''}" id="parent-name">-->
 			</div>
 			<div class="layui-form-mid layui-word-aux">注意：如果是一级菜单则为空</div>
 		</div>
@@ -67,9 +71,32 @@
 	</form>
 </div>
 <@footer>
+<script type="text/javascript">
+    layui.config({
+        base: '${assets}/modules/' //此处路径请自行处理, 可以使用绝对路径
+    }).extend({
+        formSelects: 'formSelects-v4'
+    });
+    layui.use(['form','formSelects'], function(){
+        let formSelects = layui.formSelects;
+        formSelects.config('action-node', {
+            type: 'post',                //请求方式: post, get, put, delete...
+            keyVal: 'id',
+            searchUrl: '${ctx}sysAction/actionList',              //搜索地址, 默认使用xm-select-search的值, 此参数优先级高
+            selected: '${data.parentId!""}'
+		})
+    });
+</script>
 <script>
+
+    layui.config({
+        base: '${assets}/modules/' //此处路径请自行处理, 可以使用绝对路径
+    }).extend({
+        iconshow: 'iconshow'
+    });
+
 	//入口
-	layui.use(['form','common','iconshow'], function(){
+	layui.use(['form','iconshow'], function(){
 		var $ = layui.jquery,form = layui.form,common = layui.common,layer = layui.layer,iconshow = layui.iconshow;
         // 渲染图标列表
         iconshow.render({

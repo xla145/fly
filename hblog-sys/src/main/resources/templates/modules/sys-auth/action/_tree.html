@@ -9,24 +9,22 @@
 <script>
 	//入口
 	layui.use(['form','tree'], function(){
-		var $ = layui.jquery;
+		var $ = layui.jquery, tree = layui.tree;
 
 		// 编辑 删除
 		let arr = ${treeNode!'{}'}
 		let json = {checkboxValue: "2", children: '',data:{id:-1,origin:{id: -1,name: "一级菜单"}}, id: -1, name: "一级菜单"}
         arr.splice(0, 0, json)
-        var tree = layui.tree({
+
+
+        var s = tree.render({
             elem : '#actionBox',
-//            check : 'checkbox',
             skin : 'as',
             click : function(item) {
                 showDetail(item.data.origin)
             },
-            onchange: function (){
-//                $('#count').text(getChecks().length);
-            },
             nodes: arr
-        });
+        })
 
         var showDetail = function(data){
             parent._tool.setParentName(data.name,data.id)

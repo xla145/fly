@@ -1,75 +1,101 @@
 <#include "../../../_layout/_layout2.0.html"><#t>
 <@header/>
 <div class="admin-main">
-	<!-- 按钮组 -->
-	<blockquote class="layui-elem-quote">
-		<@shiro.hasPermission name="sysAction:getView,sysAction:add">
-		<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
-		</@shiro.hasPermission>
-	<@shiro.hasPermission name="sysAction:getView,sysAction:edit">
-		<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-normal operator-btn" data-type="edit"><i class="layui-icon">&#xe642;</i> 编辑</a>
-</@shiro.hasPermission>
-<@shiro.hasPermission name="sysAction:del">
-	<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-danger operator-btn" data-type="del"><i class="iconfont layui-e-lajixiang"></i> 删除</a>
-</@shiro.hasPermission>
-</blockquote>
-	<!-- 筛选组 -->
-	<blockquote class="layui-elem-quote filter-bar">
-		<form class="layui-form" id="filterForm">
-			<div class="layui-inline">
-				<label class="layui-filtrate-title">名称：</label>
-				<div class="layui-input-inline">
-					<input type="text" class="layui-input" id="release-time" name="name">
+	<div class="layui-row layui-col-space10">
+		<div class="layui-col-md2">
+			<div class="layui-card" style="border: 1px solid #1aa094;">
+				<div class="layui-card-header" style="background-color: #1aa094;color: white">
+					权限菜单
+				</div>
+				<div class="layui-card-body" style="padding:10px 0">
+					<div class="action-box" id="actionBox"></div>
 				</div>
 			</div>
-			<div class="layui-inline">
-				<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="search"><i class="layui-icon layui-icon-search"></i>搜索</a>
-				<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="reset"><i class="layui-icon layui-icon-refresh-3"></i>重置</a>
+		</div>
+		<div class="layui-col-md10">
+			<div class="layui-card">
+				<div class="layui-card-header layuiadmin-card-header-auto">
+					<div class="layui-btn-group">
+						<@shiro.hasPermission name="sysAction:getView,sysAction:add">
+						<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
+						</@shiro.hasPermission>
+						<@shiro.hasPermission name="sysAction:getView,sysAction:edit">
+						<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-normal operator-btn" data-type="edit"><i class="layui-icon">&#xe642;</i> 编辑</a>
+						</@shiro.hasPermission>
+						<@shiro.hasPermission name="sysAction:del">
+						<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-danger operator-btn" data-type="del"><i class="iconfont layui-e-lajixiang"></i> 删除</a>
+						</@shiro.hasPermission>
+					</div>
+				</div>
+				<div class="layui-card-body">
+					<table class="layui-table" id="table-action" lay-filter="table-action"></table>
+					<script type="text/html" id="iconTpl">
+						<i class="layui-icon {{ d.icon || 'layui-icon-diamond' }}"></i> &nbsp;&nbsp; {{ d.name }}
+					</script>
+					<script type="text/html" id="table-useradmin-webuser">
+						<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+					</script>
+				</div>
 			</div>
-		</form>
-	</blockquote>
-	<!-- 表格区域 -->
-	<table class="layui-table" id="table-action" lay-filter="table-action"></table>
-	<!--<script type="text/html" id="barDemo">-->
-		<!--<a class='layui-btn layui-btn-xs layui-btn-normal' lay-event='edit'>编辑</a>-->
-		<!--<a class='layui-btn layui-btn-danger layui-btn-xs' lay-event='del'>删除</a>-->
-	<!--</script>-->
+		</div>
+	</div>
 </div>
 <@footer>
 <script>
 //入口
-layui.use(['form','table','common','treeGrid'], function(){
+layui.use(['form','table','common','tree'], function(){
 	var $ = layui.jquery,
 		table = layui.table,
 		form = layui.form,
+        tree = layui.tree,
 		common = layui.common,treeGrid = layui.treeGrid; //很重要
-    var tableIns = treeGrid.render({
+
+    var s = tree.render({
+        elem : '#actionBox',
+        check : 'checkbox',
+        skin : 'as',
+        click : function(item) {
+            console.log(item)
+            dataReload(item.id);
+        }
+    })
+
+    function loadMenu() {
+        $.post("${ctx}sysAction/actionList",function (res) {
+            // console.log(res.data)
+            s.reload(res.data);
+        })
+    }
+
+    loadMenu();
+
+    var tableIns = table.render({
         elem: '#table-action'
         ,id:'table-action'
-        ,levelField:'level'
-        ,paramName:'parentId'
-        ,paramValue:'id'
-        ,scopeField:'baseCode'
         ,url: '${ctx}sysAction/list'
+        ,method: 'post'
+        ,request: {
+            pageName: 'pageNo' //页码的参数名称，默认：page
+            ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+        }
         ,cols: [[
             {checkbox: true, fixed: true}
-            ,{field:'baseCode', title: '', width:100}
             ,{field:'id', title: 'ID', width:80}
             ,{field:'name', title: '名称', width:150}
             ,{field:'url', title: 'url', width:150}
-//			,{field:'icon', title: '图标', width:150}
             ,{field:'type', title: '类型', width:100,templet: '#typeTpl'}
             ,{field:'parentId', title: '父级ID', width:80}
-            ,{field:'createTime', title: '创建时间', width:150,sort: true,templet: '<div>{{dateFormat(d.createTime)}}</div>'}
             ,{field:'perms', title: '授权标识', width:150}
             ,{field:'remark', title: '备注', width:150}
-            ,{field:'weight', title: '权重', width:80,sort:true}
+            ,{fixed:'right',field:'weight', title: '权重', width:80,sort:true}
         ]]
 		,size: 'sm'
-        ,limit:300
+        ,limit:20
         ,page: false
-        ,height: 'full-150'
+        ,height: 'full-120'
     });
+
 	// 编辑 删除
 	var $ = layui.$, active = {
 		search: function () {
@@ -101,7 +127,7 @@ layui.use(['form','table','common','treeGrid'], function(){
             });
 		},
 		edit: function (data) {
-			data = data || treeGrid.checkStatus('table-action').data;
+			data = data || table.checkStatus('table-action').data;
             common.editForm({
 				content:"${ctx}sysAction/getView?id="+data[0].id,
 				title:'编辑功能',
@@ -141,11 +167,9 @@ layui.use(['form','table','common','treeGrid'], function(){
         }
 	}
 	//加载数据
-	var dataReload = function (isEdit) {
+	var dataReload = function (parenId) {
 		tableIns.reload({
-			where: common.formatForm($('#filterForm')),page: {
-                pageNo: 1 //重新从第 1 页开始
-            }
+			where: {"parentId": parenId}
 		});
 	}
 	//绑定操作按钮

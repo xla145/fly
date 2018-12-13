@@ -60,14 +60,18 @@ public class SysActionsController {
         int pageNo = ReqUtils.getParamToInt(request, "pageNo", 1);
         int pageSize = ReqUtils.getParamToInt(request, "pageSize", 2000);
         int parentId = ReqUtils.getParamToInt(request, "parentId", -1);
-        String name = ReqUtils.getParam(request, "name", null);
-        Conditions conn = new Conditions();
-        if (StringUtils.isNotBlank(name)) {
-            conn.add(new Conditions("name", SqlExpr.EQUAL, name),SqlJoin.AND); ;
-        }
-        conn.add(new Conditions("parent_id", SqlExpr.EQUAL, parentId), SqlJoin.AND);
+        Conditions conn = new Conditions("parent_id", SqlExpr.EQUAL, parentId);
         PagePojo<SysAction> page = sysActionService.getSysAction(conn, pageNo, pageSize);
         return JsonBean.success(page);
+    }
+
+
+
+    @RequestMapping(value = "/actionList")
+    @ResponseBody
+    public JSONObject actionList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<TreeNode> list = sysActionService.getActionTrees(2);
+        return JsonBean.success("success",list);
     }
 
     /**

@@ -87,21 +87,23 @@
 	layui.use(['tree','layer'], function() {
 
 		var $ = layui.jquery,
-		layer = layui.layer;
+		layer = layui.layer,tree = layui.tree;
 		initChunk($); //初始化高度
-		var tree = layui.tree({
-			elem : '#actionBox',
-			check : 'checkbox',
-			skin : 'as',
-			click : function(item) {
-				showDetail(item.data.origin)
-			},
-			onchange: function (){
-				$('#count').text(getChecks().length);
-			},
-			nodes: ${treeNode!'{}'}
-		});
-		
+
+        tree.render({
+            elem : '#actionBox',
+            check : 'checkbox',
+            skin : 'as',
+            click : function(item) {
+                console.log(item)
+                showDetail(item.data.origin)
+            },
+            onchange: function (){
+                $('#count').text(getChecks().length);
+            },
+            nodes: ${treeNode!'{}'}
+		})
+
 		//保存更改
 		$('#save').click(function() {
 			var roleId = $('#roleId').val();

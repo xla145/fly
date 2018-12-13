@@ -18,12 +18,21 @@ import java.util.List;
  */
 public interface ISysActionService {
 
+
+
     /**
      * 获取菜单详细信息
      * @return
      */
-     List<TreeNode> getActionTrees();
+    List<TreeNode> getActionTrees();
 
+
+    /**
+     * 获取菜单详细信息
+     * @param type
+     * @return
+     */
+     List<TreeNode> getActionTrees(Integer type);
 
     /**
      * 获取菜单详细信息

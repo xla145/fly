@@ -178,13 +178,8 @@ public class ArticleController extends WebController {
      * @return
      */
     private Conditions getConditions(String typeName,String statusName) {
-        Conditions con ;
-        if (typeName.equalsIgnoreCase("all")) {
-            con = new Conditions();
-        } else {
-            Category category = iArticleCategoryService.getCategoryByAlias(typeName);
-            con = new Conditions("a.cat_id",SqlExpr.EQUAL,category.getId());
-        }
+        Category category = iArticleCategoryService.getCategoryByAlias(typeName);
+        Conditions con = new Conditions("a.cat_id",SqlExpr.EQUAL,category.getId());
         if (StringUtils.isEmpty(statusName)) {
             return con;
         }

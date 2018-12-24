@@ -1,18 +1,22 @@
 package com.xula.config.easydao;
 
 import cn.assist.easydao.dao.datasource.DataSourceHolder;
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import cn.assist.easydao.interceptor.DataSourceInterceptor;
+import com.xula.base.constant.DataSourceConstant;
 import com.xula.config.datasource.DataSourceConfig;
+import org.aopalliance.aop.Advice;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.support.AbstractPointcutAdvisor;
+import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,9 +37,9 @@ public class ConfigDao {
     public DataSourceHolder dataSourceHolder(@Qualifier("dataSourceOne") DataSource dataSource,@Qualifier("dataSourceTwo") DataSource dataSourceTwo) {
         DataSourceHolder dataSourceHolder = new DataSourceHolder();
         dataSourceHolder.setDefaultTargetDataSource(dataSource);
-        Map<Object, Object> targetDataSources = new HashMap<Object, Object>();
-        targetDataSources.put("base",dataSource);
-        targetDataSources.put("two",dataSourceTwo);
+        Map<Object, Object> targetDataSources = new HashMap<>();
+        targetDataSources.put(DataSourceConstant.DATA_SOURCE_A,dataSource);
+        targetDataSources.put(DataSourceConstant.DATA_SOURCE_B,dataSourceTwo);
         dataSourceHolder.setTargetDataSources(targetDataSources);
         return dataSourceHolder;
     }
@@ -61,5 +65,50 @@ public class ConfigDao {
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
         dataSourceTransactionManager.setDataSource(dataSource);
         return dataSourceTransactionManager;
+    }
+
+
+    /**
+     * 定义一个数据源拦截器
+     * @return
+     */
+    @Bean
+    public DataSourceInterceptor getDataSourceInterceptor() {
+        return new DataSourceInterceptor();
+    }
+
+    /**
+     * 定义一个切面
+     * @return
+     */
+    @Bean
+    public AbstractPointcutAdvisor getAbstractPointcutAdvisor() {
+
+        /**
+         * 配置aop
+         */
+        AbstractPointcutAdvisor abstractPointcutAdvisor = new AbstractPointcutAdvisor() {
+
+            /**
+             * 配置aop规则
+             */
+            StaticMethodMatcherPointcut pointcut = new StaticMethodMatcherPointcut() {
+                @Override
+                public boolean matches(Method method, Class<?> targetClass) {
+                    return method.isAnnotationPresent(cn.assist.easydao.annotation.DataSource.class) || targetClass.isAnnotationPresent(cn.assist.easydao.annotation.DataSourceConfig.class);
+                }
+            };
+
+            @Override
+            public Pointcut getPointcut() {
+                return pointcut;
+            }
+
+            @Override
+            public Advice getAdvice() {
+                return getDataSourceInterceptor();
+            }
+        };
+        return abstractPointcutAdvisor;
     }
 }

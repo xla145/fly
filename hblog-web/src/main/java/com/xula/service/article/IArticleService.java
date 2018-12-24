@@ -2,6 +2,7 @@ package com.xula.service.article;
 
 import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.pojo.PagePojo;
+import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Article;
 import com.xula.entity.extend.ArticleList;
@@ -51,5 +52,21 @@ public interface IArticleService {
      * @return
      */
     List<Article> getArticleList(Conditions conn);
+
+
+    /**
+     * 获取文章详情
+     * @param aid
+     * @return
+     */
+    Article getArticle(String aid);
+
+
+    /**
+     * 获取文章详情
+     * @param aid
+     * @return
+     */
+    RecordPojo getArticleInfo(String aid);
 
 }

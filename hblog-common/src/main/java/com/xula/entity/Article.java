@@ -1,5 +1,6 @@
 package com.xula.entity;
 
+import cn.assist.easydao.annotation.DataSource;
 import cn.assist.easydao.annotation.Id;
 import cn.assist.easydao.annotation.Temporary;
 import cn.assist.easydao.pojo.BasePojo;

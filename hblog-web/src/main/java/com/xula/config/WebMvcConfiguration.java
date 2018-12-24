@@ -1,5 +1,6 @@
 package com.xula.config;
 
+import com.xula.base.auth.LoginInterceptor;
 import com.xula.interceptor.UserInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -34,6 +35,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**");
         registry.addInterceptor(new UserInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**");
         super.addInterceptors(registry);
     }

@@ -32,11 +32,6 @@ public class ArticleConstant {
     public static final Integer STATUS_ADUITED = 5;
 
     /**
-     * 未结
-     */
-    public static final Integer STATUS_UNSOLVED = 10;
-
-    /**
      * 完结
      */
     public static final Integer STATUS_SOLVED = 15;

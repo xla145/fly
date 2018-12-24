@@ -4,7 +4,10 @@ import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.common.SqlExpr;
 import cn.assist.easydao.common.SqlJoin;
 import cn.assist.easydao.pojo.PagePojo;
+import cn.assist.easydao.pojo.RecordPojo;
+import cn.assist.easydao.util.JsonKit;
 import com.alibaba.fastjson.JSONObject;
+import com.xula.base.auth.Login;
 import com.xula.base.constant.ArticleConstant;
 import com.xula.base.constant.PageConstant;
 import com.xula.base.utils.JsonBean;
@@ -14,8 +17,13 @@ import com.xula.controller.WebController;
 import com.xula.entity.Article;
 import com.xula.entity.Category;
 import com.xula.entity.extend.ArticleList;
+import com.xula.entity.extend.CommentList;
+import com.xula.event.AccessArticleEvent;
+import com.xula.event.EventModel;
+import com.xula.event.RegisterEvent;
 import com.xula.service.article.IArticleCategoryService;
 import com.xula.service.article.IArticleService;
+import com.xula.service.article.ICommentService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,11 +49,14 @@ public class ArticleController extends WebController {
     private IArticleService iArticleService;
     @Autowired
     private IArticleCategoryService iArticleCategoryService;
+    @Autowired
+    private ICommentService iCommentService;
 
     /**
      * 添加文章
      * @return
      */
+    @Login
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject add(HttpServletRequest request) {
@@ -78,17 +89,29 @@ public class ArticleController extends WebController {
      * 跳转添加文章页面
      * @return
      */
+    @Login
     @RequestMapping(value = "/add",method = RequestMethod.GET)
     public String addView() {
         return "article/add";
     }
 
 
-
-
-
-
-
+    /**
+     * 获取到文章列表页
+     * @return
+     */
+    @RequestMapping(value = {"/list/all","/list/all/page/{pageNo}"},method = RequestMethod.GET)
+    public String index(@PathVariable(required = false) Integer pageNo,Model model) {
+        // 获取 filter 列表数据
+        Map<String,Object> map = new HashMap<>();
+        // 获取 filter 列表数据
+        map.put("filter","");
+        map.put("type","all");
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(new Conditions(),pageNo,2);
+        model.addAttribute("page",page);
+        model.addAttribute("data",map);
+        return "/article/index";
+    }
 
 
 
@@ -96,25 +119,44 @@ public class ArticleController extends WebController {
      * 获取到文章列表页
      * @return
      */
-    @RequestMapping(value = {"/list/{typeName}","/list/{typeName}/{statusName}","/list/{typeName}/{statusName}/page/{pageNo}",},method = RequestMethod.GET)
+    @RequestMapping(value = {"/list/{typeName}/{statusName}","/list/{typeName}/{statusName}/page/{pageNo}",},method = RequestMethod.GET)
     public String index(@PathVariable String typeName,@PathVariable(required = false) String statusName,@PathVariable(required = false) Integer pageNo,Model model) {
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
         map.put("filter",statusName);
         map.put("type",typeName);
-        PagePojo<ArticleList> page = iArticleService.getArticlePage(getConditions(typeName,statusName),1,15);
-
-        Category category = iArticleCategoryService.getCategoryByAlias(typeName);
-        iArticleCategoryService.getArticleList(new Conditions("cat_id",SqlExpr.EQUAL,category.getId()));
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(getConditions(typeName,statusName),pageNo,2);
 
         model.addAttribute("page",page);
         model.addAttribute("data",map);
-        System.out.println(typeName);
-        System.out.println(pageNo);
         return "/article/index";
     }
 
 
+    /**
+     * 跳转添加文章页面
+     * @return
+     */
+    @RequestMapping(value = {"/detail/{aid}","/detail/{aid}/page/{pageNo}/"},method = RequestMethod.GET)
+    public String detail(@PathVariable("aid") String aid,@PathVariable(value = "pageNo",required = false) Integer pageNo,Model model) {
+        RecordPojo recordPojo = iArticleService.getArticleInfo(aid);
+        model.addAttribute("data",recordPojo.getColumns());
+        pageNo = pageNo == null? 1:pageNo;
+        PagePojo<CommentList> page = iCommentService.getCommentPage(new Conditions("a.article_id",SqlExpr.EQUAL,aid),pageNo,3);
+        model.addAttribute("comment", page);
+
+        //发布浏览事件
+        Integer uid = WebReqUtils.getSessionUid(request);
+        EventModel eventModel = new EventModel();
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("uid",uid);
+        param.put("aid", aid);
+        param.put("ip", WebReqUtils.getIp(request));
+        eventModel.setParam(param);
+        ac.publishEvent(new AccessArticleEvent(eventModel));
+
+        return "article/detail";
+    }
 
 
 
@@ -145,7 +187,7 @@ public class ArticleController extends WebController {
             return con;
         }
         if (statusName.equalsIgnoreCase(ArticleConstant.UNSOLVED)) {
-            con.add(new Conditions("a.status", SqlExpr.EQUAL,ArticleConstant.STATUS_UNSOLVED), SqlJoin.AND);
+            con.add(new Conditions("a.status", SqlExpr.EQUAL,ArticleConstant.STATUS_ADUITED), SqlJoin.AND);
         } else if (statusName.equalsIgnoreCase(ArticleConstant.SOLVED)) {
             con.add(new Conditions("a.status", SqlExpr.EQUAL,ArticleConstant.STATUS_SOLVED),SqlJoin.AND);
         } else {
@@ -153,4 +195,6 @@ public class ArticleController extends WebController {
         }
         return con;
     }
+
+
 }

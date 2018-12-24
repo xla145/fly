@@ -1,0 +1,60 @@
+#define comment(commentList)
+<ul class="jieda" id="jieda">
+    #if(commentList??)
+        #for(item:commentList)
+        <li data-id="#(item.id)" class="jieda-daan">
+            <a name="item-1111111111"></a>
+            <div class="detail-about detail-about-reply">
+                <a class="fly-avatar" href="/member/#(item.uid)">
+                    <img src="#(item.avatar??'https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg')"
+                         alt="#(item.nickname)">
+                </a>
+                <div class="fly-detail-user">
+                    <a href="" class="fly-link">
+                        <cite>#(item.nickname)</cite>
+                        <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
+                        <i class="layui-badge fly-badge-vip">#(item.vipName??"普通会员")</i>
+                    </a>
+
+                    <span>(楼主)</span>
+                    <!--
+                    <span style="color:#5FB878">(管理员)</span>
+                    <span style="color:#FF9E3F">（社区之光）</span>
+                    <span style="color:#999">（该号已被封）</span>
+                    -->
+                </div>
+
+                <div class="detail-hits">
+                    <span>#date(item.createTime,"yyyy-MM-dd")</span>
+                </div>
+
+                #if(item.isAccept == 1)
+                <i class="iconfont icon-caina" title="最佳答案"></i>
+                #end
+            </div>
+            <div class="detail-body jieda-body photos">
+                #(item.content??"")
+            </div>
+            <div class="jieda-reply">
+                  <span class="jieda-zan zanok" type="zan">
+                    <i class="iconfont icon-zan"></i>
+                    <em>#(item.loveNum??0)</em>
+                  </span>
+                <span type="reply">
+                    <i class="iconfont icon-svgmoban53"></i>
+                    回复
+                  </span>
+                <div class="jieda-admin">
+                    <!--<span type="edit">编辑</span>-->
+                    <!--<span type="del">删除</span>-->
+                    <!-- <span class="jieda-accept" type="accept">采纳</span> -->
+                </div>
+            </div>
+        </li>
+        #end
+    #else
+    <!-- 无数据时 -->
+     <li class="fly-none">消灭零回复</li>
+    #end
+</ul>
+#end

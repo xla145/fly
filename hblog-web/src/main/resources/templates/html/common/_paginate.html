@@ -11,9 +11,9 @@
     #if ((totalPage - currentPage) < 8)
     #setLocal(endPage = totalPage)
     #end
-
+    <div class="laypage-main">
     #if (currentPage == 1)
-    <div class="laypage-main"><a href="#" class="layui-laypage-prev layui-disabled ">上一页</a>
+    <a href="#" class="layui-laypage-prev layui-disabled ">上一页</a>
     #else
     <a href="#(link)#(currentPage - 1)#(append)" class="prev_page">上一页</a>
     #end

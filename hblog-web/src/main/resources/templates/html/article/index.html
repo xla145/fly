@@ -8,9 +8,9 @@
             <div class="fly-panel" style="margin-bottom: 0;">
                 #include("../common/filter.html")
                 <ul class="fly-list">
-                    #include("../common/_list.html")
+                    #include("_list.html")
                 </ul>
-                #@paginate(page.pageNo, page.pageTotal, "/column/#(data.type??'all')/")
+                #@paginate(page.pageNo, page.pageTotal, "/column/list/"+data.type??'all'+"/page/")
             </div>
         </div>
         <div class="layui-col-md4">

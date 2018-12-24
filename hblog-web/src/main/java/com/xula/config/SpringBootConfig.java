@@ -27,6 +27,7 @@ public class SpringBootConfig {
     jfr.addSharedFunction("common/user-nav.html");
     jfr.addSharedFunction("layout/intro.html");
     jfr.addSharedFunction("common/_paginate.html");
+    jfr.addSharedFunction("article/comment/_list.html");
 
     jfr.addDirective("module", ModuleDirective.class);
     jfr.setSuffix(".html");

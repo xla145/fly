@@ -32,4 +32,7 @@ public class MybatisConfiguration {
     public KeyGenerator keyGenerator() {
         return new CustomKeyGenerator();
     }
+
+
+
 }

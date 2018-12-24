@@ -26,7 +26,7 @@ public class ArticleComment extends BasePojo {
 	/**
 	 * 评论的文章
 	 */
-	private Integer articleId;
+	private String articleId;
 	/**
 	 * 评论内容
 	 */
@@ -39,6 +39,16 @@ public class ArticleComment extends BasePojo {
 	 * 创建时间
 	 */
 	private Date createTime;
+
+	/**
+	 * 点赞数
+	 */
+	private Integer loveNum;
+
+	/**
+	 * 是否被采纳 默认是否
+	 */
+	private Integer isAccept;
 	/**
 	 * 备注
 	 */

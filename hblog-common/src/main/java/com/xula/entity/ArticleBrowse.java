@@ -29,13 +29,18 @@ public class ArticleBrowse extends BasePojo {
 	/**
 	 * 文章编号
 	 */
-	private Integer articleId;
+	private String articleId;
 	/**
 	 * 创建时间
 	 */
 	private Date createTime;
+
+	/**
+	 * 用户ip地址
+	 */
+	private String ip;
 	/**
 	 * 备注
 	 */
-	private String reamark;
+	private String remark;
 }

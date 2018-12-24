@@ -2,21 +2,20 @@
 package com.xula;
 
 import cn.assist.easydao.dao.BaseDao;
+import cn.assist.easydao.pojo.RecordPojo;
+import cn.assist.easydao.util.JsonKit;
 import com.xula.base.cache.RedisKit;
 import com.xula.base.utils.CommonUtil;
-import com.xula.entity.Member;
-import com.xula.entity.MemberInfo;
+import com.xula.base.utils.JsonBean;
 import com.xula.entity.User;
+import com.xula.service.article.IArticleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -83,6 +82,8 @@ public class HblogWebApplicationTests {
         System.out.println(redisTemplate.boundValueOps(key).get());
     }
 
+    @Autowired
+    private IArticleService iArticleService;
 
     @Test
     public void test() throws InterruptedException {
@@ -124,21 +125,54 @@ public class HblogWebApplicationTests {
 //        list.add(member1);
 
 
-        MemberInfo member = new MemberInfo();
+//        MemberInfo member = new MemberInfo();
+//
+//        member.setGrowthValue((long) 33);
+//
+//        member.setVip(1);
+//
+//        member.setVipName("vipName");
+//
+//        member.setUid(3);
+//
+//        member.setCreateTime(new Date());
+//
+//        member.setUpdateTime(new Date());
 
-        member.setGrowthValue((long) 33);
+//        BaseDao.dao.merge(member,"vipName");
 
-        member.setVip(1);
 
-        member.setVipName("vipName");
+//        List<Article> articleList = iArticleService.getArticleList(new Conditions());
+//
+//
+//        PagePojo<ArticleList> pagePojo = iArticleService.getArticlePage(new Conditions(),1,10);
 
-        member.setUid(3);
 
-        member.setCreateTime(new Date());
 
-        member.setUpdateTime(new Date());
 
-        BaseDao.dao.merge(member,"vipName");
+
+//        MemberInfo member = new MemberInfo();
+//
+//        member.setGrowthValue((long) 33);
+//
+//        member.setVip(1);
+//
+//        member.setVipName("vipName");
+//
+//        member.setUid(100);
+//
+//        member.setCreateTime(new Date());
+//
+//        member.setUpdateTime(new Date());
+
+
+
+
+        List<RecordPojo> recordPojo = BaseDao.dao.queryList("SELECT * FROM member");
+
+
+
+        System.out.println(JsonBean.success("success", JsonKit.toJson(recordPojo)));
     }
 
 

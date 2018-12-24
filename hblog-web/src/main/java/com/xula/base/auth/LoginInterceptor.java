@@ -1,5 +1,6 @@
 package com.xula.base.auth;
 
+import com.xula.base.constant.PageConstant;
 import com.xula.base.utils.JsonBean;
 import com.xula.base.utils.WebReqUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,8 +33,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 	        if(login == null){
 	        	return true;
 	        }
-	        
-	        boolean immed = login.immed();
+
+
 	        String simpleName = method.getMethod().getReturnType().getSimpleName();
 
 	        //判断登录态
@@ -42,32 +43,15 @@ public class LoginInterceptor implements HandlerInterceptor {
 			if (uid > 0) {
 				return true;
 			}
-
-			String loginUrl = contextPath(request) + "user/login";
-			//立即登录
-			if(immed){
-				String fr = request.getParameter("fr");
-				String quertString = request.getQueryString();
-				String referrer = request.getRequestURL().toString();
-				if(StringUtils.isNotBlank(quertString)){
-					referrer = referrer + "?" + quertString;
-				}
-				referrer = URLEncoder.encode(referrer, "utf-8");
-				if(StringUtils.isBlank(fr)){
-					response.sendRedirect(loginUrl + "?referrer=" + referrer);
-				}else{
-					response.sendRedirect(loginUrl + "?fr=" + fr + "&referrer=" + referrer);
-				}
-			}
+			String loginUrl = contextPath(request) + PageConstant.LOGIN;
 			//ajax请求
-			else if("JSONObject".equalsIgnoreCase(simpleName)){
+			if("JSONObject".equalsIgnoreCase(simpleName)){
 				response.setCharacterEncoding("UTF-8");
 				response.setHeader("Content-type", "application/json;charset=UTF-8");
 				response.getWriter().write(JsonBean.notLogin("未登录", loginUrl).toString());
-			}
 			//http资源请求
-			else{
-				response.sendRedirect("/notice?state=notlogin");
+			} else {
+				response.sendRedirect(loginUrl);
 			}
 			return false;
 		}
@@ -93,9 +77,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		int port = request.getServerPort();
 		String contextPath = request.getScheme()+"://"+request.getServerName();
 		if(port != 80 && port != 443){
-			contextPath = contextPath + ":" + port + "/";
-		}else{
-			contextPath = contextPath + "/";
+			contextPath = contextPath + ":" + port ;
 		}
 		return contextPath;
 	}

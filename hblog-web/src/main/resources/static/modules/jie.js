@@ -38,7 +38,7 @@ layui.define('fly', function(exports){
   });
 
   //提交回答
-  fly.form['/jie/reply/'] = function(data, required){
+  fly.form['/comment/reply/'] = function(data, required){
     var tpl = '<li>\
       <div class="detail-about detail-about-reply">\
         <a class="fly-avatar" href="/u/{{ layui.cache.user.uid }}" target="_blank">\
@@ -126,13 +126,13 @@ layui.define('fly', function(exports){
   var asyncRender = function(){
     var div = $('.fly-admin-box'), jieAdmin = $('#LAY_jieAdmin');
     //查询帖子是否收藏
-    if(jieAdmin[0] && layui.cache.user.uid != -1){
-      fly.json('/collection/find/', {
-        cid: div.data('id')
-      }, function(res){
-        jieAdmin.append('<span class="layui-btn layui-btn-xs article-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
-      });
-    }
+    // if(jieAdmin[0] && layui.cache.user.uid != -1){
+    //   fly.json('/collection/find/', {
+    //     cid: div.data('id')
+    //   }, function(res){
+    //     jieAdmin.append('<span class="layui-btn layui-btn-xs article-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
+    //   });
+    // }
   }();
 
   //解答操作
@@ -237,5 +237,5 @@ layui.define('fly', function(exports){
     $('html,body').scrollTop(replyTop);
   }
 
-  exports('article', null);
+  exports('jie', null);
 });

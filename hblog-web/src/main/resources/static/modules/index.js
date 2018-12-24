@@ -72,6 +72,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         success: function(res){
           if(res.code === 0) {
             success && success(res);
+          } else if (res.code === 999) {
+              layer.msg(res.msg, {icon: 1, time: 1000});
+              setInterval(function () {
+                  window.location.href = '/user/login';
+              }, 1000)
           } else {
             layer.msg(res.msg || res.code, {shift: 6});
             options.error && options.error();
@@ -555,6 +560,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         if(res.action){
           location.href = res.action;
         } else {
+
+          console.log(action)
           fly.form[action||button.attr('key')](data.field, data.form);
         }
       };

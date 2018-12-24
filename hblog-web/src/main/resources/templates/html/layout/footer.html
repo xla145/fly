@@ -19,12 +19,15 @@
         , experience: '#(member.pointValue??0)'
         , sex: '#(member.sex??"男")'
     };
+
+
     layui.config({
         version: "3.0.0"
-        , base: '/static/modules/' //这里实际使用时，建议改成绝对路径
+        , base: '#(resource)/modules/'
     }).extend({
         fly: 'index'
-    }).use('fly');
+    }).use('fly')
+
 </script>
 <script type="text/javascript">
     var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");

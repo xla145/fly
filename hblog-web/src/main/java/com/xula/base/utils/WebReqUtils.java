@@ -5,6 +5,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Random;
 
 /**
  * 请求的工具类
@@ -35,10 +36,15 @@ public class WebReqUtils extends ReqUtils {
 
     /**
      * 获取用户的uid
-     * @return
+     * @return 一般般
      */
     public static int getSessionUid() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return getSessionUid(request);
+    }
+
+
+    public static void main(String[] args) {
+
     }
 }

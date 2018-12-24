@@ -92,7 +92,7 @@ public class JsonBean {
 		json.put("data", data);
 		return json;
 	}
-	
+
 	public static JSONObject page(String msg, PagePojo<?> page) {
 		JSONObject data = new JSONObject();
 		data.put("pageNo", 1);

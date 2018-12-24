@@ -9,6 +9,7 @@ import cn.assist.easydao.util.JsonKit;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.auth.Login;
 import com.xula.base.constant.ArticleConstant;
+import com.xula.base.constant.GlobalConstant;
 import com.xula.base.constant.PageConstant;
 import com.xula.base.utils.JsonBean;
 import com.xula.base.utils.RecordBean;
@@ -107,7 +108,8 @@ public class ArticleController extends WebController {
         // 获取 filter 列表数据
         map.put("filter","");
         map.put("type","all");
-        PagePojo<ArticleList> page = iArticleService.getArticlePage(new Conditions(),pageNo,2);
+        pageNo = pageNo == null? 1:pageNo;
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(new Conditions(),pageNo, GlobalConstant.PAGE_SIZE);
         model.addAttribute("page",page);
         model.addAttribute("data",map);
         return "/article/index";
@@ -125,7 +127,7 @@ public class ArticleController extends WebController {
         Map<String,Object> map = new HashMap<>();
         map.put("filter",statusName);
         map.put("type",typeName);
-        PagePojo<ArticleList> page = iArticleService.getArticlePage(getConditions(typeName,statusName),pageNo,2);
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(getConditions(typeName,statusName),pageNo,GlobalConstant.PAGE_SIZE);
 
         model.addAttribute("page",page);
         model.addAttribute("data",map);
@@ -142,7 +144,7 @@ public class ArticleController extends WebController {
         RecordPojo recordPojo = iArticleService.getArticleInfo(aid);
         model.addAttribute("data",recordPojo.getColumns());
         pageNo = pageNo == null? 1:pageNo;
-        PagePojo<CommentList> page = iCommentService.getCommentPage(new Conditions("a.article_id",SqlExpr.EQUAL,aid),pageNo,3);
+        PagePojo<CommentList> page = iCommentService.getCommentPage(new Conditions("a.article_id",SqlExpr.EQUAL,aid),pageNo,GlobalConstant.PAGE_SIZE);
         model.addAttribute("comment", page);
 
         //发布浏览事件

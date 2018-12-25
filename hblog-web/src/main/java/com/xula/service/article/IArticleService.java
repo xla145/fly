@@ -68,5 +68,4 @@ public interface IArticleService {
      * @return
      */
     RecordPojo getArticleInfo(String aid);
-
 }

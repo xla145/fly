@@ -14,6 +14,7 @@ import com.xula.entity.MemberToken;
 import com.xula.event.EventModel;
 import com.xula.event.LoginEvent;
 import com.xula.event.RegisterEvent;
+import com.xula.event.TaskEvent;
 import com.xula.service.member.IMemberService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,17 +120,15 @@ public class BaseAuth extends WebController {
 
         logger.info("用户注册成功-->uid:{}, ip: {} ,userAgent:{},referer：{},fr:{}",uid,ip,userAgent,referer,fr);
 
-        //发布登录事件
+        //发布注册送积分事件
         EventModel eventModel = new EventModel();
-        Map<String, Object> param = new HashMap<String, Object>();
-        param.put("referer",referer);
-        param.put("userAgent", userAgent);
-        param.put("ip", ip);
+        Map<String, Object> param = new HashMap<>(1);
+        param.put("taskCode", "RegisterTask");
         eventModel.setParam(param);
         eventModel.setMember(member);
-        ac.publishEvent(new RegisterEvent(eventModel));
+        ac.publishEvent(new TaskEvent(eventModel));
 
-        return RecordBean.success(null);
+        return RecordBean.success("success");
     }
 
 	/**

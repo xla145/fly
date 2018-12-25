@@ -340,19 +340,19 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   ,elemSigninDays = $('.fly-signin-days');
   
   if(elemSigninMain[0]){
-    /*
-    fly.json('/sign/status', function(res){
+
+    fly.json('/member/sign/status', function(res){
       if(!res.data) return;
       signRender.token = res.data.token;
       signRender(res.data);
     });
-    */
+
   }
   $('body').on('click', '#LAY_signin', function(){
     var othis = $(this);
     if(othis.hasClass(DISABLED)) return;
 
-    fly.json('/sign/in', {
+    fly.json('/member/sign/', {
       token: signRender.token || 1
     }, function(res){
       signRender(res.data);
@@ -398,10 +398,10 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   var tplSigninTop = ['{{# layui.each(d.data, function(index, item){ }}'
     ,'<li>'
       ,'<a href="/u/{{item.uid}}" target="_blank">'
-        ,'<img src="{{item.user.avatar}}">'
-        ,'<cite class="fly-link">{{item.user.username}}</cite>'
+        ,'<img src="{{item.avatar}}">'
+        ,'<cite class="fly-link">{{item.nickname}}</cite>'
       ,'</a>'
-      ,'{{# var date = new Date(item.time); if(d.index < 2){ }}'
+      ,'{{# var date = new Date(item.signTime); if(d.index < 2){ }}'
         ,'<span class="fly-grey">签到于 {{ layui.laytpl.digit(date.getHours()) + ":" + layui.laytpl.digit(date.getMinutes()) + ":" + layui.laytpl.digit(date.getSeconds()) }}</span>'
       ,'{{# } else { }}'
         ,'<span class="fly-grey">已连续签到 <i>{{ item.days }}</i> 天</span>'
@@ -418,7 +418,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
 
   elemSigninTop.on('click', function(){
     var loadIndex = layer.load(1, {shade: 0.8});
-    fly.json('../json/signin.js', function(res){ //实际使用，请将 url 改为真实接口
+    fly.json('/member/sign/show/', function(res){ //实际使用，请将 url 改为真实接口
       var tpl = $(['<div class="layui-tab layui-tab-brief" style="margin: 5px 0 0;">'
         ,'<ul class="layui-tab-title">'
           ,'<li class="layui-this">最新签到</li>'
@@ -453,7 +453,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         ,content: tpl.prop('outerHTML')
       });
 
-    }, {type: 'get'});
+    });
   });
 
 

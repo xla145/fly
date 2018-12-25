@@ -17,13 +17,6 @@ import java.util.List;
  */
 public interface IMemberVipService {
 
-	/**
-	 * 用户成长评估
-	 * 
-	 * @param uid 		用户uid
-	 * @param evolve	
-	 */
-	 void evolveEval(int uid, Evolve evolve);
 
     /**
      * 添加会员成长值

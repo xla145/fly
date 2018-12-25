@@ -2,9 +2,12 @@ package com.xula.service.member.impl;
 
 import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.common.SqlExpr;
+import cn.assist.easydao.common.SqlJoin;
 import cn.assist.easydao.dao.BaseDao;
+import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.constant.LoginWayConstant;
 import com.xula.base.constant.MemberConstant;
+import com.xula.base.constant.TaskConstant;
 import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.DateUtil;
 import com.xula.base.utils.Md5Utils;
@@ -14,23 +17,26 @@ import com.xula.entity.MemberInfo;
 import com.xula.entity.MemberQq;
 import com.xula.entity.MemberWb;
 import com.xula.service.member.IMemberService;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.CollectionUtils;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户服务层实现类
  * @author xla
  */
 @Service("IMemberService")
-public class IMemberServiceImpl implements IMemberService {
+public class MemberServiceImpl implements IMemberService {
 
-    private  static Logger logger = LoggerFactory.getLogger(IMemberServiceImpl.class);
+    private  static Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
     /**
      * 注册送积分
      * @param nickname
@@ -344,5 +350,33 @@ public class IMemberServiceImpl implements IMemberService {
             sql.append("WHERE b.uuid = ?");
         }
         return BaseDao.dao.queryForEntity(Member.class,sql.toString(),uuid);
+    }
+
+
+    /**
+     * 检查签到状态
+     * @return
+     */
+    @Override
+    public RecordBean<RecordPojo> checkSignStatus(Integer uid) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT DATE_FORMAT(create_time,'%Y-%m-%d') create_time,type,uid FROM member_grow_log WHERE uid = ? AND type = ? ");
+        sql.append("HAVING create_time = ?");
+        Date now = new Date();
+        String date = DateUtil.formatYMD(now);
+        RecordPojo result = new RecordPojo();
+        result.set("signed",false);
+        result.set("experience",20);
+        List<RecordPojo> recordPojo = BaseDao.dao.queryList(sql.toString(),uid,TaskConstant.TASK_TYPE_SIGN,date);
+        if (!CollectionUtils.isEmpty(recordPojo)) {
+            result.set("signed",true);
+        }
+        MemberInfo memberInfo = BaseDao.dao.queryForEntity(MemberInfo.class,new Conditions("uid",SqlExpr.EQUAL,uid));
+        Integer days = 0;
+        if (memberInfo != null) {
+            days = memberInfo.getDays();
+        }
+        result.set("days",days);
+        return RecordBean.success("success",result);
     }
 }

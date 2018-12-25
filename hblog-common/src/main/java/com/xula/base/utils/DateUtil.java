@@ -122,4 +122,15 @@ public class DateUtil {
         return simpleDateFormat.format(date);
     }
 
+
+    /**
+     * 时间格式化
+     * @param date 日期
+     * @return
+     */
+    public static String formatYMD(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+
 }

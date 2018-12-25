@@ -139,11 +139,11 @@ layui.define('fly', function(exports){
   gather.jiedaActive = {
     zan: function(li){ //赞
       var othis = $(this), ok = othis.hasClass('zanok');
-      fly.json('/api/jieda-zan/', {
-        ok: ok
-        ,id: li.data('id')
+      fly.json('/comment/love/', {
+        fever: ok? 0:1
+        ,commentId: li.data('id')
       }, function(res){
-        if(res.status === 0){
+        if(res.code === 0){
           var zans = othis.find('em').html()|0;
           othis[ok ? 'removeClass' : 'addClass']('zanok');
           othis.find('em').html(ok ? (--zans) : (++zans));
@@ -163,10 +163,10 @@ layui.define('fly', function(exports){
       var othis = $(this);
       layer.confirm('是否采纳该回答为最佳答案？', function(index){
         layer.close(index);
-        fly.json('/api/jieda-accept/', {
-          id: li.data('id')
+        fly.json('/comment/accept/', {
+          commentId: li.data('id')
         }, function(res){
-          if(res.status === 0){
+          if(res.code === 0){
             $('.jieda-accept').remove();
             li.addClass('jieda-daan');
             li.find('.detail-about').append('<i class="iconfont icon-caina" title="最佳答案"></i>');

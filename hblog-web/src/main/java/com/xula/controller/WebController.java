@@ -1,5 +1,6 @@
 package com.xula.controller;
 
+import com.xula.base.constant.GlobalConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -16,4 +17,19 @@ public class WebController extends BaseController{
 
     @Autowired
     protected ApplicationContext ac;
+
+    private Integer pageNo = 1;
+
+
+    /**
+     * 对page进行封装
+     * @param pageNo
+     * @return
+     */
+    public Integer getPageNo(Integer pageNo) {
+        if (pageNo == null) {
+            return this.pageNo;
+        }
+        return pageNo;
+    }
 }

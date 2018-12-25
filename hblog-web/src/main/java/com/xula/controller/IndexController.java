@@ -1,9 +1,7 @@
 package com.xula.controller;
 
 
-import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
-import cn.assist.easydao.pojo.RecordPojo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.constant.GlobalConstant;
@@ -44,7 +42,7 @@ public class IndexController extends WebController{
     public String index(Model model) {
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
-        PagePojo<ArticleList> page = iArticleService.getArticlePage(null,1,2);
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(null,1,GlobalConstant.PAGE_SIZE);
         map.put("type","all");
         map.put("filter","");
 

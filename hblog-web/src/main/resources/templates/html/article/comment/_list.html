@@ -1,4 +1,4 @@
-#define comment(commentList)
+#define comment(uid,articleStatus,commentList)
 <ul class="jieda" id="jieda">
     #if(commentList??)
         #for(item:commentList)
@@ -16,7 +16,9 @@
                         <i class="layui-badge fly-badge-vip">#(item.vipName??"普通会员")</i>
                     </a>
 
+                    #if(uid == item.uid)
                     <span>(楼主)</span>
+                    #end
                     <!--
                     <span style="color:#5FB878">(管理员)</span>
                     <span style="color:#FF9E3F">（社区之光）</span>
@@ -36,7 +38,7 @@
                 #(item.content??"")
             </div>
             <div class="jieda-reply">
-                  <span class="jieda-zan zanok" type="zan">
+                  <span class="jieda-zan #(item.isLove?'zanok':'')" type="zan">
                     <i class="iconfont icon-zan"></i>
                     <em>#(item.loveNum??0)</em>
                   </span>
@@ -47,7 +49,9 @@
                 <div class="jieda-admin">
                     <!--<span type="edit">编辑</span>-->
                     <!--<span type="del">删除</span>-->
-                    <!-- <span class="jieda-accept" type="accept">采纳</span> -->
+                    #if(articleStatus <= 5 && item.isAccept == 0)
+                    <span class="jieda-accept" type="accept">采纳</span>
+                    #end
                 </div>
             </div>
         </li>

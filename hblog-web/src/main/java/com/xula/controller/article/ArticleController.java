@@ -108,8 +108,7 @@ public class ArticleController extends WebController {
         // 获取 filter 列表数据
         map.put("filter","");
         map.put("type","all");
-        pageNo = pageNo == null? 1:pageNo;
-        PagePojo<ArticleList> page = iArticleService.getArticlePage(new Conditions(),pageNo, GlobalConstant.PAGE_SIZE);
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(new Conditions(),getPageNo(pageNo), GlobalConstant.PAGE_SIZE);
         model.addAttribute("page",page);
         model.addAttribute("data",map);
         return "/article/index";
@@ -121,13 +120,13 @@ public class ArticleController extends WebController {
      * 获取到文章列表页
      * @return
      */
-    @RequestMapping(value = {"/list/{typeName}/{statusName}","/list/{typeName}/{statusName}/page/{pageNo}",},method = RequestMethod.GET)
+    @RequestMapping(value = {"/list/{typeName}","/list/{typeName}/{statusName}","/list/{typeName}/{statusName}/page/{pageNo}",},method = RequestMethod.GET)
     public String index(@PathVariable String typeName,@PathVariable(required = false) String statusName,@PathVariable(required = false) Integer pageNo,Model model) {
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
         map.put("filter",statusName);
         map.put("type",typeName);
-        PagePojo<ArticleList> page = iArticleService.getArticlePage(getConditions(typeName,statusName),pageNo,GlobalConstant.PAGE_SIZE);
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(getConditions(typeName,statusName),getPageNo(pageNo),GlobalConstant.PAGE_SIZE);
 
         model.addAttribute("page",page);
         model.addAttribute("data",map);
@@ -184,7 +183,7 @@ public class ArticleController extends WebController {
             return con;
         }
         if (statusName.equalsIgnoreCase(ArticleConstant.UNSOLVED)) {
-            con.add(new Conditions("a.status", SqlExpr.EQUAL,ArticleConstant.STATUS_ADUITED), SqlJoin.AND);
+            con.add(new Conditions("a.status", SqlExpr.EQUAL,ArticleConstant.STATUS_AUDITED), SqlJoin.AND);
         } else if (statusName.equalsIgnoreCase(ArticleConstant.SOLVED)) {
             con.add(new Conditions("a.status", SqlExpr.EQUAL,ArticleConstant.STATUS_SOLVED),SqlJoin.AND);
         } else {
@@ -192,6 +191,4 @@ public class ArticleController extends WebController {
         }
         return con;
     }
-
-
 }

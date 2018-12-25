@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 评论控制层
+ * 评论控制层 点赞
  * @author xla
  */
 @RequestMapping("/comment")
@@ -41,4 +41,40 @@ public class CommentController {
         }
         return JsonBean.error(result.getMsg());
     }
+
+
+    /**
+     * 评论点赞
+     * @param commentId
+     * @return
+     */
+    @Login
+    @RequestMapping("/love")
+    @ResponseBody
+    public JSONObject love(@RequestParam(name = "commentId") Integer commentId,@RequestParam("fever") Integer fever) {
+        RecordBean<String> result = iCommentService.love(commentId,fever);
+        if (result.isSuccessCode()) {
+            return JsonBean.success(result.getMsg());
+        }
+        return JsonBean.error(result.getMsg());
+    }
+
+
+
+    /**
+     * 评论采纳
+     * @param commentId
+     * @return
+     */
+    @Login
+    @RequestMapping("/accept")
+    @ResponseBody
+    public JSONObject accept(@RequestParam(name = "commentId") Integer commentId) {
+        RecordBean<String> result = iCommentService.accept(commentId);
+        if (result.isSuccessCode()) {
+            return JsonBean.success(result.getMsg());
+        }
+        return JsonBean.error(result.getMsg());
+    }
+
 }

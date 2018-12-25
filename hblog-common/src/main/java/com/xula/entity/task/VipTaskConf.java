@@ -19,5 +19,5 @@ public class VipTaskConf extends BasePojo {
 	 * VIP升级任务名
 	 */
 	private String name;
-	private String clazz;
+	private String clazzName;
 }

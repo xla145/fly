@@ -1,10 +1,13 @@
 package com.xula.service.member;
 
+import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Member;
 import com.xula.entity.MemberInfo;
 import com.xula.entity.MemberQq;
 import com.xula.entity.MemberWb;
+
+import java.util.List;
 
 /**
  * 用户服务层
@@ -104,5 +107,15 @@ public interface IMemberService {
      * @return
      */
     Member getMemberByUuid(String uuid, Integer loginWay);
+
+
+    /**
+     * 判断用户签到状态
+     * @param uid
+     * @return
+     */
+    RecordBean<RecordPojo> checkSignStatus(Integer uid);
+
+
 
 }

@@ -6,17 +6,17 @@ import com.xula.entity.task.Evolve;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 
 /**
  * 注册送积分
  * @author xla
  */
+@Component("RegisterTask")
 public class RegisterTask extends VipTask{
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
-
-	private static final String CURRENT_TASK = "registerTask";
 
 	@Override
 	public void run(int uid, String taskName, String param, Evolve evolve) {
@@ -24,11 +24,6 @@ public class RegisterTask extends VipTask{
 			logger.info("[会员完成注册任务]-[参数为空],uid:" + uid + ",param:" + param + ",evolve：" + JSON.toJSONString(evolve));
 			return;
 		}
-		if(!CURRENT_TASK.equalsIgnoreCase(evolve.getTaskTag())){
-			logger.info("[会员完成注册任务]-[订单不符合条件]:uid:" + uid + ",param:" + param);
-			return;
-		}
-
 		/**
          * 分割积分和成长值
 		 */

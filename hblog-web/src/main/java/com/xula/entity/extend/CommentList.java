@@ -31,4 +31,13 @@ public class CommentList extends ArticleComment {
      */
     private String vipName;
 
+    /**
+     * 判断用户是否点赞
+     */
+    private boolean love = false;
+
+
+    public boolean getIsLove() {
+        return love;
+    }
 }

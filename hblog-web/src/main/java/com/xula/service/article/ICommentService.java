@@ -31,4 +31,22 @@ public interface ICommentService {
      */
     PagePojo<CommentList> getCommentPage(Conditions conn, Integer pageNo, Integer pageSize);
 
+
+    /**
+     * 点赞
+     * @param commentId
+     * @param fever 热度
+     * @return
+     */
+    RecordBean<String> love(Integer commentId,Integer fever);
+
+
+    /**
+     * 评论采纳
+     * @param commentId
+     * @return
+     */
+    RecordBean<String> accept(Integer commentId);
+
+
 }

@@ -47,4 +47,9 @@ public class MemberInfo extends BasePojo {
 	 * 更新时间
 	 */
 	private Date updateTime;
+
+	/**
+	 * 连续签到天数
+	 */
+	private Integer days;
 }

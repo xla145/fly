@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 会员 积分计算 &成长值计算 服务
@@ -38,39 +39,6 @@ public class MemberVipServiceImpl implements IMemberVipService {
 
     @Autowired
     private IMemberService iMemberService;
-
-    /**
-     * 用户成长评估
-     *
-     * @param uid
-     */
-    @Override
-    public void evolveEval(int uid, Evolve evolve) {
-        int vip = 1;
-        MemberInfo memberInfo = iMemberService.getMemberInfo(uid);
-        if (memberInfo != null) {
-            vip = memberInfo.getVip();
-        }
-        List<VipTaskConf> vts = getVipTasks(vip);
-
-        logger.info("[会员成长]--uid:" + uid + ",user vip:" + vip + ", vip task:" + JSON.toJSONString(vts));
-
-        if (vts == null) {
-            return;
-        }
-        for (VipTaskConf vt : vts) {
-            try {
-                String className = vt.getClazz();
-                String param = vt.getParam();
-                VipTask vipTask = (VipTask) Class.forName(className).newInstance();
-                String taskName = vt.getName();
-                vipTask.run(uid, taskName, param, evolve);
-            } catch (Exception e) {
-                logger.error("[会员成长] 运行成长任务 error:", e);
-            }
-        }
-    }
-
 
     /**
      * 添加会员成长值
@@ -169,17 +137,6 @@ public class MemberVipServiceImpl implements IMemberVipService {
         conn.add(new Conditions("point_value", SqlExpr.GT, 0), SqlJoin.AND);
         Sort sort = new Sort("create_time", SqlSort.DESC);
         return BaseDao.dao.queryForListPage(MemberPointValues.class, conn, sort, pageNo, pageSize);
-    }
-
-    /**
-     * 获取有效的vip等级任务
-     *
-     * @param vip
-     * @return
-     */
-    private List<VipTaskConf> getVipTasks(int vip) {
-        String sql = "SELECT a.param, b.name, b.clazz FROM `vip_grade_task` AS a INNER JOIN `vip_task` AS b ON a.`vtid` = b.`vtid` WHERE a.`vip` = ? AND b.`status` = ?";
-        return BaseDao.dao.queryForListEntity(VipTaskConf.class, sql, vip, TaskConstant.TASK_STATUS_ENABLE);
     }
 
     /**

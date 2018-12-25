@@ -29,7 +29,7 @@ public class ArticleConstant {
     /**
      * 审核通过，发布
      */
-    public static final Integer STATUS_ADUITED = 5;
+    public static final Integer STATUS_AUDITED= 5;
 
     /**
      * 完结

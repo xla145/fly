@@ -452,9 +452,4 @@ public class CommonUtil {
     public static String md5(String content) {
         return DigestUtils.md5Hex(content).toUpperCase();
     }
-
-    public static void main(String[] args) {
-        System.out.println(md5("123456"));
-    }
-
 }

@@ -9,7 +9,9 @@ import com.xula.service.member.IMemberVipService;
 import com.xula.service.task.WebTaskFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,7 @@ import java.util.Map;
  * @author xla
  */
 @Component
+@Import(SpringFactory.class)
 public class TaskListener implements ApplicationListener<TaskEvent> {
 
     Logger logger = LoggerFactory.getLogger(LoginListener.class);

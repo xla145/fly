@@ -60,12 +60,6 @@ spring:
                 test-on-borrow: false
                 test-on-return: false
 
-
-# mache
-
-memcached:
-    ip: 192.168.1.6
-    port: 11211
 is:
   dev: true
 online:

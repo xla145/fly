@@ -162,11 +162,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
               //执行上传实例
               upload.render({
                 elem: '#uploadImg'
-                ,url: '/api/upload/'
+                ,url: '/img/upload/'
                 ,size: 200
                 ,done: function(res){
-                  if(res.status == 0){
-                    image.val(res.url);
+                  if(res.code == 0){
+                    image.val(res.data.url);
                   } else {
                     layer.msg(res.msg, {icon: 5});
                   }
@@ -560,8 +560,6 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         if(res.action){
           location.href = res.action;
         } else {
-
-          console.log(action)
           fly.form[action||button.attr('key')](data.field, data.form);
         }
       };

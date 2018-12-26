@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.xula.base.constant.GlobalConstant;
 import com.xula.base.constant.LoginWayConstant;
 import com.xula.base.constant.PageConstant;
+import com.xula.base.utils.Captcha;
 import com.xula.base.utils.JsonBean;
 import com.xula.base.utils.RecordBean;
+import com.xula.base.utils.WebReqUtils;
 import com.xula.entity.Member;
 import com.xula.service.member.IMemberService;
 import org.apache.commons.lang.StringUtils;
@@ -20,8 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * 用户处理
@@ -32,7 +39,6 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController extends BaseAuth {
 
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
-
 
     /**
      * 跳转到登录页
@@ -54,6 +60,14 @@ public class UserController extends BaseAuth {
         RecordBean<String> recordBean = userValidation(member);
         if (!recordBean.isSuccessCode()) {
             return JsonBean.error(recordBean.getMsg());
+        }
+        String vcode = WebReqUtils.getParam(request,"vcode",null);
+        if (StringUtils.isEmpty(vcode)) {
+            return JsonBean.error("验证码必填！");
+        }
+        String code = request.getSession().getAttribute(GlobalConstant.CODE_NAME).toString();
+        if (!vcode.equalsIgnoreCase(code)) {
+            return JsonBean.error("验证码错误！");
         }
         String password = member.getPassword();
         String email = member.getEmail();

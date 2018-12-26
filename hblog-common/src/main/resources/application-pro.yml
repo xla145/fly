@@ -59,13 +59,6 @@ spring:
                 test-while-idle: true
                 test-on-borrow: false
                 test-on-return: false
-
-
-# mache
-
-memcached:
-    ip: 127.0.0.1
-    port: 11211
 is:
   dev: false
 online:

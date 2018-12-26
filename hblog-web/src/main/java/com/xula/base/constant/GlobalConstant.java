@@ -17,6 +17,12 @@ public class GlobalConstant {
 	 */
 	public static final String COOKIE_KEY = "auto-token";
 
+
+	/**
+	 * 验证码key
+	 */
+	public static final String CODE_NAME = "vcode";
+
 	
 	/**用户 登录token 租期(小时为单位)**/
 	public static final int MEMBER_LOGIN_TOKEN_TENANCYTERM  = 720; //30天有效

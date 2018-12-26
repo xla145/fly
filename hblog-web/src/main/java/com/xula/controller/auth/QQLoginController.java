@@ -1,9 +1,7 @@
 package com.xula.controller.auth;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xula.base.constant.GlobalConfig;
 import com.xula.base.constant.GlobalConstant;
 import com.xula.base.constant.LoginWayConstant;
 import com.xula.base.constant.MemberConstant;
@@ -21,7 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 第三方qq授权登录
@@ -29,19 +28,18 @@ import java.util.*;
  * @author xla
  * @date 20181025
  */
+@RequestMapping("/qq")
 @Controller
 public class QQLoginController extends BaseAuth{
 
 
-    private final static String APP_ID = "101392599";
+    private final static String APP_ID = "101534755";
 
-    private final static String APP_KEY = "47af19b47870932e2ba4d1008a705961";
+    private final static String APP_KEY = "bd13818f9cc11ff04261e5bf2222e4ce";
 
     private final static String GET_CODE_URL = "https://graph.qq.com/oauth2.0/authorize";
 
-    private final static String loginCallback = "http://www.xulian.net.cn:8088/afterlogin";
-
-    static final String[] EMPTY_STRING_ARRAY = new String[0];
+    private final static String loginCallback = "http://test.xulian.net.cn/qq/authLoginCallback";
 
     @Value("is.dev")
     private String isDev;
@@ -51,22 +49,20 @@ public class QQLoginController extends BaseAuth{
      *
      * @return
      */
-    @RequestMapping("/qqLogin")
+    @RequestMapping("/login")
     public String index(HttpServletRequest request, HttpServletResponse response) {
         /**
          * 如果是用户已经登录了，对微博进行绑定我们是直接在存在的用户进行绑定
          */
         int uid = WebReqUtils.getSessionUid(request);
-        String referrer = request.getParameter("referrer"); // 来路地址
         String fr = request.getParameter("fr"); // 渠道标识
         String userIp = WebReqUtils.getIp(request); // 登录请求ip
 
         // 临时存储用户发起数据
         JSONObject json = new JSONObject();
-        json.put("referrer", referrer);
         json.put("fr", fr);
         json.put("userIp", userIp);
-        json.put("authWay", LoginWayConstant.weibo.getWay());
+        json.put("authWay", LoginWayConstant.qq.getWay());
         json.put("uid", uid);
         try {
             String state = Md5Utils.md5(json.toString());
@@ -89,7 +85,7 @@ public class QQLoginController extends BaseAuth{
      *
      * @return
      */
-    @RequestMapping("/afterlogin")
+    @RequestMapping("/authLoginCallback")
     public String afterlogin(HttpServletRequest request, Model model, HttpServletResponse response) {
         try {// state 用户携带的信息
             String state = request.getParameter("state");
@@ -103,7 +99,7 @@ public class QQLoginController extends BaseAuth{
             }
             String referrer = userParam.getString("referrer");
             if (StringUtils.isBlank(referrer)) {
-                referrer = "http://www.xulian.net.cn:8088/index";
+                referrer = "http://test.xulian.net.cn/index";
             }
             String api = "https://graph.qq.com/oauth2.0/token";
             Map<String, String> data = new HashMap<String, String>();

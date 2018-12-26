@@ -8,6 +8,7 @@ import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.constant.ArticleConstant;
+import com.xula.base.utils.ImgUtil;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.ArticleComment;
 import com.xula.entity.ArticleCommentLove;
@@ -20,11 +21,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +49,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
      */
     @Override
     public RecordBean<String> reply(String aid, String content) {
+        content = ImgUtil.replaceContent(content);
         ArticleComment articleComment = new ArticleComment();
         articleComment.setArticleId(aid);
         articleComment.setContent(content);
@@ -95,6 +100,9 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
      */
 
     List<CommentList> dealCommentList(List<CommentList> commentLists) {
+        if (CollectionUtils.isEmpty(commentLists)) {
+            return new ArrayList<>();
+        }
         List<Integer> commentIds = commentLists.stream().map(CommentList::getId).collect(Collectors.toList());
         List<ArticleCommentLove> list = BaseDao.dao.queryForListEntity(ArticleCommentLove.class,new Conditions("ac_id", SqlExpr.IN,commentIds.toArray()));
         Map<Integer,ArticleCommentLove> map = list.stream().collect(Collectors.toMap(ArticleCommentLove::getAcId,a -> a));

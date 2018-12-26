@@ -1,4 +1,20 @@
 spring:
+    cache:
+        ehcache:
+            config: classpath:cached/ehcache.xml
+    redis:
+        host: 192.168.1.6
+        port: 6388
+        password: 123456
+        timeout: 0
+        jedis:
+            pool:
+                max-active: 8
+                max-idle: 0
+                max-wait: -1
+        sentinel:
+            master: test
+            nodes: 127.0.0.1:6388
     mail:
         host: smtp.qq.com
         username: 1379960679@qq.com

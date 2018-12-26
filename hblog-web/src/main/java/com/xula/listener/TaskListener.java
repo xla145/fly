@@ -28,11 +28,10 @@ public class TaskListener implements ApplicationListener<TaskEvent> {
 
     Logger logger = LoggerFactory.getLogger(LoginListener.class);
 
-    private WebTaskFactory webTaskFactory = SpringFactory.getBean("WebTaskFactory");
-
     @Async
     @Override
     public void onApplicationEvent(final TaskEvent event) {
+        WebTaskFactory webTaskFactory = SpringFactory.getBean("WebTaskFactory");
         if(event instanceof TaskEvent) {
             EventModel eventModel = (EventModel)event.getSource();
             if(eventModel == null){

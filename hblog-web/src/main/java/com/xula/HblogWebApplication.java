@@ -15,12 +15,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 @EnableCaching
-public class HblogWebApplication extends SpringBootServletInitializer {
+public class HblogWebApplication
+//        extends SpringBootServletInitializer
+{
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(HblogWebApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(HblogWebApplication.class);
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(HblogWebApplication.class, args);

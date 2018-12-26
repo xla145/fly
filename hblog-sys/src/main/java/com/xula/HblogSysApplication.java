@@ -14,12 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  * @author xla Got error 28 from storage engine
  */
 @SpringBootApplication
-public class HblogSysApplication extends SpringBootServletInitializer {
+public class HblogSysApplication
+//        extends SpringBootServletInitializer
+ {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(HblogSysApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(HblogSysApplication.class);
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(HblogSysApplication.class, args);

@@ -12,6 +12,7 @@ import com.xula.entity.dict.DictGroup;
 import com.xula.entity.dict.DictItem;
 import com.xula.service.dict.api.IDictOperService;
 import com.xula.service.dict.cache.DictCache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,6 +24,9 @@ import java.util.List;
  */
 @Service("IDictOperService")
 public class DictOperServiceImpl implements IDictOperService {
+
+    @Autowired
+    private DictCache dictCache;
 
     /**
      * 添加字典组
@@ -112,7 +116,7 @@ public class DictOperServiceImpl implements IDictOperService {
         if (result != 1) {
             return RecordBean.error("修改失败！");
         }
-        DictCache.getCache().invalidate(dictItem.getGroupCode(),dictItem.getName());
+        dictCache.invalidate(dictItem.getGroupCode(),dictItem.getName());
         return RecordBean.success("success",dictItem);
     }
 

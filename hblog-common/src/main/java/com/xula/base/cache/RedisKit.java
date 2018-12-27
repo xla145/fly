@@ -51,6 +51,10 @@ public class RedisKit<T> {
                 return;
             }
             if (!BaseConstant.isDev) {
+                if (exp == -1) {
+                    redisTemplate.boundValueOps(key).set(value);
+                    return;
+                }
                 redisTemplate.boundValueOps(key).set(value,exp,TimeUnit.SECONDS);
             }
         } catch (Exception e) {

@@ -1,12 +1,14 @@
 package com.xula.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 广告model
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class Adv {
 
     /**

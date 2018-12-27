@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 字典服务
+ * @author xla
  */
 @Controller
 @RequestMapping(value = "/dict/group")
@@ -60,11 +61,14 @@ public class DictGroupController extends BaseController {
         int pageSize = ReqUtils.getParamToInt(request, "pageSize", 15);
         int pageNo = ReqUtils.getParamToInt(request, "pageNo", 1);
         String code = ReqUtils.getParam(request, "code", null);
-        Conditions conn = new Conditions("code", SqlExpr.EQUAL, code);
-        if (uid != 1) {
-            conn.add(new Conditions("belong", SqlExpr.EQUAL, DictConstant.DICT_BELONG_OPRATION), SqlJoin.AND);
+        Conditions con = new Conditions();
+        if (StringUtils.isNotEmpty(code)) {
+            con.add(new Conditions("code", SqlExpr.EQUAL, code),SqlJoin.AND);
         }
-        PagePojo<DictGroup> page = iDictService.getDictGroupPage(conn, pageNo, pageSize);
+        if (uid != 1) {
+            con.add(new Conditions("belong", SqlExpr.EQUAL, DictConstant.DICT_BELONG_OPRATION), SqlJoin.AND);
+        }
+        PagePojo<DictGroup> page = iDictService.getDictGroupPage(con, pageNo, pageSize);
         return JsonBean.success(page);
     }
 

@@ -1,6 +1,7 @@
 package com.xula.entity.extend;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -9,6 +10,7 @@ import java.util.Date;
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class MemberDetail {
 
     /**
@@ -61,5 +63,36 @@ public class MemberDetail {
      */
     private String signature;
 
+    /**
+     * 是否绑定了qq
+     */
+    private boolean isQQ = false;
 
+    /**
+     * 邮箱
+     */
+    private String email;
+
+
+    /**
+     * 判断是否绑定qq
+     * @return
+     */
+    public boolean getIsQQ() {
+        return isQQ;
+    }
+
+    /**
+     * 是否绑定了微博
+     */
+    private boolean isWeiBo = false;
+
+
+    /**
+     * 判断是否绑定微博
+     * @return
+     */
+    public boolean getIsWeiBo() {
+        return isWeiBo;
+    }
 }

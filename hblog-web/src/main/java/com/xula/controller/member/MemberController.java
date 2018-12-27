@@ -4,7 +4,9 @@ import cn.assist.easydao.pojo.RecordPojo;
 import cn.assist.easydao.util.JsonKit;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.auth.Login;
+import com.xula.base.constant.ImgCategory;
 import com.xula.base.constant.PageConstant;
+import com.xula.base.utils.ImgUtil;
 import com.xula.base.utils.JsonBean;
 import com.xula.base.utils.RecordBean;
 import com.xula.base.utils.WebReqUtils;
@@ -16,14 +18,15 @@ import com.xula.event.RegisterEvent;
 import com.xula.event.TaskEvent;
 import com.xula.service.member.IMemberService;
 import com.xula.service.member.IWebMemberService;
+import com.xula.service.oss.IUploadFileService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +43,8 @@ public class MemberController extends WebController {
     public IMemberService iMemberService;
     @Autowired
     private IWebMemberService iWebMemberService;
-
+    @Autowired
+    private IUploadFileService iUploadFileService;
     /**
      * 跳转到用户详情
      * @return
@@ -98,4 +102,50 @@ public class MemberController extends WebController {
         List<List<SignList>> data = iWebMemberService.getSignedList();
         return JsonBean.success("success", data);
     }
+
+
+    /**
+     * 用户上传头像
+     * @return
+     */
+    @RequestMapping(value = "/member/upload",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject uploadAvatar(@RequestParam("avatar") String avatar) {
+        RecordBean<String> result = iWebMemberService.updateAvatar(avatar,WebReqUtils.getSessionUid(request));
+        if (!result.isSuccessCode()) {
+            return JsonBean.error("更新头像失败！");
+        }
+        return JsonBean.success("success");
+    }
+
+    /**
+     * 修改用户密码
+     * @return
+     */
+    @RequestMapping(value = "/member/repass",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject repass(@RequestParam("nowPwd") String nowPwd,@RequestParam("pwd") String pwd) {
+        RecordBean<String> result = iWebMemberService.updatePwd(nowPwd,pwd,WebReqUtils.getSessionUid(request));
+        if (!result.isSuccessCode()) {
+            return JsonBean.error(result.getMsg());
+        }
+        return JsonBean.success("success");
+    }
+
+
+    /**
+     * 用户信息更新
+     * @return
+     */
+    @RequestMapping(value = "/member/update",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject update(Member member) {
+        member.setUid(WebReqUtils.getSessionUid(request));
+        RecordBean<Member> result = iWebMemberService.updateMember(member);
+        if (!result.isSuccessCode()) {
+            return JsonBean.error(result.getMsg());
+        }
+        return JsonBean.success("success");
+    }
+
 }

@@ -3,6 +3,7 @@ package com.xula.entity;
 import cn.assist.easydao.annotation.Temporary;
 import cn.assist.easydao.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -15,6 +16,7 @@ import java.util.Date;
  * @date 2018-11-02 17:19:31
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class MemberArticle extends BasePojo {
     @Temporary
 	private static final long serialVersionUID = 1L;

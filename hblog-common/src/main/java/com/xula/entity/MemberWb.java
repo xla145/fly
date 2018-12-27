@@ -4,6 +4,7 @@ package com.xula.entity;
 import cn.assist.easydao.annotation.Table;
 import cn.assist.easydao.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import java.util.Date;
  */
 @Table(name = "member_weibo")
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class MemberWb extends BasePojo {
 
     /**

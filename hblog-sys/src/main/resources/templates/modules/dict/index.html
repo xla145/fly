@@ -5,7 +5,7 @@
 		<blockquote class="layui-elem-quote">
 			<@shiro.hasPermission name="dict:group:getView,dict:group:add">
 			<a href="javascript:void(0)" class="layui-btn layui-btn-sm operator-btn" data-type="add"><i class="layui-icon">&#xe654;</i> 添加</a>
-		</@shiro.hasPermission>
+			</@shiro.hasPermission>
 			<@shiro.hasPermission name="dict:group:getView,dict:group:edit">
 			<a href="javascript:void(0)" class="layui-btn layui-btn-sm layui-btn-normal operator-btn" data-type="edit"><i class="layui-icon">&#xe642;</i>编&nbsp;&nbsp;辑</a>
 			</@shiro.hasPermission>
@@ -38,7 +38,7 @@
 <script>
 //入口
 layui.use(['table','layer','form','laydate','common'], function(){
-	var table = layui.table, layer = layui.layer, form = layui.form,common = layui.common;
+	var $ = layui.jquery,table = layui.table, layer = layui.layer, form = layui.form,common = layui.common;
     //自定义验证规则
     form.verify({
         info: function (value) {

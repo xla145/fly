@@ -167,15 +167,15 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 
       upload.render({
         elem: '.upload-img'
-        ,url: '/user/upload/'
+        ,url: '/img/upload/'
         ,size: 50
         ,before: function(){
           avatarAdd.find('.loading').show();
         }
         ,done: function(res){
-          if(res.status == 0){
-            $.post('/user/set/', {
-              avatar: res.url
+          if(res.code == 0){
+            $.post('/member/upload/', {
+              avatar: res.data.url
             }, function(res){
               location.reload();
             });
@@ -273,10 +273,10 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
   $('.acc-unbind').on('click', function(){
     var othis = $(this), type = othis.attr('type');
     layer.confirm('整的要解绑'+ ({
-      qq_id: 'QQ'
-      ,weibo_id: '微博'
+      2: 'QQ'
+      ,3: '微博'
     })[type] + '吗？', {icon: 5}, function(){
-      fly.json('/api/unbind', {
+      fly.json('/member/unbind', {
         type: type
       }, function(res){
         if(res.status === 0){

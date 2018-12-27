@@ -57,10 +57,6 @@ public class Captcha {
      *
      */
 
-
-
-
-
     /**
      * 生成验证码
      */

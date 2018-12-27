@@ -115,7 +115,4 @@ public interface IMemberService {
      * @return
      */
     RecordBean<RecordPojo> checkSignStatus(Integer uid);
-
-
-
 }

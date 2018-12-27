@@ -10,6 +10,7 @@ import com.xula.service.dict.cache.DictCache;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,6 +27,9 @@ import java.util.Map;
 public class DictServiceImpl implements IDictService {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
+	private DictCache dictCache;
 
 	/**
 	 * 根据code 和 name获取String值
@@ -198,7 +202,7 @@ public class DictServiceImpl implements IDictService {
 		if(StringUtils.isBlank(code) || StringUtils.isBlank(name)){
 			return null;
 		}
-		Item item = DictCache.getCache().get(code, name);
+		Item item = dictCache.get(code, name);
 		if(item != null){
 			return item;
 		}
@@ -209,7 +213,7 @@ public class DictServiceImpl implements IDictService {
 		//添加缓存策略
 		item = BaseDao.dao.queryForEntity(Item.class, conn);
 		if(item != null){
-			DictCache.getCache().put(code, name, item);
+			dictCache.put(code, name, item);
 		}
 
 		return item;
@@ -223,7 +227,7 @@ public class DictServiceImpl implements IDictService {
 	 * @return
 	 */
 	@Override
-	public Map<Integer, String> getMapValue(String code, String name, String regex) {
+	public Map<String, String> getMapValue(String code, String name, String regex) {
 		if (StringUtils.isEmpty(regex)) {
 			regex = ",";
 		}
@@ -233,12 +237,14 @@ public class DictServiceImpl implements IDictService {
 		}
 		String value = item.getValue();
 		String[] values = value.split(regex);
-		Map<Integer,String> map = new HashMap<>(values.length);
+		Map<String,String> map = new HashMap<>(values.length);
 		for (String v:values) {
-			String[] v1 = v.split(":");
-			if (v1.length > 1) {
-				map.put(Integer.valueOf(v1[0]),v1[1]);
-			}
+		    int index = v.indexOf(":");
+		    if (index > 0) {
+		        String v1 = v.substring(0,index);
+		        String v2 = v.substring(index + 1);
+                map.put(v1,v2);
+            }
 		}
 		return map;
 	}

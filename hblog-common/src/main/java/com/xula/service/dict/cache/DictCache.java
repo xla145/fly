@@ -6,22 +6,16 @@ import com.xula.entity.dict.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 用于字典数据缓存处理
  * @author xla
  */
+@Component
 public class DictCache {
 	
 	private static Logger logger = LoggerFactory.getLogger(DictCache.class);
-
-
-	private static DictCache dictCache = new DictCache();
-
-
-	public static DictCache getCache() {
-		return dictCache;
-	}
 
     /**
      * 字典服务 采用  redis 进行存储

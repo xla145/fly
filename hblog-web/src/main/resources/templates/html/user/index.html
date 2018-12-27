@@ -88,3 +88,13 @@
     </div>
 </div>
 #end
+#define js()
+<script>
+    layui.config({
+        version: "3.0.0"
+        , base: '#(resource)/modules/'
+    }).extend({
+        user: 'user'
+    }).use('user')
+</script>
+#end

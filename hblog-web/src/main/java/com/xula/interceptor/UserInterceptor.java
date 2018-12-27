@@ -43,7 +43,6 @@ public class UserInterceptor implements HandlerInterceptor {
             member = new MemberDetail();
         }
         modelAndView.addObject("member",member);
-        System.out.println("interceptor cost="+(System.currentTimeMillis()-start));
     }
 
     @Override

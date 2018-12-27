@@ -2,12 +2,14 @@ package com.xula.entity.extend;
 
 import com.xula.entity.Article;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 文章列表
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class ArticleList extends Article {
 
 

@@ -4,18 +4,21 @@ import cn.assist.easydao.common.*;
 import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
+import com.xula.base.constant.MemberConstant;
 import com.xula.base.constant.SexEnum;
 import com.xula.base.constant.TaskConstant;
 import com.xula.base.utils.DateUtil;
-import com.xula.entity.Member;
-import com.xula.entity.MemberGrowLog;
-import com.xula.entity.MemberInfo;
+import com.xula.base.utils.Md5Utils;
+import com.xula.base.utils.RecordBean;
+import com.xula.entity.*;
 import com.xula.entity.extend.MemberDetail;
 import com.xula.entity.extend.SignList;
 import com.xula.service.member.IMemberService;
 import com.xula.service.member.IWebMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -59,13 +62,22 @@ public class WebMemberServiceImpl implements IWebMemberService {
         memberDetail.setCity(member.getCity());
         memberDetail.setCreateTime(member.getCreateTime());
         memberDetail.setSignature(member.getSignature());
-
-
+        memberDetail.setEmail(member.getEmail());
 
         memberDetail.setPointValue(memberInfo.getPointValue());
         memberDetail.setVip(memberInfo.getVip());
         memberDetail.setVipName(memberInfo.getVipName());
 
+
+        // 判断用户是否绑定qq或微博
+        MemberQq memberQq = getMemberQq(uid);
+        if (memberQq != null) {
+            memberDetail.setQQ(true);
+        }
+        MemberWb memberWb = getMemberWb(uid);
+        if (memberWb != null) {
+            memberDetail.setWeiBo(true);
+        }
         return memberDetail;
     }
 
@@ -188,4 +200,87 @@ public class WebMemberServiceImpl implements IWebMemberService {
         return signLists;
     }
 
+    /**
+     * 更新头像
+     * @param avatar
+     * @param uid
+     * @return
+     */
+    @Override
+    public RecordBean<String> updateAvatar(String avatar, Integer uid) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE member SET avatar = ?  WHERE uid = ? ");
+        int result = BaseDao.dao.update(sql.toString(),avatar,uid);
+        if (result == 0) {
+            return RecordBean.error("更新头像失败！");
+        }
+        return RecordBean.success("更新头像成功！");
+    }
+
+
+    /**
+     * 更新密码
+     * @param nowPwd
+     * @param pwd
+     * @param uid
+     * @return
+     */
+    @Override
+    public RecordBean<String> updatePwd(String nowPwd, String pwd, Integer uid) {
+        Conditions conn = new Conditions("uid",SqlExpr.EQUAL,uid);
+        conn.add(new Conditions("password",SqlExpr.EQUAL,Md5Utils.md5(nowPwd)),SqlJoin.AND);
+        Member member = BaseDao.dao.queryForEntity(Member.class,conn);
+        if (member == null) {
+            return RecordBean.error("当前密码有误！");
+        }
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE member SET password = ?  WHERE uid = ? ");
+        int result = BaseDao.dao.update(sql.toString(),Md5Utils.md5(pwd),uid);
+        if (result == 0) {
+            return RecordBean.error("更新密码失败！");
+        }
+        return RecordBean.success("更新密码成功！");
+    }
+
+
+    /**
+     * 获取qq授权信息
+     * @param uid
+     * @return
+     */
+    @Override
+    public MemberQq getMemberQq(int uid) {
+        Conditions conn = new Conditions("uid",SqlExpr.EQUAL,uid);
+        conn.add(new Conditions("status",SqlExpr.EQUAL, MemberConstant.STATUS_BINDED),SqlJoin.AND);
+        return BaseDao.dao.queryForEntity(MemberQq.class,conn);
+    }
+
+
+    /**
+     * 获取微博授权信息
+     * @param uid
+     * @return
+     */
+    @Override
+    public MemberWb getMemberWb(int uid) {
+        Conditions conn = new Conditions("uid",SqlExpr.EQUAL,uid);
+        conn.add(new Conditions("status",SqlExpr.EQUAL, MemberConstant.STATUS_BINDED),SqlJoin.AND);
+        return BaseDao.dao.queryForEntity(MemberWb.class,conn);
+    }
+
+
+    /**
+     * 更新用户信息
+     * @param member
+     * @return
+     */
+    @CacheEvict
+    @Override
+    public RecordBean<Member> updateMember(Member member) {
+        int result = BaseDao.dao.update(member);
+        if (result == 0) {
+            return RecordBean.error("更新失败！");
+        }
+        return RecordBean.success("更新失败！");
+    }
 }

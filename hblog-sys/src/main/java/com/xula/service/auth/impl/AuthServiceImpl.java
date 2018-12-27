@@ -110,9 +110,12 @@ public class AuthServiceImpl implements IAuthService {
         String key2 = DEFAULTAUTHKEY + ".getUserMenus." + uid;
         String key3 = DEFAULTAUTHKEY + ".getAllMenus";
         String key4 = DEFAULTAUTHKEY + ".getSysUserAction." + uid;
+
+        String key =  "com.xula.service.auth.impl.SysActionServiceImpl.getSysUserAction." + uid;
         redisKit.delete(key2);
         redisKit.delete(key3);
         redisKit.delete(key4);
+        redisKit.delete(key);
         this.getUserMenus(uid, key2);
         this.getAllMenus();
         logger.info("reload auth success uid:" + uid);

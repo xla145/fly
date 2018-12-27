@@ -1,6 +1,7 @@
 package com.xula.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * qq 用户实体类
@@ -8,6 +9,7 @@ import lombok.Data;
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class UserInfo {
 
     /**

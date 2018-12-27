@@ -4,6 +4,7 @@ import cn.assist.easydao.annotation.Id;
 import cn.assist.easydao.annotation.Temporary;
 import cn.assist.easydao.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class SmsRecord extends BasePojo {
 
 	@Temporary

@@ -96,6 +96,6 @@ public interface IDictService {
 	 * @param regex
 	 * @return
 	 */
-	public Map<Integer,String> getMapValue(String code, String name, String regex);
+	public Map<String,String> getMapValue(String code, String name, String regex);
 	
 }

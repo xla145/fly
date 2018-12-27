@@ -2,6 +2,7 @@ package com.xula.entity.task;
 import cn.assist.easydao.annotation.Temporary;
 import cn.assist.easydao.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * vip task
@@ -9,6 +10,7 @@ import lombok.Data;
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class VipTaskConf extends BasePojo {
 
 	@Temporary

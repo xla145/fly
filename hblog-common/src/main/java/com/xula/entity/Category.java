@@ -5,6 +5,7 @@ import cn.assist.easydao.annotation.Table;
 import cn.assist.easydao.annotation.Temporary;
 import cn.assist.easydao.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import java.util.Date;
  */
 @Table(name = "article_category")
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class Category extends BasePojo {
     @Temporary
 	private static final long serialVersionUID = 1L;

@@ -1,6 +1,7 @@
 package com.xula.entity.task;
 import cn.assist.easydao.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
@@ -9,6 +10,7 @@ import lombok.Data;
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class Evolve extends BasePojo {
 	
 	private static final long serialVersionUID = 1L;

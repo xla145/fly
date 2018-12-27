@@ -1,12 +1,14 @@
 package com.xula.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 链接类
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class Link {
 
     /**

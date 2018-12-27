@@ -8,7 +8,9 @@ import com.xula.base.constant.MemberConstant;
 import com.xula.base.utils.*;
 import com.xula.entity.Member;
 import com.xula.entity.UserInfo;
+import com.xula.service.dict.IDictService;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +42,9 @@ public class QQLoginController extends BaseAuth{
     private final static String GET_CODE_URL = "https://graph.qq.com/oauth2.0/authorize";
 
     private final static String loginCallback = "http://test.xulian.net.cn/qq/authLoginCallback";
+
+    @Autowired
+    private IDictService iDictService;
 
     @Value("is.dev")
     private String isDev;
@@ -93,7 +98,7 @@ public class QQLoginController extends BaseAuth{
             String userParamStr = CookieUtil.getCookie(request, state);
             // 解析参数
             JSONObject userParam = JSONObject.parseObject(Base64Helper.decode(userParamStr, "utf-8"));
-
+            Map<String,String> config = iDictService.getMapValue("QQ_LOGIN_CONFIG","CONFIG_CONTENT",",");
             if (stringToBoolean(isDev)) {
                 logger.info("微信授权确认-处理用户数据逻辑：state：" + state + ", code:" + code + ",param:" + userParam);
             }
@@ -103,11 +108,11 @@ public class QQLoginController extends BaseAuth{
             }
             String api = "https://graph.qq.com/oauth2.0/token";
             Map<String, String> data = new HashMap<String, String>();
-            data.put("client_id", APP_ID);
-            data.put("client_secret", APP_KEY);
+            data.put("client_id", config.get("appId"));
+            data.put("client_secret", config.get("appKey"));
             data.put("code", code);
             data.put("grant_type", "authorization_code");
-            data.put("redirect_uri", loginCallback);
+            data.put("redirect_uri", config.get("loginCallBack"));
             String result = null;
 
             result = HttpUtil.httpGet(api, data, null);

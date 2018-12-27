@@ -4,6 +4,7 @@ import cn.assist.easydao.annotation.Id;
 import cn.assist.easydao.annotation.Temporary;
 import cn.assist.easydao.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  * 成长积分日志表
 */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class MemberGrowLog extends BasePojo {
 
 	@Temporary

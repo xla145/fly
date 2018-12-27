@@ -56,7 +56,6 @@ public class UserRealm extends AuthorizingRealm {
 
         List<String> permsList = menuList.stream().map(SysAction::getPerms).collect(Collectors.toList());
 
-
         //用户权限列表
         Set<String> permsSet = permsList.stream().parallel().filter(s -> StringUtils.isNotBlank(s)).map(String::trim).map(s -> s.split(",")).map(Arrays::asList).flatMap(Collection::stream).collect(Collectors.toSet());
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();

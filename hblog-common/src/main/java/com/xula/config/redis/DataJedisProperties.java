@@ -1,6 +1,7 @@
 package com.xula.config.redis;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -10,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @ConfigurationProperties("spring.redis")
 public class DataJedisProperties {
 

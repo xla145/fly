@@ -1,12 +1,14 @@
 package com.xula.entity.extend;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 热门回帖用户信息
  * @author xla
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class HotReply {
 
     /**

@@ -23,6 +23,16 @@ public class MemberConstant {
 
 
     /**
+     * 已绑定
+     **/
+    public static final int STATUS_BINDED = 1;
+
+    /**
+     * 未绑定
+     **/
+    public static final int STATUS_UNBINDING = 2;
+
+    /**
      * 用户有效
      **/
     public static final int USET_DALID_YES = 1;

@@ -2,14 +2,12 @@ package com.xula.service.article.impl;
 
 import cn.assist.easydao.annotation.DataSource;
 import cn.assist.easydao.annotation.DataSourceConfig;
-import cn.assist.easydao.common.Conditions;
-import cn.assist.easydao.common.Sort;
-import cn.assist.easydao.common.SqlExpr;
-import cn.assist.easydao.common.SqlSort;
+import cn.assist.easydao.common.*;
 import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
 import cn.assist.easydao.util.PojoHelper;
+import com.xula.base.constant.ArticleConstant;
 import com.xula.base.constant.DataSourceConstant;
 import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.RecordBean;
@@ -148,5 +146,18 @@ public class ArticleServiceImpl extends BaseService implements IArticleService {
         MemberDetail memberDetail = iWebMemberService.getMemberDetail(uid);
         recordPojo.set("member",memberDetail);
         return recordPojo;
+    }
+
+
+    /**
+     * 获取用户提问列表
+     * @param uid
+     * @return
+     */
+    @Override
+    public List<Article> getAskList(Integer uid) {
+        Conditions conn = new Conditions("create_uid",SqlExpr.EQUAL,uid);
+        conn.add(new Conditions("cat_id",SqlExpr.EQUAL, ArticleConstant.ASK_TYPE), SqlJoin.AND);
+        return BaseDao.dao.queryForListEntity(Article.class,conn);
     }
 }

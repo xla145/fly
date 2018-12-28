@@ -4,6 +4,8 @@ import com.xula.entity.Article;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+
 /**
  * 文章列表
  * @author xla
@@ -37,5 +39,10 @@ public class ArticleList extends Article {
      * vip名称
      */
     private String vipName;
+
+    /**
+     * 收藏时间
+     */
+    private Date collectionTime;
 
 }

@@ -5,7 +5,6 @@ import cn.assist.easydao.common.SqlExpr;
 import cn.assist.easydao.common.SqlJoin;
 import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
-import cn.assist.easydao.util.JsonKit;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.auth.Login;
 import com.xula.base.constant.ArticleConstant;
@@ -21,7 +20,6 @@ import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.CommentList;
 import com.xula.event.AccessArticleEvent;
 import com.xula.event.EventModel;
-import com.xula.event.RegisterEvent;
 import com.xula.service.article.IArticleCategoryService;
 import com.xula.service.article.IArticleService;
 import com.xula.service.article.ICommentService;
@@ -29,10 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -58,7 +53,7 @@ public class ArticleController extends WebController {
      * @return
      */
     @Login
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     @ResponseBody
     public JSONObject add(HttpServletRequest request) {
         Integer catId = WebReqUtils.getParamToInteger(request,"catId",null);
@@ -91,7 +86,7 @@ public class ArticleController extends WebController {
      * @return
      */
     @Login
-    @RequestMapping(value = "/add",method = RequestMethod.GET)
+    @GetMapping(value = "/add")
     public String addView() {
         return "article/add";
     }
@@ -101,7 +96,7 @@ public class ArticleController extends WebController {
      * 获取到文章列表页
      * @return
      */
-    @RequestMapping(value = {"/list/all","/list/all/page/{pageNo}"},method = RequestMethod.GET)
+    @GetMapping(value = {"/list/all","/list/all/page/{pageNo}"})
     public String index(@PathVariable(required = false) Integer pageNo,Model model) {
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
@@ -120,7 +115,7 @@ public class ArticleController extends WebController {
      * 获取到文章列表页
      * @return
      */
-    @RequestMapping(value = {"/list/{typeName}","/list/{typeName}/{statusName}","/list/{typeName}/{statusName}/page/{pageNo}",},method = RequestMethod.GET)
+    @GetMapping(value = {"/list/{typeName}","/list/{typeName}/{statusName}","/list/{typeName}/{statusName}/page/{pageNo}",})
     public String index(@PathVariable String typeName,@PathVariable(required = false) String statusName,@PathVariable(required = false) Integer pageNo,Model model) {
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
@@ -138,7 +133,7 @@ public class ArticleController extends WebController {
      * 跳转添加文章页面
      * @return
      */
-    @RequestMapping(value = {"/detail/{aid}","/detail/{aid}/page/{pageNo}/"},method = RequestMethod.GET)
+    @GetMapping(value = {"/detail/{aid}","/detail/{aid}/page/{pageNo}/"})
     public String detail(@PathVariable("aid") String aid,@PathVariable(value = "pageNo",required = false) Integer pageNo,Model model) {
         RecordPojo recordPojo = iArticleService.getArticleInfo(aid);
         model.addAttribute("data",recordPojo.getColumns());

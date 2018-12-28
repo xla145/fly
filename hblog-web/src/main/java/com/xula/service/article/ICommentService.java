@@ -6,6 +6,8 @@ import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.extend.CommentList;
 
+import java.util.List;
+
 /**
  * 评论服务层
  * @author xla
@@ -49,4 +51,11 @@ public interface ICommentService {
     RecordBean<String> accept(Integer commentId);
 
 
+
+    /**
+     * 获取用户的评论列表
+     * @param uid
+     * @return
+     */
+    List<CommentList> getCommentList(Integer uid);
 }

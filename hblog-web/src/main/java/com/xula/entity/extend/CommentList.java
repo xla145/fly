@@ -39,6 +39,12 @@ public class CommentList extends ArticleComment {
     private boolean love = false;
 
 
+    /**
+     * 文章标题
+     */
+    private String articleTitle;
+
+
     public boolean getIsLove() {
         return love;
     }

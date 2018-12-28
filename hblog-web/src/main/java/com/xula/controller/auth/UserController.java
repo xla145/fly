@@ -2,6 +2,7 @@ package com.xula.controller.auth;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.xula.base.auth.Login;
 import com.xula.base.constant.GlobalConstant;
 import com.xula.base.constant.LoginWayConstant;
 import com.xula.base.constant.PageConstant;
@@ -124,6 +125,7 @@ public class UserController extends BaseAuth {
      * 跳转到用户主页
      * @return
      */
+    @Login
     @RequestMapping(value = "home",method = RequestMethod.GET)
     public String home() {
         return "/user/home";

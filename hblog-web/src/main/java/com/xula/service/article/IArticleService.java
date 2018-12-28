@@ -68,4 +68,11 @@ public interface IArticleService {
      * @return
      */
     RecordPojo getArticleInfo(String aid);
+
+
+    /**
+     * 获取用户的提问列表
+     * @return
+     */
+    List<Article> getAskList(Integer uid);
 }

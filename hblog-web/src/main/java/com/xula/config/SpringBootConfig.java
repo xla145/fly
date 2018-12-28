@@ -9,8 +9,15 @@ import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+/**
+ * spring boot 配置
+ * @author xla
+ */
 @Configuration
 public class SpringBootConfig {
+
+
   @Bean(name = "jfinalViewResolver")
   public JFinalViewResolver getJFinalViewResolver() {
     JFinalViewResolver jfr = new JFinalViewResolver();
@@ -35,11 +42,4 @@ public class SpringBootConfig {
     jfr.setOrder(0);
     return jfr;
   }
-
-
-//
-//  @Bean("customKeyGenerator")
-//  public KeyGenerator keyGenerator() {
-//    return new CustomKeyGenerator();
-//  }
 }

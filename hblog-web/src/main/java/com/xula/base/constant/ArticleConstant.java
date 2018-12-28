@@ -40,4 +40,11 @@ public class ArticleConstant {
      * 审核不通过
      */
     public static final Integer STATUS_UNPASS= 20;
+
+
+    /**
+     * 文章分类 提问
+     */
+
+    public static final Integer ASK_TYPE = 1;
 }

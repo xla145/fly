@@ -641,7 +641,10 @@ layui.define('layer', function(exports){
     ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
     ,fieldElem = elem.find('input,select,textarea') //获取所有表单域
     ,filter = button.attr('lay-filter'); //获取过滤器
-   
+
+
+    console.log(button.parents('form'))
+
     
     //开始校验
     layui.each(verifyElem, function(_, item){

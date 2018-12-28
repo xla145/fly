@@ -8,6 +8,7 @@ import com.xula.base.utils.RecordBean;
 import com.xula.service.article.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +33,7 @@ public class CommentController {
      * @return
      */
     @Login
-    @RequestMapping("/reply")
+    @PostMapping(value = "/reply")
     @ResponseBody
     public JSONObject reply(@RequestParam(name = "aid") String aid,@RequestParam(name = "content") String content) {
         RecordBean<String> result = iCommentService.reply(aid,content);
@@ -49,7 +50,7 @@ public class CommentController {
      * @return
      */
     @Login
-    @RequestMapping("/love")
+    @PostMapping(value = "/love")
     @ResponseBody
     public JSONObject love(@RequestParam(name = "commentId") Integer commentId,@RequestParam("fever") Integer fever) {
         RecordBean<String> result = iCommentService.love(commentId,fever);
@@ -67,7 +68,7 @@ public class CommentController {
      * @return
      */
     @Login
-    @RequestMapping("/accept")
+    @PostMapping("/accept")
     @ResponseBody
     public JSONObject accept(@RequestParam(name = "commentId") Integer commentId) {
         RecordBean<String> result = iCommentService.accept(commentId);

@@ -97,17 +97,17 @@ public class JsonBean {
 		JSONObject data = new JSONObject();
 		data.put("pageNo", 1);
 		data.put("pageSize", 0);
-		data.put("total", 0);
+		data.put("count", 0);
 		data.put("pageTotal", 0);
-		data.put("pageDate", new JSONArray());
+		data.put("rows", new JSONArray());
 		
 		if(page != null){
 			List<?> list = page.getPageData();
 			data.put("pageNo", page.getPageNo());
 			data.put("pageSize", page.getPageSize());
-			data.put("total", page.getTotal());
+			data.put("count", page.getTotal());
 			data.put("pageTotal", page.getPageTotal());
-			data.put("pageDate", JSON.toJSON(list));
+			data.put("rows", JSON.toJSON(list));
 		}
 		return JsonBean.success(msg, data);
 	}

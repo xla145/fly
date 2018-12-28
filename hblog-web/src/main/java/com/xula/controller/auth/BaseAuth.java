@@ -2,18 +2,13 @@ package com.xula.controller.auth;
 
 
 import com.xula.base.constant.GlobalConstant;
-import com.xula.base.constant.LoginWayConstant;
-import com.xula.base.utils.SpringFactory;
 import com.xula.base.utils.CookieUtil;
 import com.xula.base.utils.RecordBean;
 import com.xula.base.utils.ReqUtils;
-import com.xula.controller.BaseController;
 import com.xula.controller.WebController;
 import com.xula.entity.Member;
-import com.xula.entity.MemberToken;
 import com.xula.event.EventModel;
 import com.xula.event.LoginEvent;
-import com.xula.event.RegisterEvent;
 import com.xula.event.TaskEvent;
 import com.xula.service.member.IMemberService;
 import org.slf4j.Logger;

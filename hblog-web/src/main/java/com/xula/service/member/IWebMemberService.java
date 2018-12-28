@@ -1,11 +1,12 @@
 package com.xula.service.member;
 
 
+import cn.assist.easydao.common.Conditions;
+import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.utils.RecordBean;
-import com.xula.entity.Member;
-import com.xula.entity.MemberQq;
-import com.xula.entity.MemberWb;
+import com.xula.entity.*;
+import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.MemberDetail;
 import com.xula.entity.extend.SignList;
 
@@ -74,5 +75,15 @@ public interface IWebMemberService {
      * @return
      */
     RecordBean<Member> updateMember(Member member);
+
+
+    /**
+     * 获取用户收藏的文章
+     * @param conn
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    PagePojo<MemberArticle> getMemberArticlePage(Conditions conn, Integer pageNo, Integer pageSize);
 
 }

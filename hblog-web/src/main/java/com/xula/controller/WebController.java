@@ -1,6 +1,5 @@
 package com.xula.controller;
 
-import com.xula.base.constant.GlobalConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 

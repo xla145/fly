@@ -452,4 +452,15 @@ public class CommonUtil {
     public static String md5(String content) {
         return DigestUtils.md5Hex(content).toUpperCase();
     }
+
+    /**
+     * 获取集合的长度
+     * @return
+     */
+    public static Integer getSize(List<Object> objects) {
+        if (objects == null) {
+            return 0;
+        }
+        return objects.size();
+    }
 }

@@ -1,0 +1,16 @@
+<ul class="jie-row">
+    #if(data??)
+    #for(item : data)
+    <li>
+        #if(item.isGood == 1)
+        <span class="fly-jing">精</span>
+        #end
+        <a href="#(ctx)article/detail/#(item.aid??)" class="jie-title">#(item.title??)</a>
+        <i>#date(item.createTime,"yyyy-MM-dd")</i>
+        <em class="layui-hide-xs">#(item.browse??0)阅/#(item.commentNum??0)答</em>
+    </li>
+    #end
+    #else
+       <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><i style="font-size:14px;">没有发表任何求解</i></div>
+    #end
+</ul>

@@ -32,27 +32,27 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       //求解
       '{{# for(var i = 0; i < d.rows.length; i++){ }}\
       <li>\
-        {{# if(d.rows[i].collection_time){ }}\
+        {{# if(d.collect){ }}\
           <a class="article-title" href="/article/{{d.rows[i].id}}/" target="_blank">{{= d.rows[i].title}}</a>\
-          <i>{{ d.rows[i].collection_time }} 收藏</i>\
+          <i>{{ d.rows[i].collectionTime }} 收藏</i>\
         {{# } else { }}\
-          {{# if(d.rows[i].status == 1){ }}\
+          {{# if(d.rows[i].isGood == 1){ }}\
           <span class="fly-jing layui-hide-xs">精</span>\
           {{# } }}\
-          {{# if(d.rows[i].accept >= 0){ }}\
+          {{# if(d.rows[i].status == 15){ }}\
             <span class="article-status article-status-ok">已结</span>\
           {{# } else { }}\
             <span class="article-status">未结</span>\
           {{# } }}\
-          {{# if(d.rows[i].status == -1){ }}\
+          {{# if(d.rows[i].status == 0){ }}\
             <span class="article-status">审核中</span>\
           {{# } }}\
-          <a class="article-title" href="/article/{{d.rows[i].id}}/" target="_blank">{{= d.rows[i].title}}</a>\
-          <i class="layui-hide-xs">{{ layui.util.timeAgo(d.rows[i].time, 1) }}</i>\
-          {{# if(d.rows[i].accept == -1){ }}\
-          <a class="mine-edit layui-hide-xs" href="/article/edit/{{d.rows[i].id}}" target="_blank">编辑</a>\
+          <a class="article-title" href="/article/detail/{{d.rows[i].aid}}/" target="_blank">{{= d.rows[i].title}}</a>\
+          <i class="layui-hide-xs">{{ layui.util.timeAgo(d.rows[i].createTime, 1) }}</i>\
+          {{# if(d.rows[i].status != -1 && d.rows[i].status != 15){ }}\
+          <a class="mine-edit layui-hide-xs" href="/article/edit/{{d.rows[i].aid}}" target="_blank">编辑</a>\
           {{# } }}\
-          <em class="layui-hide-xs">{{d.rows[i].hits}}阅/{{d.rows[i].comment}}答</em>\
+          <em class="layui-hide-xs">{{d.rows[i].browse}}阅/{{d.rows[i].commentNum}}答</em>\
         {{# } }}\
       </li>\
       {{# } }}'
@@ -73,9 +73,8 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
         if(type === 'collection'){
           var nums = 10; //每页出现的数据量
           fly.json(url, {}, function(res){
-            res.count = res.rows.length;
 
-            var rows = layui.sort(res.rows, 'collection_timestamp', 'desc')
+            var rows = layui.sort(res.data.rows, 'createTime', 'desc')
             ,render = function(curr){
               var data = []
               ,start = curr*nums - nums
@@ -89,9 +88,10 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
                 data.push(rows[i]);
               }
 
-              res.rows = data;
+              res.data.rows = data;
+              res.data.collect = true;
               
-              view(res);
+              view(res.data);
             };
 
             render(curr)
@@ -109,14 +109,16 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
             });
           });
         } else {
-          fly.json('/api/'+ type +'/', {
+          fly.json('/member/'+ type +'/', {
             page: curr
           }, function(res){
-            view(res);
+            // res.data.rows = res.data.pageData;
+            // res.data.count = res.data.total;
+            view(res.data);
             gather.minelog['mine-article-page-' + curr] = res;
             now || laypage.render({
               elem: 'LAY_page'
-              ,count: res.count
+              ,count: res.data.count
               ,curr: curr
               ,jump: function(e, first){
                 if(!first){

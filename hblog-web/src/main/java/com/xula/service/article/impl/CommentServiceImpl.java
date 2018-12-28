@@ -6,7 +6,6 @@ import cn.assist.easydao.common.SqlExpr;
 import cn.assist.easydao.common.SqlSort;
 import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
-import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.constant.ArticleConstant;
 import com.xula.base.utils.ImgUtil;
 import com.xula.base.utils.RecordBean;
@@ -27,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -181,5 +178,20 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
             return RecordBean.error("更新点赞数失败");
         }
         return RecordBean.success("评论采纳成功！");
+    }
+
+
+    /**
+     * 获取用户的评论列表
+     * @param uid
+     * @return
+     */
+    @Override
+    public List<CommentList> getCommentList(Integer uid) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT a.id,a.content,a.uid,a.create_time,b.title article_title ");
+        sql.append("FROM article_comment a JOIN article b ON(b.aid = a.article_id) ");
+        sql.append("WHERE 1=1 AND a.uid = ?");
+        return BaseDao.dao.queryForListEntity(CommentList.class,sql.toString(),uid);
     }
 }

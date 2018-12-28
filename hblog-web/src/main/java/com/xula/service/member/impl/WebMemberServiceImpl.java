@@ -11,10 +11,12 @@ import com.xula.base.utils.DateUtil;
 import com.xula.base.utils.Md5Utils;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.*;
+import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.MemberDetail;
 import com.xula.entity.extend.SignList;
 import com.xula.service.member.IMemberService;
 import com.xula.service.member.IWebMemberService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -282,5 +284,19 @@ public class WebMemberServiceImpl implements IWebMemberService {
             return RecordBean.error("更新失败！");
         }
         return RecordBean.success("更新失败！");
+    }
+
+    /**
+     * 获取用户收藏的文章
+     * @param conn
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Cacheable
+    @Override
+    public PagePojo<MemberArticle> getMemberArticlePage(Conditions conn, Integer pageNo, Integer pageSize) {
+        Sort sort = new Sort("create_time",SqlSort.DESC);
+        return BaseDao.dao.queryForListPage(MemberArticle.class,conn,sort,pageNo,pageSize);
     }
 }

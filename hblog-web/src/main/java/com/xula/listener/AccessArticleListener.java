@@ -1,14 +1,9 @@
 package com.xula.listener;
 
 import cn.assist.easydao.dao.BaseDao;
-import com.xula.base.utils.SpringFactory;
 import com.xula.entity.ArticleBrowse;
-import com.xula.entity.Member;
-import com.xula.entity.task.Evolve;
 import com.xula.event.AccessArticleEvent;
 import com.xula.event.EventModel;
-import com.xula.event.RegisterEvent;
-import com.xula.service.member.IMemberVipService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;

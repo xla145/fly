@@ -20,10 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +47,7 @@ public class IndexController extends WebController{
     private IUploadFileService iUploadFileService;
 
 
-    @RequestMapping(value = {"/","index"})
+    @GetMapping(value = {"/","index"})
     public String index(Model model) {
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
@@ -63,7 +60,7 @@ public class IndexController extends WebController{
         return "index";
     }
 
-    @RequestMapping(value = "loginTest")
+    @GetMapping(value = "loginTest")
     @ResponseBody
     public JSONObject loginTest(HttpServletRequest request) {
 
@@ -81,7 +78,7 @@ public class IndexController extends WebController{
      * 获取验证码
      * @return
      */
-    @RequestMapping(value = "/auth/imagecode",method = RequestMethod.GET)
+    @GetMapping(value = "/auth/imagecode")
     public void imageCode(HttpServletResponse response,HttpServletRequest request) {
         Captcha captcha = Captcha.getInstance();
         String vcode = captcha.getRandomString();
@@ -97,7 +94,7 @@ public class IndexController extends WebController{
      * 获取验证码
      * @return
      */
-    @RequestMapping(value = "/img/upload",method = RequestMethod.POST)
+    @PostMapping(value = "/img/upload")
     @ResponseBody
     public JSONObject upload(@RequestParam("file") MultipartFile file) {
         JSONObject jsonObject = new JSONObject();

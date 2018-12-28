@@ -1,32 +1,32 @@
 package com.xula.controller.member;
 
+import cn.assist.easydao.common.Conditions;
+import cn.assist.easydao.common.SqlExpr;
+import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
-import cn.assist.easydao.util.JsonKit;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.auth.Login;
-import com.xula.base.constant.ImgCategory;
+import com.xula.base.constant.GlobalConstant;
 import com.xula.base.constant.PageConstant;
-import com.xula.base.utils.ImgUtil;
 import com.xula.base.utils.JsonBean;
 import com.xula.base.utils.RecordBean;
 import com.xula.base.utils.WebReqUtils;
 import com.xula.controller.WebController;
 import com.xula.entity.Member;
+import com.xula.entity.MemberArticle;
+import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.SignList;
 import com.xula.event.EventModel;
-import com.xula.event.RegisterEvent;
 import com.xula.event.TaskEvent;
+import com.xula.service.article.IArticleService;
 import com.xula.service.member.IMemberService;
 import com.xula.service.member.IWebMemberService;
 import com.xula.service.oss.IUploadFileService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +44,13 @@ public class MemberController extends WebController {
     @Autowired
     private IWebMemberService iWebMemberService;
     @Autowired
-    private IUploadFileService iUploadFileService;
+    private IArticleService iArticleService;
+
     /**
      * 跳转到用户详情
      * @return
      */
-    @RequestMapping(value = "/member/{uid}",method = RequestMethod.GET)
+    @GetMapping(value = "/member/{uid}")
     public String index(@PathVariable Integer uid, Model model) {
         model.addAttribute("uid",uid);
         return PageConstant.USER_HOME;
@@ -61,7 +62,7 @@ public class MemberController extends WebController {
      * @return
      */
     @Login
-    @RequestMapping(value = "/member/sign",method = RequestMethod.POST)
+    @PostMapping(value = "/member/sign")
     @ResponseBody
     public JSONObject sign() {
         Integer uid = WebReqUtils.getSessionUid(request);
@@ -82,7 +83,7 @@ public class MemberController extends WebController {
      * 判断用户签到状态
      * @return
      */
-    @RequestMapping(value = "/member/sign/status",method = RequestMethod.POST)
+    @PostMapping(value = "/member/sign/status")
     @ResponseBody
     public JSONObject signStatus() {
         Integer uid = WebReqUtils.getSessionUid(request);
@@ -96,7 +97,7 @@ public class MemberController extends WebController {
      * 用户签到列表显示
      * @return
      */
-    @RequestMapping(value = "/member/sign/show",method = RequestMethod.POST)
+    @PostMapping(value = "/member/sign/show")
     @ResponseBody
     public JSONObject show() {
         List<List<SignList>> data = iWebMemberService.getSignedList();
@@ -108,7 +109,7 @@ public class MemberController extends WebController {
      * 用户上传头像
      * @return
      */
-    @RequestMapping(value = "/member/upload",method = RequestMethod.POST)
+    @PostMapping(value = "/member/upload")
     @ResponseBody
     public JSONObject uploadAvatar(@RequestParam("avatar") String avatar) {
         RecordBean<String> result = iWebMemberService.updateAvatar(avatar,WebReqUtils.getSessionUid(request));
@@ -122,7 +123,7 @@ public class MemberController extends WebController {
      * 修改用户密码
      * @return
      */
-    @RequestMapping(value = "/member/repass",method = RequestMethod.POST)
+    @PostMapping(value = "/member/repass")
     @ResponseBody
     public JSONObject repass(@RequestParam("nowPwd") String nowPwd,@RequestParam("pwd") String pwd) {
         RecordBean<String> result = iWebMemberService.updatePwd(nowPwd,pwd,WebReqUtils.getSessionUid(request));
@@ -137,7 +138,7 @@ public class MemberController extends WebController {
      * 用户信息更新
      * @return
      */
-    @RequestMapping(value = "/member/update",method = RequestMethod.POST)
+    @PostMapping(value = "/member/update")
     @ResponseBody
     public JSONObject update(Member member) {
         member.setUid(WebReqUtils.getSessionUid(request));
@@ -148,4 +149,28 @@ public class MemberController extends WebController {
         return JsonBean.success("success");
     }
 
+    /**
+     * 用户发布的文章
+     * @return
+     */
+    @PostMapping(value = "/member/article")
+    @ResponseBody
+    public JSONObject article(@RequestParam(value = "page",required = false,defaultValue = "1") Integer pageNo) {
+        Conditions conn = new Conditions("create_uid", SqlExpr.EQUAL,WebReqUtils.getSessionUid(request));
+        PagePojo<ArticleList> page = iArticleService.getArticlePage(conn,pageNo, GlobalConstant.PAGE_SIZE);
+        return JsonBean.page("success",page);
+    }
+
+
+    /**
+     * 用户收藏的文章
+     * @return
+     */
+    @PostMapping(value = "/member/collect")
+    @ResponseBody
+    public JSONObject collect(@RequestParam(value = "page",required = false,defaultValue = "1") Integer pageNo) {
+        Conditions conn = new Conditions("uid", SqlExpr.EQUAL,WebReqUtils.getSessionUid(request));
+        PagePojo<MemberArticle> page = iWebMemberService.getMemberArticlePage(conn,pageNo, GlobalConstant.PAGE_SIZE);
+        return JsonBean.page("success",page);
+    }
 }

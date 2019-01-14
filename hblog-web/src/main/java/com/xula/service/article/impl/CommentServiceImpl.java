@@ -62,6 +62,10 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
         if (result == 0) {
             return RecordBean.error("更新文章评论数失败！");
         }
+
+
+
+
         return RecordBean.success("评论失败！");
     }
 

@@ -16,6 +16,7 @@ import com.xula.base.utils.WebReqUtils;
 import com.xula.controller.WebController;
 import com.xula.entity.Article;
 import com.xula.entity.Category;
+import com.xula.entity.MemberArticle;
 import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.CommentList;
 import com.xula.event.AccessArticleEvent;
@@ -153,8 +154,6 @@ public class ArticleController extends WebController {
 
         return "article/detail";
     }
-
-
 
     /**
      * article/list/all

@@ -34,7 +34,7 @@ public class MemberMessage extends BasePojo {
 	/**
 	 * 消息可能关联的帖子
 	 */
-	private Integer articleId;
+	private String articleId;
 	/**
 	 * 消息可能关联的评论
 	 */

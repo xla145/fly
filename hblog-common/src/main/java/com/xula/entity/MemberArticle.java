@@ -32,7 +32,7 @@ public class MemberArticle extends BasePojo {
 	/**
 	 * 文章编号
 	 */
-	private Integer articleId;
+	private String articleId;
 	/**
 	 * 文章标题
 	 */
@@ -41,6 +41,11 @@ public class MemberArticle extends BasePojo {
 	 * 创建时间
 	 */
 	private Date createTime;
+
+	/**
+	 * 状态 0:取消收藏 1:收藏
+	 */
+	private Integer status;
 	/**
 	 * 备注
 	 */

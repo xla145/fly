@@ -9,11 +9,13 @@ import cn.assist.easydao.pojo.RecordPojo;
 import cn.assist.easydao.util.PojoHelper;
 import com.xula.base.constant.ArticleConstant;
 import com.xula.base.constant.DataSourceConstant;
+import com.xula.base.constant.MemberArticleConstant;
 import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Article;
 import com.xula.entity.ArticleComment;
 import com.xula.entity.Category;
+import com.xula.entity.MemberArticle;
 import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.MemberDetail;
 import com.xula.service.article.BaseService;
@@ -90,7 +92,7 @@ public class ArticleServiceImpl extends BaseService implements IArticleService {
      * @param pageNo
      * @return
      */
-    @Cacheable(keyGenerator = "customKeyGenerator")
+    @Cacheable
     @Override
     public PagePojo<ArticleList> getArticlePage(Conditions conn, Integer pageNo, Integer pageSize) {
         StringBuffer sql = new StringBuffer();
@@ -159,5 +161,57 @@ public class ArticleServiceImpl extends BaseService implements IArticleService {
         Conditions conn = new Conditions("create_uid",SqlExpr.EQUAL,uid);
         conn.add(new Conditions("cat_id",SqlExpr.EQUAL, ArticleConstant.ASK_TYPE), SqlJoin.AND);
         return BaseDao.dao.queryForListEntity(Article.class,conn);
+    }
+
+
+    /**
+     *
+     * @param aid
+     * @param uid
+     * @return
+     */
+    @Override
+    public MemberArticle getMemberArticle(String aid, Integer uid) {
+        Conditions conn = new Conditions("article_id",SqlExpr.EQUAL,aid);
+        conn.add(new Conditions("uid",SqlExpr.EQUAL,uid),SqlJoin.AND);
+        return BaseDao.dao.queryForEntity(MemberArticle.class,conn);
+    }
+
+
+    /**
+     * 收藏文章
+     * @param aid
+     * @param uid
+     * @return
+     */
+    @Override
+    public RecordBean<String> addMemberArticle(String aid, Integer uid) {
+        MemberArticle memberArticle = new MemberArticle();
+        memberArticle.setArticleId(aid);
+        memberArticle.setCreateTime(new Date());
+        memberArticle.setUid(uid);
+        memberArticle.setStatus(MemberArticleConstant.STATUS_COLECTED);
+        int result = BaseDao.dao.merge(memberArticle,"status");
+        if (result > 0) {
+            return RecordBean.success("收藏成功！");
+        }
+        return RecordBean.error("收藏失败！");
+    }
+
+    /**
+     *
+     * @param aid
+     * @param uid
+     * @return
+     */
+    @Override
+    public RecordBean<String> cancelMemberArticle(String aid, Integer uid) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE member_article SET status = 0 WHERE uid = ? AND article_id = ?");
+        int result =  BaseDao.dao.update(sql.toString(),uid,aid);
+        if (result == 1) {
+            return RecordBean.success("取消收藏成功！");
+        }
+        return RecordBean.error("取消收藏失败！");
     }
 }

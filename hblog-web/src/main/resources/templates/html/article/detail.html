@@ -24,7 +24,7 @@
                     #if(data.isGood == 1)
                     <span class="layui-badge layui-bg-red">精帖</span>
                     #end
-                    <!--<div class="fly-admin-box" data-id="123">-->
+                    <div class="fly-admin-box" data-id="#(data.aid)">
                         <!--<span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>-->
 
                         <!--<span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>-->
@@ -32,7 +32,7 @@
 
                         <!--<span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span>-->
                         <!--&lt;!&ndash; <span class="layui-btn layui-btn-xs article-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> &ndash;&gt;-->
-                    <!--</div>-->
+                    </div>
                     <span class="fly-list-nums">
                         <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> #(data.commentNum)</a>
                         <i class="iconfont" title="人气">&#xe60b;</i> #(data.browse)

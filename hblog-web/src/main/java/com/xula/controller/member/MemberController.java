@@ -14,6 +14,7 @@ import com.xula.base.utils.WebReqUtils;
 import com.xula.controller.WebController;
 import com.xula.entity.Member;
 import com.xula.entity.MemberArticle;
+import com.xula.entity.MemberMessage;
 import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.SignList;
 import com.xula.event.EventModel;
@@ -40,7 +41,7 @@ import java.util.Map;
 public class MemberController extends WebController {
 
     @Autowired
-    public IMemberService iMemberService;
+    public  IMemberService iMemberService;
     @Autowired
     private IWebMemberService iWebMemberService;
     @Autowired
@@ -163,14 +164,29 @@ public class MemberController extends WebController {
 
 
     /**
-     * 用户收藏的文章
+     * 获取用户的消息
      * @return
      */
-    @PostMapping(value = "/member/collect")
+    @PostMapping(value = "/member/message/find")
     @ResponseBody
-    public JSONObject collect(@RequestParam(value = "page",required = false,defaultValue = "1") Integer pageNo) {
-        Conditions conn = new Conditions("uid", SqlExpr.EQUAL,WebReqUtils.getSessionUid(request));
-        PagePojo<MemberArticle> page = iWebMemberService.getMemberArticlePage(conn,pageNo, GlobalConstant.PAGE_SIZE);
-        return JsonBean.page("success",page);
+    public JSONObject find() {
+        Conditions conn = new Conditions("to_uid", SqlExpr.EQUAL,WebReqUtils.getSessionUid(request));
+        List<MemberMessage> list = iWebMemberService.getMemberMessageList(conn);
+        return JsonBean.success("success",list);
+    }
+
+
+    /**
+     * 删除用户的消息
+     * @return
+     */
+    @PostMapping(value = "/member/message/remove")
+    @ResponseBody
+    public JSONObject remove(@RequestParam(value = "id",required = false) Integer id,@RequestParam(value = "all",required = false) boolean all) {
+        RecordBean<String> result = iWebMemberService.delMemberMessage(id,WebReqUtils.getSessionUid(request),all);
+        if (!result.isSuccessCode()) {
+            return JsonBean.error(result.getMsg());
+        }
+        return JsonBean.success("success");
     }
 }

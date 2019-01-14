@@ -24,11 +24,6 @@
 #end
 #define js()
 <script>
-    layui.config({
-        version: "3.0.0"
-        , base: '#(resource)/modules/'
-    }).extend({
-        user: 'user'
-    }).use('user')
+    layui.cache.page = "user";
 </script>
 #end

@@ -299,15 +299,15 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
   //我的消息
   gather.minemsg = function(){
     var delAll = $('#LAY_delallmsg')
-    ,tpl = '{{# var len = d.rows.length;\
+    ,tpl = '{{# var len = d.data.length;\
     if(len === 0){ }}\
       <div class="fly-none">您暂时没有最新消息</div>\
     {{# } else { }}\
       <ul class="mine-msg">\
       {{# for(var i = 0; i < len; i++){ }}\
-        <li data-id="{{d.rows[i].id}}">\
-          <blockquote class="layui-elem-quote">{{ d.rows[i].content}}</blockquote>\
-          <p><span>{{d.rows[i].time}}</span><a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">删除</a></p>\
+        <li data-id="{{d.data[i].id}}">\
+          <blockquote class="layui-elem-quote">{{ d.data[i].content}}</blockquote>\
+          <p><span>{{layui.util.timeAgo(d.data[i].createTime)}}</span><a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">删除</a></p>\
         </li>\
       {{# } }}\
       </ul>\
@@ -319,23 +319,23 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     }
     
     
-    /*
-    fly.json('/message/find/', {}, function(res){
+
+    fly.json('/member/message/find/', {}, function(res){
       var html = laytpl(tpl).render(res);
       dom.minemsg.html(html);
-      if(res.rows.length > 0){
+      if(res.data.length > 0){
         delAll.removeClass('layui-hide');
       }
     });
-    */
+
     
     //阅读后删除
     dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
       var othis = $(this).parents('li'), id = othis.data('id');
-      fly.json('/message/remove/', {
+      fly.json('/member/message/remove/', {
         id: id
       }, function(res){
-        if(res.status === 0){
+        if(res.code === 0){
           othis.remove();
           delEnd();
         }
@@ -346,10 +346,10 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     $('#LAY_delallmsg').on('click', function(){
       var othis = $(this);
       layer.confirm('确定清空吗？', function(index){
-        fly.json('/message/remove/', {
+        fly.json('/member/message/remove/', {
           all: true
         }, function(res){
-          if(res.status === 0){
+          if(res.code === 0){
             layer.close(index);
             othis.addClass('layui-hide');
             delEnd(true);

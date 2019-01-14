@@ -46,7 +46,9 @@ public class UserController extends BaseAuth {
      * @return
      */
     @RequestMapping(value = "login",method = RequestMethod.GET)
-    public String index() {
+    public String index(HttpServletRequest request) {
+        String referer = request.getHeader("referer");
+        request.getSession().setAttribute("referer",referer);
         return "/user/login";
     }
 
@@ -74,8 +76,10 @@ public class UserController extends BaseAuth {
         String email = member.getEmail();
         RecordBean<Member> result = iMemberService.login(password,email);
         gotoLogin(request,response,ac,result.getData(), LoginWayConstant.email.getWay());
+
+        String referer = request.getSession().getAttribute("referer").toString();
         if (result.isSuccessCode()) {
-            return JsonBean.success("success!", PageConstant.INDEX);
+            return JsonBean.success("success!", referer);
         }
         return JsonBean.error(result.getMsg());
     }

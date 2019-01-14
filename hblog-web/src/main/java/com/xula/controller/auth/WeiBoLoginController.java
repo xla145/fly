@@ -40,9 +40,9 @@ public class WeiBoLoginController extends BaseAuth {
 
     private final static String GET_CODE_URL = "https://api.weibo.com/oauth2/authorize";
 
-    private final static String loginCallback = "http://www.xulian.net.cn:8088/authLoginCallback";
+    private final static String loginCallback = "http://test.xulian.net.cn/authLoginCallback";
 
-    private final static String reduceCallback = "http://www.xulian.net.cn:8088/authReduceCallback";
+    private final static String reduceCallback = "http://test.xulian.net.cn/authReduceCallback";
 
     private Logger logger = LoggerFactory.getLogger(WeiBoLoginController.class);
 
@@ -104,7 +104,7 @@ public class WeiBoLoginController extends BaseAuth {
             }
             String referrer = userParam.getString("referrer");
             if (StringUtils.isBlank(referrer)) {
-                referrer = "http://www.xulian.net.cn:8088/index";
+                referrer = "http://test.xulian.net.cn:8088/index";
             }
             String api = "https://api.weibo.com/oauth2/access_token";
             Map<String, String> data = new HashMap<String, String>();

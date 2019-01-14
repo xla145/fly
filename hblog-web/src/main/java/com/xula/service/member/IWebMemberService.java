@@ -86,4 +86,20 @@ public interface IWebMemberService {
      */
     PagePojo<MemberArticle> getMemberArticlePage(Conditions conn, Integer pageNo, Integer pageSize);
 
+
+    /**
+     * 获取用户消息
+     * @param conn
+     * @return
+     */
+    List<MemberMessage> getMemberMessageList(Conditions conn);
+
+
+    /**
+     * 删除用户的消息
+     * @param ids
+     * @return
+     */
+    RecordBean<String> delMemberMessage(Integer ids,Integer uid,boolean isAll);
+
 }

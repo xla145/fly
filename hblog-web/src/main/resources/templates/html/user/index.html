@@ -49,7 +49,7 @@
         <div class="layui-tab layui-tab-brief" lay-filter="user">
             <ul class="layui-tab-title" id="LAY_mine">
                 <li data-type="article" lay-id="index" class="layui-this">我发的帖（<span>0</span>）</li>
-                <li data-type="collection" data-url="/member/collect/" lay-id="collection">我收藏的帖（<span>0</span>）</li>
+                <li data-type="collection" data-url="/member/article/collectList/" lay-id="collection">我收藏的帖（<span>0</span>）</li>
             </ul>
             <div class="layui-tab-content" style="padding: 20px 0;" id="LAY_ucm">
                 <div class="layui-tab-item layui-show">
@@ -71,11 +71,6 @@
 #end
 #define js()
 <script>
-    layui.config({
-        version: "3.0.0"
-        , base: '#(resource)/modules/'
-    }).extend({
-        user: 'user'
-    }).use('user')
+    layui.cache.page = "user";
 </script>
 #end

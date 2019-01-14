@@ -299,4 +299,39 @@ public class WebMemberServiceImpl implements IWebMemberService {
         Sort sort = new Sort("create_time",SqlSort.DESC);
         return BaseDao.dao.queryForListPage(MemberArticle.class,conn,sort,pageNo,pageSize);
     }
+
+    /**
+     *
+     * @param conn
+     * @return
+     */
+    @Override
+    public List<MemberMessage> getMemberMessageList(Conditions conn) {
+        conn.add(new Conditions("status",SqlExpr.UNEQUAL,-1),SqlJoin.AND);
+        return BaseDao.dao.queryForListEntity(MemberMessage.class,conn);
+    }
+
+    /**
+     *
+     * @param id
+     * @param uid
+     * @param isAll
+     * @return
+     */
+    @Override
+    public RecordBean<String> delMemberMessage(Integer id, Integer uid, boolean isAll) {
+        StringBuffer sql = new StringBuffer();
+        List<Object> params = new ArrayList<>();
+        sql.append("UPDATE member_message SET status = -1 WHERE to_uid = ? ");
+        params.add(uid);
+        if (!isAll) {
+            sql.append("AND id = ?");
+            params.add(id);
+        }
+        int result = BaseDao.dao.update(sql.toString(),params.toArray());
+        if (result == 0) {
+            return RecordBean.error("删除失败！");
+        }
+        return RecordBean.success("删除成功！");
+    }
 }

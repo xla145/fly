@@ -5,6 +5,7 @@ import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.Article;
+import com.xula.entity.MemberArticle;
 import com.xula.entity.extend.ArticleList;
 
 import java.util.List;
@@ -75,4 +76,30 @@ public interface IArticleService {
      * @return
      */
     List<Article> getAskList(Integer uid);
+
+    /**
+     * 判断用户是否收藏该文章
+     * @param aid
+     * @param uid
+     * @return
+     */
+    MemberArticle getMemberArticle(String aid,Integer uid);
+
+
+    /**
+     * 收藏该文章
+     * @param aid
+     * @param uid
+     * @return
+     */
+    RecordBean<String> addMemberArticle(String aid,Integer uid);
+
+
+    /**
+     * 取消收藏该文章
+     * @param aid
+     * @param uid
+     * @return
+     */
+    RecordBean<String> cancelMemberArticle(String aid,Integer uid);
 }

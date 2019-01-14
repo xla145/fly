@@ -12,10 +12,6 @@ public class ArticleConstant {
 
     public static final String SOLVED = "solved";
 
-
-
-
-
     /**
      * 文章状态
      */

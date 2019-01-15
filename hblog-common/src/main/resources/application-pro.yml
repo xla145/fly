@@ -5,6 +5,7 @@ spring:
     redis:
         host: 127.0.0.1
         port: 6388
+        password: 123456
         timeout: 0
         jedis:
             pool:

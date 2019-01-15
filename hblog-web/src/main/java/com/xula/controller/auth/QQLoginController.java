@@ -69,7 +69,7 @@ public class QQLoginController extends BaseAuth{
         json.put("userIp", userIp);
         json.put("authWay", LoginWayConstant.qq.getWay());
         json.put("uid", uid);
-        json.put("referrer",request.getHeader("referrer"));
+        json.put("referrer",null);
         try {
             String state = Md5Utils.md5(json.toString());
             CookieUtil.setCookie(response, state, Base64Helper.encode(json.toString(), "utf-8"), 60 * 60 * 3);

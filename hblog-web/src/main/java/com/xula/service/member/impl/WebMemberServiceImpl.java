@@ -4,9 +4,11 @@ import cn.assist.easydao.common.*;
 import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
+import com.alibaba.fastjson.JSONObject;
 import com.xula.base.constant.MemberConstant;
 import com.xula.base.constant.SexEnum;
 import com.xula.base.constant.TaskConstant;
+import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.DateUtil;
 import com.xula.base.utils.Md5Utils;
 import com.xula.base.utils.RecordBean;
@@ -14,6 +16,7 @@ import com.xula.entity.*;
 import com.xula.entity.extend.ArticleList;
 import com.xula.entity.extend.MemberDetail;
 import com.xula.entity.extend.SignList;
+import com.xula.service.email.IEmailService;
 import com.xula.service.member.IMemberService;
 import com.xula.service.member.IWebMemberService;
 import org.apache.commons.lang.StringUtils;
@@ -41,6 +44,8 @@ public class WebMemberServiceImpl implements IWebMemberService {
 
     @Autowired
     private IMemberService iMemberService;
+    @Autowired
+    private IEmailService iEmailService;
 
 
     /**
@@ -65,10 +70,12 @@ public class WebMemberServiceImpl implements IWebMemberService {
         memberDetail.setCreateTime(member.getCreateTime());
         memberDetail.setSignature(member.getSignature());
         memberDetail.setEmail(member.getEmail());
+        memberDetail.setStatus(member.getStatus());
 
         memberDetail.setPointValue(memberInfo.getPointValue());
         memberDetail.setVip(memberInfo.getVip());
         memberDetail.setVipName(memberInfo.getVipName());
+
 
 
         // 判断用户是否绑定qq或微博
@@ -311,6 +318,24 @@ public class WebMemberServiceImpl implements IWebMemberService {
         return BaseDao.dao.queryForListEntity(MemberMessage.class,conn);
     }
 
+
+    /**
+     * 阅读用户消息
+     * @return
+     */
+    @Override
+    public RecordBean<String> readMemberMessage(int uid) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE member_message SET status = 1 WHERE to_uid = ? ");
+        int result = BaseDao.dao.update(sql.toString(),uid);
+        if (result == 0) {
+            return RecordBean.error("删除失败！");
+        }
+        return RecordBean.success("删除成功！");
+    }
+
+
+
     /**
      *
      * @param id
@@ -333,5 +358,37 @@ public class WebMemberServiceImpl implements IWebMemberService {
             return RecordBean.error("删除失败！");
         }
         return RecordBean.success("删除成功！");
+    }
+
+    /**
+     *
+     * @param email
+     * @return
+     */
+    @Override
+    public RecordBean<String> sendEmail(String email) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title","账号激活");
+        // 过期时间
+        long expirationTime = DateUtil.getDateAddOffSet(Calendar.MINUTE,30,new Date()).getTime();
+        jsonObject.put("content","您的账号激活链接是 http://localhost:8088/email/activate?expirationTime="+ expirationTime);
+        return iEmailService.send(email,null,jsonObject);
+    }
+
+
+    /**
+     *
+     * @param uid
+     * @return
+     */
+    @Override
+    public RecordBean<String> activateEmail(Integer uid) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("UPDATE member SET status = ? WHERE uid = ?");
+        int result = BaseDao.dao.update(sql.toString(),MemberConstant.USET_DALID_YES,uid);
+        if (result == 0) {
+            return RecordBean.error("激活失败！");
+        }
+        return RecordBean.success("激活成功！");
     }
 }

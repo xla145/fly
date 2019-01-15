@@ -9,9 +9,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.constant.GlobalConstant;
 import com.xula.base.constant.ImgCategory;
-import com.xula.base.utils.Captcha;
-import com.xula.base.utils.ImgUtil;
-import com.xula.base.utils.JsonBean;
+import com.xula.base.constant.PageConstant;
+import com.xula.base.utils.*;
 import com.xula.dao.one.MemberMapper;
 import com.xula.dao.two.UserMapper;
 import com.xula.entity.Member;
@@ -20,8 +19,10 @@ import com.xula.entity.OrderGoodsModel;
 import com.xula.entity.User;
 import com.xula.entity.extend.ArticleList;
 import com.xula.service.article.IArticleService;
+import com.xula.service.member.IWebMemberService;
 import com.xula.service.oss.IUploadFileService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,10 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 首页信息
@@ -52,6 +50,10 @@ public class IndexController extends WebController{
     private IArticleService iArticleService;
     @Autowired
     private IUploadFileService iUploadFileService;
+    @Autowired
+    private IWebMemberService iWebMemberService;
+
+
 
 
     @GetMapping(value = {"/","index"})
@@ -115,6 +117,40 @@ public class IndexController extends WebController{
             e.printStackTrace();
         }
         return JsonBean.success("success",jsonObject);
+    }
+
+
+    /**
+     * 发送激活链接
+     * @return
+     */
+    @PostMapping(value = "/email/send")
+    @ResponseBody
+    public JSONObject activate(@RequestParam("email") String email) {
+        RecordBean<String> result = iWebMemberService.sendEmail(email);
+        if (!result.isSuccessCode()) {
+            return JsonBean.error(result.getMsg());
+        }
+        return JsonBean.success("success");
+    }
+
+
+    /**
+     * 获取验证码
+     * @return
+     */
+    @GetMapping(value = "/email/activate")
+    public String activate(HttpServletRequest request) {
+        String expirationTime = WebReqUtils.getParam(request,"expirationTime",null);
+        if (expirationTime == null) {
+            return "redirect:"+PageConstant.PAGE_404;
+        }
+        Long expTime = Long.parseLong(expirationTime);
+        if (expTime < System.currentTimeMillis()) {
+            return "redirect:"+PageConstant.PAGE_404;
+        }
+        iWebMemberService.activateEmail(WebReqUtils.getSessionUid(request));
+        return "redirect:"+PageConstant.INDEX;
     }
 
 }

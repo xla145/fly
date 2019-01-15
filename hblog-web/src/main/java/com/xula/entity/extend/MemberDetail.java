@@ -73,6 +73,10 @@ public class MemberDetail {
      */
     private String email;
 
+    /**
+     * 状态：0 无效，2：用户未激活邮箱  5：有效， -1 删除
+     */
+    private Integer status;
 
     /**
      * 判断是否绑定qq

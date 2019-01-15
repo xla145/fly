@@ -25,7 +25,7 @@ public class MemberConstant {
     /**
      * 已绑定
      **/
-    public static final int STATUS_BINDED = 1;
+    public static final int STATUS_BINDED = 3;
 
     /**
      * 未绑定
@@ -35,7 +35,7 @@ public class MemberConstant {
     /**
      * 用户有效
      **/
-    public static final int USET_DALID_YES = 1;
+    public static final int USET_DALID_YES = 5;
 
 
     /**************************************************************************/

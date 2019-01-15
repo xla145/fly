@@ -1,24 +1,10 @@
-/*
-Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50723
-Source Host           : localhost:3306
-Source Database       : dream_admin
+USE `fly`;
 
-Target Server Type    : MYSQL
-Target Server Version : 50723
-File Encoding         : 65001
+/*Table structure for table `article` */
 
-Date: 2018-11-29 12:02:48
-*/
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for article
--- ----------------------------
 DROP TABLE IF EXISTS `article`;
+
 CREATE TABLE `article` (
   `aid` varchar(30) NOT NULL COMMENT '文章编号',
   `title` varchar(255) NOT NULL COMMENT '文章标题',
@@ -30,7 +16,7 @@ CREATE TABLE `article` (
   `create_uid` int(11) NOT NULL COMMENT '创建用户uid',
   `info` text NOT NULL COMMENT '文章内容',
   `pay_point` int(11) NOT NULL DEFAULT '10' COMMENT '发布文章消耗积分 10 - 200 之间（后台字典配置）',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态  -1：已删除 0：待审核 5：成功发布 10：未结 15：完结 20：不通过',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态  -1：已删除 0：待审核 5：成功发布  15：完结 20：不通过',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `label` varchar(100) DEFAULT NULL COMMENT '标签',
   `weight` tinyint(4) NOT NULL DEFAULT '0' COMMENT '权重',
@@ -41,22 +27,24 @@ CREATE TABLE `article` (
   PRIMARY KEY (`aid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for article_browse
--- ----------------------------
-DROP TABLE IF EXISTS `article_browse`;
-CREATE TABLE `article_browse` (
-  `id` int(11) NOT NULL,
-  `uid` int(11) NOT NULL COMMENT '浏览文章用户',
-  `article_id` int(11) NOT NULL COMMENT '文章编号',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `reamark` varchar(255) DEFAULT NULL COMMENT '备注'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*Table structure for table `article_browse` */
 
--- ----------------------------
--- Table structure for article_category
--- ----------------------------
+DROP TABLE IF EXISTS `article_browse`;
+
+CREATE TABLE `article_browse` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL COMMENT '浏览文章用户',
+  `article_id` varchar(30) NOT NULL COMMENT '文章编号',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `ip` varchar(20) NOT NULL COMMENT 'ip地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `article_category` */
+
 DROP TABLE IF EXISTS `article_category`;
+
 CREATE TABLE `article_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL COMMENT '分类名称',
@@ -69,35 +57,40 @@ CREATE TABLE `article_category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for article_comment
--- ----------------------------
+/*Table structure for table `article_comment` */
+
 DROP TABLE IF EXISTS `article_comment`;
+
 CREATE TABLE `article_comment` (
-  `id` int(11) NOT NULL,
-  `article_id` int(11) NOT NULL COMMENT '评论的文章',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` varchar(30) NOT NULL COMMENT '评论的文章',
   `content` varchar(255) NOT NULL COMMENT '评论内容',
   `uid` int(11) NOT NULL COMMENT '评论用户uid',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `is_accept` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否被采纳 默认是否',
+  `love_num` int(11) NOT NULL DEFAULT '0' COMMENT '点赞数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for article_comment_love
--- ----------------------------
+/*Table structure for table `article_comment_love` */
+
 DROP TABLE IF EXISTS `article_comment_love`;
+
 CREATE TABLE `article_comment_love` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
   `ac_id` int(11) NOT NULL,
-  `create_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `create_time` datetime NOT NULL,
+  `fever` int(4) NOT NULL DEFAULT '0' COMMENT '热度',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_uid_acid` (`uid`,`ac_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for article_comment_replay
--- ----------------------------
+/*Table structure for table `article_comment_replay` */
+
 DROP TABLE IF EXISTS `article_comment_replay`;
+
 CREATE TABLE `article_comment_replay` (
   `id` int(11) NOT NULL,
   `uid` int(11) NOT NULL COMMENT '评论用户',
@@ -109,10 +102,10 @@ CREATE TABLE `article_comment_replay` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for dict_group
--- ----------------------------
+/*Table structure for table `dict_group` */
+
 DROP TABLE IF EXISTS `dict_group`;
+
 CREATE TABLE `dict_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(100) NOT NULL COMMENT '字典类型编号',
@@ -122,12 +115,12 @@ CREATE TABLE `dict_group` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_dict_group_code` (`code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典组';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='字典组';
 
--- ----------------------------
--- Table structure for dict_item
--- ----------------------------
+/*Table structure for table `dict_item` */
+
 DROP TABLE IF EXISTS `dict_item`;
+
 CREATE TABLE `dict_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '字典类型code',
   `group_code` varchar(100) NOT NULL COMMENT '组编号',
@@ -138,12 +131,12 @@ CREATE TABLE `dict_item` (
   `info` varchar(512) DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ids_1` (`group_code`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典项';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='字典项';
 
--- ----------------------------
--- Table structure for image_text_group
--- ----------------------------
+/*Table structure for table `image_text_group` */
+
 DROP TABLE IF EXISTS `image_text_group`;
+
 CREATE TABLE `image_text_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(50) NOT NULL COMMENT '组编码',
@@ -156,10 +149,10 @@ CREATE TABLE `image_text_group` (
   UNIQUE KEY `index_data_dic_group_code` (`code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for image_text_item
--- ----------------------------
+/*Table structure for table `image_text_item` */
+
 DROP TABLE IF EXISTS `image_text_item`;
+
 CREATE TABLE `image_text_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL COMMENT '组编码',
@@ -174,10 +167,10 @@ CREATE TABLE `image_text_item` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for member
--- ----------------------------
+/*Table structure for table `member` */
+
 DROP TABLE IF EXISTS `member`;
+
 CREATE TABLE `member` (
   `uid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'uid',
   `password` varchar(128) NOT NULL COMMENT '登录密码',
@@ -198,25 +191,28 @@ CREATE TABLE `member` (
   `remark` varchar(128) DEFAULT NULL COMMENT '备注',
   `signature` varchar(255) NOT NULL DEFAULT '' COMMENT '签名',
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for member_article
--- ----------------------------
+/*Table structure for table `member_article` */
+
 DROP TABLE IF EXISTS `member_article`;
-CREATE TABLE `member_article` (
-  `id` int(11) NOT NULL,
-  `uid` int(11) DEFAULT NULL COMMENT '收藏用户uid',
-  `article_id` int(11) NOT NULL COMMENT '文章编号',
-  `article_title` varchar(255) NOT NULL COMMENT '文章标题',
-  `create_time` datetime NOT NULL,
-  `remark` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户收藏文章表';
 
--- ----------------------------
--- Table structure for member_grow_log
--- ----------------------------
+CREATE TABLE `member_article` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL COMMENT '收藏用户uid',
+  `article_id` varchar(30) NOT NULL COMMENT '文章编号',
+  `article_title` varchar(255) DEFAULT NULL COMMENT '文章标题',
+  `create_time` datetime NOT NULL,
+  `remark` varchar(255) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '0:取消收藏 1：收藏',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_article_id_uid` (`uid`,`article_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='用户收藏文章表';
+
+/*Table structure for table `member_grow_log` */
+
 DROP TABLE IF EXISTS `member_grow_log`;
+
 CREATE TABLE `member_grow_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户uid',
@@ -231,12 +227,12 @@ CREATE TABLE `member_grow_log` (
   `type` tinyint(4) NOT NULL COMMENT '来源类型 1：签到 2：发表文章 3：后台赠送 4：其他',
   PRIMARY KEY (`id`),
   KEY `ids_1` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2454 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2490 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for member_info
--- ----------------------------
+/*Table structure for table `member_info` */
+
 DROP TABLE IF EXISTS `member_info`;
+
 CREATE TABLE `member_info` (
   `uid` int(11) NOT NULL,
   `vip` int(3) NOT NULL DEFAULT '1' COMMENT '会员当前vip等级',
@@ -245,13 +241,14 @@ CREATE TABLE `member_info` (
   `point_value` bigint(20) DEFAULT '0' COMMENT '会员当前积分',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
+  `days` int(11) NOT NULL DEFAULT '0' COMMENT '连续签到天数',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for member_log
--- ----------------------------
+/*Table structure for table `member_log` */
+
 DROP TABLE IF EXISTS `member_log`;
+
 CREATE TABLE `member_log` (
   `id` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
@@ -261,27 +258,28 @@ CREATE TABLE `member_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for member_message
--- ----------------------------
+/*Table structure for table `member_message` */
+
 DROP TABLE IF EXISTS `member_message`;
+
 CREATE TABLE `member_message` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_uid` int(11) NOT NULL COMMENT '发送消息的用户ID',
   `to_uid` int(11) NOT NULL COMMENT '接收消息的用户ID',
-  `article_id` int(11) NOT NULL COMMENT '消息可能关联的帖子',
+  `article_id` varchar(30) NOT NULL COMMENT '消息可能关联的帖子',
   `comment_id` int(11) NOT NULL COMMENT '消息可能关联的评论',
   `content` text NOT NULL COMMENT '消息内容',
   `create_time` datetime NOT NULL COMMENT '创建时间',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '-1：删除 0:未读 1:已读',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
--- ----------------------------
--- Table structure for member_qq
--- ----------------------------
+/*Table structure for table `member_qq` */
+
 DROP TABLE IF EXISTS `member_qq`;
+
 CREATE TABLE `member_qq` (
   `uid` int(11) NOT NULL COMMENT '用户uid',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -292,10 +290,10 @@ CREATE TABLE `member_qq` (
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for member_weibo
--- ----------------------------
+/*Table structure for table `member_weibo` */
+
 DROP TABLE IF EXISTS `member_weibo`;
+
 CREATE TABLE `member_weibo` (
   `uid` int(11) NOT NULL COMMENT '用户uid',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -307,10 +305,10 @@ CREATE TABLE `member_weibo` (
   KEY `xcx_open_id` (`uuid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sms_conf
--- ----------------------------
+/*Table structure for table `sms_conf` */
+
 DROP TABLE IF EXISTS `sms_conf`;
+
 CREATE TABLE `sms_conf` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `cmd` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '标记',
@@ -327,10 +325,10 @@ CREATE TABLE `sms_conf` (
   KEY `cmd` (`cmd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sms_oper
--- ----------------------------
+/*Table structure for table `sms_oper` */
+
 DROP TABLE IF EXISTS `sms_oper`;
+
 CREATE TABLE `sms_oper` (
   `sid` int(11) NOT NULL COMMENT '主键',
   `aclass` varchar(512) DEFAULT NULL COMMENT '操作类com.xx.oo',
@@ -339,10 +337,10 @@ CREATE TABLE `sms_oper` (
   PRIMARY KEY (`sid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sms_record
--- ----------------------------
+/*Table structure for table `sms_record` */
+
 DROP TABLE IF EXISTS `sms_record`;
+
 CREATE TABLE `sms_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `type` int(5) NOT NULL COMMENT '类型 1： 验证码类  2：通知类',
@@ -362,10 +360,10 @@ CREATE TABLE `sms_record` (
   KEY `ids_3` (`expire_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sms_temp
--- ----------------------------
+/*Table structure for table `sms_temp` */
+
 DROP TABLE IF EXISTS `sms_temp`;
+
 CREATE TABLE `sms_temp` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '模板编号',
   `title` varchar(100) NOT NULL COMMENT '模板标题',
@@ -377,10 +375,10 @@ CREATE TABLE `sms_temp` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_action
--- ----------------------------
+/*Table structure for table `sys_action` */
+
 DROP TABLE IF EXISTS `sys_action`;
+
 CREATE TABLE `sys_action` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(100) NOT NULL COMMENT '功能名称',
@@ -397,12 +395,12 @@ CREATE TABLE `sys_action` (
   `parent_name` varchar(20) DEFAULT NULL COMMENT '父级名称',
   `level` tinyint(4) NOT NULL COMMENT '等级',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=191 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_operator_log
--- ----------------------------
+/*Table structure for table `sys_operator_log` */
+
 DROP TABLE IF EXISTS `sys_operator_log`;
+
 CREATE TABLE `sys_operator_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sys_uid` varchar(20) NOT NULL COMMENT '操作人uid',
@@ -416,10 +414,10 @@ CREATE TABLE `sys_operator_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_role
--- ----------------------------
+/*Table structure for table `sys_role` */
+
 DROP TABLE IF EXISTS `sys_role`;
+
 CREATE TABLE `sys_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '角色id',
   `name` varchar(200) NOT NULL COMMENT '角色名称',
@@ -427,10 +425,10 @@ CREATE TABLE `sys_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_role_action
--- ----------------------------
+/*Table structure for table `sys_role_action` */
+
 DROP TABLE IF EXISTS `sys_role_action`;
+
 CREATE TABLE `sys_role_action` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_id` int(11) NOT NULL COMMENT '角色id',
@@ -441,10 +439,10 @@ CREATE TABLE `sys_role_action` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14379 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_user
--- ----------------------------
+/*Table structure for table `sys_user` */
+
 DROP TABLE IF EXISTS `sys_user`;
+
 CREATE TABLE `sys_user` (
   `uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户uid',
   `name` varchar(20) NOT NULL COMMENT '用户名',
@@ -467,10 +465,10 @@ CREATE TABLE `sys_user` (
   KEY `idx` (`name`,`pswd`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_user_action
--- ----------------------------
+/*Table structure for table `sys_user_action` */
+
 DROP TABLE IF EXISTS `sys_user_action`;
+
 CREATE TABLE `sys_user_action` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户uid',
@@ -483,10 +481,10 @@ CREATE TABLE `sys_user_action` (
   UNIQUE KEY `uniq_1` (`uid`,`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_user_cache
--- ----------------------------
+/*Table structure for table `sys_user_cache` */
+
 DROP TABLE IF EXISTS `sys_user_cache`;
+
 CREATE TABLE `sys_user_cache` (
   `cache_id` varchar(100) NOT NULL COMMENT 'session编号',
   `session` blob NOT NULL COMMENT 'session 值',
@@ -494,10 +492,10 @@ CREATE TABLE `sys_user_cache` (
   PRIMARY KEY (`cache_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for sys_user_role
--- ----------------------------
+/*Table structure for table `sys_user_role` */
+
 DROP TABLE IF EXISTS `sys_user_role`;
+
 CREATE TABLE `sys_user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户id',
@@ -507,10 +505,10 @@ CREATE TABLE `sys_user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for vip_grade
--- ----------------------------
+/*Table structure for table `vip_grade` */
+
 DROP TABLE IF EXISTS `vip_grade`;
+
 CREATE TABLE `vip_grade` (
   `vid` int(11) NOT NULL AUTO_INCREMENT,
   `vip` int(3) NOT NULL COMMENT 'vip等级',
@@ -524,10 +522,10 @@ CREATE TABLE `vip_grade` (
   KEY `vip` (`vip`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for vip_grade_task
--- ----------------------------
+/*Table structure for table `vip_grade_task` */
+
 DROP TABLE IF EXISTS `vip_grade_task`;
+
 CREATE TABLE `vip_grade_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `vip` int(11) NOT NULL COMMENT 'vip等级',
@@ -536,20 +534,20 @@ CREATE TABLE `vip_grade_task` (
   `remark` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
   UNIQUE KEY `vip` (`vip`,`vtid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for vip_task
--- ----------------------------
+/*Table structure for table `vip_task` */
+
 DROP TABLE IF EXISTS `vip_task`;
+
 CREATE TABLE `vip_task` (
   `vtid` int(11) NOT NULL AUTO_INCREMENT COMMENT ' vip升级任务id',
   `name` varchar(64) NOT NULL COMMENT 'vip升级任务名',
   `info` varchar(500) DEFAULT NULL COMMENT 'vip升级任务描述',
-  `clazz` varchar(256) NOT NULL COMMENT '可运行类名',
+  `clazz_name` varchar(256) NOT NULL COMMENT '可运行类名',
   `param_dec` varchar(512) NOT NULL COMMENT '参数说明',
   `status` int(5) NOT NULL DEFAULT '0' COMMENT '状态 0 无效 1 有效',
   `create_time` datetime NOT NULL,
   `remark` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`vtid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;

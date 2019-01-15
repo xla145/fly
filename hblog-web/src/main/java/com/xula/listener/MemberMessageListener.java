@@ -47,6 +47,7 @@ public class MemberMessageListener implements ApplicationListener<MemberMessageE
             memberMessage.setFromUid(uid);
             memberMessage.setToUid(toUid);
             memberMessage.setCreateTime(new Date());
+            memberMessage.setUpdateTime(new Date());
 
             BaseDao.dao.insert(memberMessage);
 

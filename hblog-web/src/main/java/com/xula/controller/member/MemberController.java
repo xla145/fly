@@ -2,6 +2,7 @@ package com.xula.controller.member;
 
 import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.common.SqlExpr;
+import cn.assist.easydao.common.SqlJoin;
 import cn.assist.easydao.pojo.PagePojo;
 import cn.assist.easydao.pojo.RecordPojo;
 import com.alibaba.fastjson.JSONObject;
@@ -184,6 +185,35 @@ public class MemberController extends WebController {
     @ResponseBody
     public JSONObject remove(@RequestParam(value = "id",required = false) Integer id,@RequestParam(value = "all",required = false) boolean all) {
         RecordBean<String> result = iWebMemberService.delMemberMessage(id,WebReqUtils.getSessionUid(request),all);
+        if (!result.isSuccessCode()) {
+            return JsonBean.error(result.getMsg());
+        }
+        return JsonBean.success("success");
+    }
+
+
+    /**
+     * 获取用户的最新消息
+     * @return
+     */
+    @PostMapping(value = "/member/message/nums")
+    @ResponseBody
+    public JSONObject messageNums() {
+        Conditions conn = new Conditions("to_uid", SqlExpr.EQUAL,WebReqUtils.getSessionUid(request));
+        conn.add(new Conditions("status",SqlExpr.EQUAL,0), SqlJoin.AND);
+        List<MemberMessage> list = iWebMemberService.getMemberMessageList(conn);
+        return JsonBean.success("success",list);
+    }
+
+
+    /**
+     * 删除用户的消息
+     * @return
+     */
+    @PostMapping(value = "/member/message/read")
+    @ResponseBody
+    public JSONObject messageRead() {
+        RecordBean<String> result = iWebMemberService.readMemberMessage(WebReqUtils.getSessionUid(request));
         if (!result.isSuccessCode()) {
             return JsonBean.error(result.getMsg());
         }

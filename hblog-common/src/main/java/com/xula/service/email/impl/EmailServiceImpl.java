@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
  * 邮件发送实现类
  * @author xla
  */
+@Service("IEmailService")
 public class EmailServiceImpl implements IEmailService {
 
     @Autowired
@@ -26,11 +27,10 @@ public class EmailServiceImpl implements IEmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(username);
         message.setTo(email);
-
-
-
-        message.setSubject("标题：测试标题");
-        message.setText("测试内容部份");
+        String title = params.getString("title");
+        String content = params.getString("content");
+        message.setSubject(title);
+        message.setText(content);
         javaMailSender.send(message);
         return RecordBean.success("");
     }

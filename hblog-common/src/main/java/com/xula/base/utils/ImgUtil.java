@@ -1,5 +1,7 @@
 package com.xula.base.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
@@ -96,12 +98,15 @@ public class ImgUtil {
 
 
     /**
-     * 内容正则替换
+     * 内容正则替换 标签
      * @param content
      * @return
      */
     public static String replaceContent(String content) {
         // 如果上传图片 img[http://img.xulian.net.cn/test/img/593208709349.jpg] 转成 <img src="http://img.xulian.net.cn/test/img/593208709349.jpg">
+        if (!containsImgLabel(content)) {
+            return content;
+        }
         Pattern p = Pattern.compile(IMG_URL);
         Pattern p_1 = Pattern.compile(IMG_MATCHER);
         Matcher m = p.matcher(content);
@@ -111,5 +116,15 @@ public class ImgUtil {
             m.appendReplacement(sb, "<img src='" + p_1.matcher(s1).replaceAll("") + "'/>");
         }
         return sb.toString();
+    }
+
+
+    public static boolean containsImgLabel(String content) {
+        Pattern p = Pattern.compile(IMG_URL);
+        return p.matcher(content).find();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(replaceContent("tttttttttttttttttttimg[http://img.xulian.net.cn/test/img/593208709349.jpg]"));
     }
 }

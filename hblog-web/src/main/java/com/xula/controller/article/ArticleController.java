@@ -61,7 +61,14 @@ public class ArticleController extends WebController {
         String title = WebReqUtils.getParam(request,"title",null);
         String info = WebReqUtils.getParam(request,"info",null);
         Integer payPoint = WebReqUtils.getParamToInteger(request,"payPoint",null);
-
+        String vcode = WebReqUtils.getParam(request,"vcode",null);
+        if (StringUtils.isEmpty(vcode)) {
+            return JsonBean.error("验证码必填！");
+        }
+        String code = request.getSession().getAttribute(GlobalConstant.CODE_NAME).toString();
+        if (!vcode.equalsIgnoreCase(code)) {
+            return JsonBean.error("验证码错误！");
+        }
         if (catId == null) {
             return JsonBean.error("文章类型不能为空！");
         }
@@ -81,7 +88,6 @@ public class ArticleController extends WebController {
         return JsonBean.error(result.getMsg());
     }
 
-
     /**
      * 跳转添加文章页面
      * @return
@@ -92,6 +98,52 @@ public class ArticleController extends WebController {
         return "article/add";
     }
 
+    /**
+     * 跳转修改文章页面
+     * @return
+     */
+    @Login
+    @GetMapping(value = "/edit/{aid}")
+    public String editView(@PathVariable("aid") String aid,Model model) {
+        if (StringUtils.isEmpty(aid)) {
+            return renderTips(model,"文章编号不能为空！");
+        }
+        Article article = iArticleService.getArticle(aid);
+        model.addAttribute("data",article);
+        return "article/edit";
+    }
+
+    /**
+     * 添加文章
+     * @return
+     */
+    @Login
+    @PostMapping(value = "/edit")
+    @ResponseBody
+    public JSONObject edit(HttpServletRequest request) {
+        String aid = WebReqUtils.getParam(request,"aid",null);
+        String title = WebReqUtils.getParam(request,"title",null);
+        String info = WebReqUtils.getParam(request,"info",null);
+        String vcode = WebReqUtils.getParam(request,"vcode",null);
+        if (StringUtils.isEmpty(vcode)) {
+            return JsonBean.error("验证码必填！");
+        }
+        String code = request.getSession().getAttribute(GlobalConstant.CODE_NAME).toString();
+        if (!vcode.equalsIgnoreCase(code)) {
+            return JsonBean.error("验证码错误！");
+        }
+        if (StringUtils.isEmpty(title)) {
+            return JsonBean.error("文章标题不能为空！");
+        }
+        if (StringUtils.isEmpty(info)) {
+            return JsonBean.error("文章内容不能为空！");
+        }
+        RecordBean<Article> result = iArticleService.update(aid,title,info);
+        if (result.isSuccessCode()) {
+            return JsonBean.success(result.getMsg(), PageConstant.INDEX);
+        }
+        return JsonBean.error(result.getMsg());
+    }
 
     /**
      * 获取到文章列表页

@@ -17,4 +17,8 @@ public class PageConstant {
 
 
     public final static String USER_HOME = "/user/home";
+
+
+    public final static String PAGE_404 = "/other/404.html";
+
 }

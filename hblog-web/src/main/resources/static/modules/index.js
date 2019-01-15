@@ -286,20 +286,20 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     ,newmsg: function(){
       var elemUser = $('.fly-nav-user');
       if(layui.cache.user.uid !== -1 && elemUser[0]){
-        fly.json('/message/nums/', {
+        fly.json('/member/message/nums/', {
           _: new Date().getTime()
         }, function(res){
-          if(res.status === 0 && res.count > 0){
-            var msg = $('<a class="fly-nav-msg" href="javascript:;">'+ res.count +'</a>');
+          if(res.code === 0 && res.data.length > 0){
+            var msg = $('<a class="fly-nav-msg" href="javascript:;">'+ res.data.length +'</a>');
             elemUser.append(msg);
             msg.on('click', function(){
-              fly.json('/message/read', {}, function(res){
-                if(res.status === 0){
+              fly.json('/member/message/read', {}, function(res){
+                if(res.code === 0){
                   location.href = '/user/message/';
                 }
               });
             });
-            layer.tips('你有 '+ res.count +' 条未读消息', msg, {
+            layer.tips('你有 '+ res.data.length +' 条未读消息', msg, {
               tips: 3
               ,tipsMore: true
               ,fixed: true
@@ -523,12 +523,12 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   });
 
   //新消息通知
-  // fly.newmsg();
-
+  fly.newmsg();
+  //
   //发送激活邮件
   fly.activate = function(email){
-    fly.json('/api/activate/', {}, function(res){
-      if(res.status === 0){
+    fly.json('/email/send/', {email: email}, function(res){
+      if(res.code === 0){
         layer.alert('已成功将激活链接发送到了您的邮箱，接受可能会稍有延迟，请注意查收。', {
           icon: 1
         });
@@ -560,6 +560,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         if(res.action){
           location.href = res.action;
         } else {
+          console.log(action||button.attr('key'))
           fly.form[action||button.attr('key')](data.field, data.form);
         }
       };

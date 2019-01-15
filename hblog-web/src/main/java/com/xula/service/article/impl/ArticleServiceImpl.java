@@ -81,7 +81,16 @@ public class ArticleServiceImpl extends BaseService implements IArticleService {
 
     @Override
     public RecordBean<Article> update(String articleId, String title, String info) {
-        return null;
+        Article article = new Article();
+        article.setAid(articleId);
+        article.setUpdateTime(new Date());
+        article.setInfo(info);
+        article.setTitle(title);
+        int result = BaseDao.dao.update(article);
+        if (result == 0) {
+            return RecordBean.error("修改失败！");
+        }
+        return RecordBean.success("修改成功！");
     }
 
 

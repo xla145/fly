@@ -261,7 +261,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
   }
 
   //提交成功后刷新
-  fly.form['set-mine'] = function(data, required){
+  fly.form['/member/update'] = function(data, required){
     layer.msg('修改成功', {
       icon: 1
       ,time: 1000
@@ -269,6 +269,18 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     }, function(){
       location.reload();
     });
+  }
+
+
+  //提交成功后刷新
+  fly.form['/member/repass'] = function(data, required){
+      layer.msg('修改成功', {
+          icon: 1
+          ,time: 1000
+          ,shade: 0.1
+      }, function(){
+          location.reload();
+      });
   }
 
   //帐号绑定

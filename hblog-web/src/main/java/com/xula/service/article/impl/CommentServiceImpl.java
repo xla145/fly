@@ -9,23 +9,27 @@ import cn.assist.easydao.pojo.PagePojo;
 import com.xula.base.constant.ArticleConstant;
 import com.xula.base.utils.ImgUtil;
 import com.xula.base.utils.RecordBean;
+import com.xula.entity.Article;
 import com.xula.entity.ArticleComment;
 import com.xula.entity.ArticleCommentLove;
 import com.xula.entity.extend.CommentList;
+import com.xula.event.EventModel;
+import com.xula.event.LoginEvent;
+import com.xula.event.MemberMessageEvent;
 import com.xula.service.article.BaseService;
+import com.xula.service.article.IArticleService;
 import com.xula.service.article.ICommentService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +41,11 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
 
 
     private static Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
+
+    @Autowired
+    public ApplicationContext ac;
+    @Autowired
+    private IArticleService iArticleService;
 
     /**
      * 评论
@@ -52,21 +61,30 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
         articleComment.setContent(content);
         articleComment.setCreateTime(new Date());
         articleComment.setUid(getUid());
-        int result = BaseDao.dao.insert(articleComment);
-        if (result == 0) {
+        int commentId = BaseDao.dao.insertReturnId(articleComment);
+        if (commentId == 0) {
             return RecordBean.error("评论失败！");
         }
         StringBuffer sql = new StringBuffer();
         sql.append("UPDATE article SET comment_num = comment_num + 1 WHERE aid = ?");
-        result = BaseDao.dao.update(sql.toString(),aid);
+        int result = BaseDao.dao.update(sql.toString(),aid);
         if (result == 0) {
             return RecordBean.error("更新文章评论数失败！");
         }
-
-
-
-
-        return RecordBean.success("评论失败！");
+        Article article = iArticleService.getArticle(aid);
+        if (!article.getCreateUid().equals(getUid())) {
+            //发布消息事件
+            EventModel eventModel = new EventModel();
+            Map<String, Object> param = new HashMap<>(5);
+            param.put("aid",aid);
+            param.put("content", content);
+            param.put("commentId", commentId);
+            param.put("toUid", article.getCreateUid());
+            param.put("uid", getUid());
+            eventModel.setParam(param);
+            ac.publishEvent(new MemberMessageEvent(eventModel));
+        }
+        return RecordBean.success("评论成功！");
     }
 
 

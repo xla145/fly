@@ -96,10 +96,34 @@ public interface IWebMemberService {
 
 
     /**
+     * 阅读用户消息
+     * @return
+     */
+     RecordBean<String> readMemberMessage(int uid);
+
+
+    /**
      * 删除用户的消息
      * @param ids
+     * @param uid
+     * @param isAll
      * @return
      */
     RecordBean<String> delMemberMessage(Integer ids,Integer uid,boolean isAll);
+
+    /**
+     * 发送激活账号邮件
+     * @param email
+     * @return
+     */
+    RecordBean<String> sendEmail(String email);
+
+
+    /**
+     * 修改用户状态为已激活状态
+     * @param uid
+     * @return
+     */
+    RecordBean<String> activateEmail(Integer uid);
 
 }

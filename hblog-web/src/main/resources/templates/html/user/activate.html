@@ -2,44 +2,7 @@
 <!-- 导航栏  -->
 #define body()
 <div class="layui-container fly-marginTop fly-user-main">
-    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-        <li class="layui-nav-item">
-            <a href="home.html">
-                <i class="layui-icon">&#xe609;</i>
-                我的主页
-            </a>
-        </li>
-        <li class="layui-nav-item layui-this">
-            <a href="index.html">
-                <i class="layui-icon">&#xe612;</i>
-                用户中心
-            </a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="set.html">
-                <i class="layui-icon">&#xe620;</i>
-                基本设置
-            </a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="message.html">
-                <i class="layui-icon">&#xe611;</i>
-                我的消息
-            </a>
-        </li>
-    </ul>
-
-    <div class="site-tree-mobile layui-hide">
-        <i class="layui-icon">&#xe602;</i>
-    </div>
-    <div class="site-mobile-shade"></div>
-
-    <div class="site-tree-mobile layui-hide">
-        <i class="layui-icon">&#xe602;</i>
-    </div>
-    <div class="site-mobile-shade"></div>
-
-
+    #include("common/user-menu.html")
     <div class="fly-panel fly-panel-user" pad20>
         <div class="layui-tab layui-tab-brief" lay-filter="user">
             <ul class="layui-tab-title">
@@ -51,16 +14,19 @@
                 <ul class="layui-form">
                     <li class="layui-form-li">
                         <label for="activate">您的邮箱：</label>
-                        <span class="layui-form-text">xx@xx.com
-                            <!-- <em style="color:#999;">（已成功激活）</em> -->
-              <em style="color:#c00;">（尚未激活）</em>
-            </span>
+                        <span class="layui-form-text">#(member.email??)
+                            #if(member.status == 5)
+                            <em style="color:#999;">（已成功激活）</em>
+                            #else
+                            <em style="color:#c00;">（尚未激活）</em>
+                            #end
+                        </span>
                     </li>
                     <li class="layui-form-li" style="margin-top: 20px; line-height: 26px;">
                         <div>
                             1. 如果您未收到邮件，或激活链接失效，您可以
                             <a class="layui-form-a" style="color:#4f99cf;" id="LAY-activate" href="javascript:;"
-                               email="{{user.email}}">重新发送邮件</a>，或者
+                               email="#(member.email??)">重新发送邮件</a>，或者
                             <a class="layui-form-a" style="color:#4f99cf;" href="set.html">更换邮箱</a>；
                         </div>
                         <div>
@@ -74,6 +40,5 @@
             </div>
         </div>
     </div>
-
 </div>
 #end

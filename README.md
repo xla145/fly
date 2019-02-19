@@ -15,8 +15,9 @@
 
 #### 注意事项
 
-1：项目中有一些个人封装的小工具，由于小工具都是单独一个项目，目前已经上传到阿里的私有仓库，所以需要修改maven的配置文件信息-路径 document/settings.xml
-2：fly社区官网 https://fly.layui.com/ 里面涉及到的功能都基本完成，如果有问题可以提issue 
+1. 项目中有一些个人封装的小工具，由于小工具都是单独一个项目，目前已经上传到阿里的私有仓库，所以需要修改maven的配置文件信息-路径 document/settings.xml
+2. fly社区官网 https://fly.layui.com/ 里面涉及到的功能都基本完成，如果有问题可以提issue
+3. 目前项目已经放在公网上，访问地址 https://test.xulian.net.cn/
 
 #### 参与贡献
 

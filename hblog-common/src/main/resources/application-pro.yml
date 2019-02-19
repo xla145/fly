@@ -17,8 +17,8 @@ spring:
             nodes: 127.0.0.1:6388
     mail:
         host: smtp.qq.com
-        username: 1379960679@qq.com
-        password: uungoqqnvlqcjecf
+        username: 2222@qq.com
+        password: 222222
         default-encoding: UTF-8
         port: 465
         protocol: stmp
@@ -28,8 +28,8 @@ spring:
             one: #数据源1
                 url: jdbc:mysql://localhost:3306/fly?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
                 driver-class-name: com.mysql.cj.jdbc.Driver
-                username: xla
-                password: xula19941129L.
+                username: ccc
+                password: ccccccc
                 initial-size: 10
                 max-active: 100
                 min-idle: 10

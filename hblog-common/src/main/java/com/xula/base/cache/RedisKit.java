@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -86,12 +87,12 @@ public class RedisKit<T> {
      *
      * @param key
      */
-    public void delete(String key) {
-        if (StringUtils.isBlank(key)) {
+    public void delete(String... key) {
+        if (key == null || key.length == 0) {
             return;
         }
         try {
-            redisTemplate.delete(key);
+            redisTemplate.delete(Arrays.asList(key));
         } catch (Exception e) {
             logger.error("redis operate error: ", e);
         }

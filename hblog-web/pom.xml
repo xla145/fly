@@ -6,7 +6,7 @@
     <groupId>com.xula</groupId>
     <artifactId>hblog-web</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>hblog-web</name>
     <description>博客web</description>

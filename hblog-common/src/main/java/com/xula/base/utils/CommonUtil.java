@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 /**
@@ -462,5 +463,16 @@ public class CommonUtil {
             return 0;
         }
         return objects.size();
+    }
+
+    /**
+     * 判断是否是静态请求
+     * @param url
+     * @return
+     */
+    public static boolean isStaticRequest(String url) {
+        String[] suffix = {".js",".jpg",".css",".html",".woff"};
+        List list = Arrays.stream(suffix).filter(s -> StringUtils.endsWith(url,s)).collect(Collectors.toList());
+        return list.size() > 0;
     }
 }

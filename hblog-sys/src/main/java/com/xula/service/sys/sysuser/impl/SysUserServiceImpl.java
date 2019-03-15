@@ -10,6 +10,9 @@ import com.xula.base.constant.SysUserConstant;
 import com.xula.entity.SysAction;
 import com.xula.service.sys.sysuser.ISysUserService;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ import java.util.Map;
  * @author caibin
  */
 @Service("ISysUserService")
+@CacheConfig
 public class SysUserServiceImpl implements ISysUserService {
     /**
      * 登录
@@ -66,7 +70,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param
      * @return
      */
-    @MCache(expire = 30)
+    @Cacheable
     @Override
     public SysAction.SysUser getSysUser(int uid) {
         SysAction.SysUser sysUser = BaseDao.dao.queryForEntity(SysAction.SysUser.class, uid);
@@ -80,7 +84,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return
      */
     @Override
-    @MCache(expire = 30)
+    @Cacheable
     public PagePojo<SysAction.SysUser> getSysUsers(Map<String, Object> map) {
 
         int pageNo = (int) map.get("pageNo");
@@ -135,6 +139,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param sysUser
      */
     @Override
+    @CacheEvict
     public RecordBean<SysAction.SysUser> addSysUsers(SysAction.SysUser sysUser) {
         String cipher = CommonUtil.md5(sysUser.getPswd());
         sysUser.setPswd(cipher);
@@ -151,6 +156,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param sysUser
      */
     @Override
+    @CacheEvict
     public RecordBean<SysAction.SysUser> editSysUsers(SysAction.SysUser sysUser) {
         if (sysUser.getIsValid() == null) {
             sysUser.setIsValid(SysUserConstant.USET_DALID_NO);
@@ -169,6 +175,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return
      */
     @Override
+    @CacheEvict
     public RecordBean<String> delSysUsers(String[] ids) {
         StringBuffer sql = new StringBuffer();
         sql.append("UPDATE sys_user set is_valid = 0 AND update_time = now() WHERE uid IN(");

@@ -19,4 +19,3 @@ spring:
         suffix: .html
         template-loader-path: classpath:/templates/
         cache: false
-

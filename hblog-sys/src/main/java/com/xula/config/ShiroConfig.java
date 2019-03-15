@@ -1,10 +1,10 @@
 package com.xula.config;
 
+import com.xula.base.cas.ReRedisSessionDao;
+import com.xula.base.cas.RedisCacheManager;
 import com.xula.shiro.realm.UserRealm;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -13,15 +13,16 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @Description: shiro配置
+ * @Description: shiro Configuration
  * @author: xula
  * @create: 2018-01-30 10:39
  **/
@@ -42,9 +43,12 @@ public class ShiroConfig {
         return simpleCookie;
     }
 
+
     @Bean("sessionDAO")
-    public SessionDAO sessionDAO() {
-        return new EnterpriseCacheSessionDAO();
+    public SessionDAO sessionDAO(@Qualifier("redisTemplate") RedisTemplate redisTemplate) {
+        ReRedisSessionDao redisSessionDAO = new ReRedisSessionDao();
+        redisSessionDAO.setRedisManager(redisTemplate);
+        return redisSessionDAO;
     }
 
     @Bean("sessionManager")
@@ -59,25 +63,25 @@ public class ShiroConfig {
         return sessionManager;
     }
 
-    @Bean("ehcacheManager")
-    public EhCacheManager shiroEhcacheManager() {
-        EhCacheManager ehCacheManager = new EhCacheManager();
-        ehCacheManager.setCacheManagerConfigFile("classpath:ehcache/ehcache.xml");
-        return ehCacheManager;
+    @Bean("redisCacheManager")
+    public RedisCacheManager redisCacheManager(@Qualifier("redisTemplate") RedisTemplate redisTemplate) {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisTemplate);
+        redisCacheManager.setPrincipalIdFieldName("uid");
+        return redisCacheManager;
     }
 
-
     @Bean("securityManager")
-    public SecurityManager securityManager(UserRealm userRealm, SessionManager sessionManager,EhCacheManager ehCacheManager) {
+    public SessionsSecurityManager securityManager(UserRealm userRealm, SessionManager sessionManager, RedisCacheManager redisCacheManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(userRealm);
         securityManager.setSessionManager(sessionManager);
-        securityManager.setCacheManager(ehCacheManager);
+        securityManager.setCacheManager(redisCacheManager);
         return securityManager;
     }
 
     @Bean("shiroFilter")
-    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
+    public ShiroFilterFactoryBean shirFilter(SessionsSecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl("/login.html");
@@ -88,7 +92,7 @@ public class ShiroConfig {
         filterMap.put("/static/**", "anon");
         filterMap.put("/login", "anon");
         filterMap.put("/sys/login", "anon");
-        filterMap.put("/captcha.jpg", "anon");
+        filterMap.put("/getCaptcha", "anon");
         filterMap.put("/swagger-ui.html","anon");
         filterMap.put("/swagger/**","anon");
         filterMap.put("/swagger-resources/**","anon");
@@ -102,6 +106,7 @@ public class ShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
+
     @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator proxyCreator = new DefaultAdvisorAutoProxyCreator();
@@ -110,7 +115,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SessionsSecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(securityManager);
         return advisor;

@@ -64,7 +64,6 @@ public class UserRealm extends AuthorizingRealm {
     }
 
     /**
-     * 由于项目初始化的时候就创建了这个类，所以不能使用
      * @Autowired
      * private HttpServletRequest request;
      * 只能通过 RequestContextHolder 获取到的ServletRequestAttributes，通过ServletRequestAttributes获取到HttpServletRequest

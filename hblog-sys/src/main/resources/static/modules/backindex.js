@@ -329,7 +329,7 @@ function fromTable(result) {
     //图片上传
     var uploadInst = upload.render({
         elem: '.upload-spec-img' //绑定元素
-        , url: '/oss/product/upload' //上传接口
+        , url: '/cas/product/upload' //上传接口
         , done: function (res) {
             $(this.item).parent('#specImgUpload').siblings('.spec-img').val(res.data[0]);
             $(this.item).parent('#specImgUpload').hide().siblings('#specImgPvw').show();

@@ -6,7 +6,7 @@ import com.xula.base.constant.UploadConfig;
 
 
 /**
- * oss manager
+ * cas manager
  * @author xla
  */
 public class OSSClientManger {

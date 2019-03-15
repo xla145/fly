@@ -2,6 +2,7 @@ package com.xula.config;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,4 +27,6 @@ public class KaptchaConfig {
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
     }
+
+
 }

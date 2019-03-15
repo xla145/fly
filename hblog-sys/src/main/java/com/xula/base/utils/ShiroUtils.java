@@ -20,7 +20,6 @@ package com.xula.base.utils;
 
 import com.xula.entity.SysAction;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
@@ -76,9 +75,5 @@ public class ShiroUtils {
     public static String getIp() {
         String ip = getSessionAttribute("ip").toString();
         return ip;
-    }
-
-    public static void main(String[] args) throws IllegalAccessException {
-        System.out.println(new Sha256Hash("123456").toHex());
     }
 }

@@ -69,13 +69,4 @@
            memoryStoreEvictionPolicy="LFU">
     </cache>
 
-
-    <cache name="dict-cache"
-           maxElementsInMemory="2000"
-           eternal="true"
-           timeToIdleSeconds="150"
-           timeToLiveSeconds="150"
-           overflowToDisk="false"
-           memoryStoreEvictionPolicy="LFU">
-    </cache>
 </ehcache>

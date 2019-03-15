@@ -5,7 +5,7 @@ Editor.defaults = {
     lang: 'zh-CN',
     minHeight: 100,
     placeholder: '请输入内容....',
-    uploadPath: '/oss/product/upload'
+    uploadPath: '/cas/product/upload'
 };
 Editor.prototype = {
     init: function (options) {

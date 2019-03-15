@@ -4,12 +4,13 @@ import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.common.SqlExpr;
 import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
+import com.xula.base.cache.MCache;
+import com.xula.base.utils.CommonUtil;
 import com.xula.entity.*;
 import com.xula.service.auth.ISysActionService;
 import com.xula.service.auth.ISysRoleService;
 import com.xula.service.model.SysActionModel;
 import com.xula.service.model.SysUserRoleModel;
-import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.RecordBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     /**
      * 查询所有角色
      */
+    @MCache(expire = 90)
     @Override
     public List<SysRole> getSysRoles() {
         Conditions conn = new Conditions("id", SqlExpr.GT, 0);

@@ -36,7 +36,9 @@ public class ConfigDao {
     @Bean
     public DataSourceHolder dataSourceHolder(@Qualifier("dataSourceOne") DataSource dataSource,@Qualifier("dataSourceTwo") DataSource dataSourceTwo) {
         DataSourceHolder dataSourceHolder = new DataSourceHolder();
+        // 传入默认的数据源
         dataSourceHolder.setDefaultTargetDataSource(dataSource);
+        // 创建map存数据源信息
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceConstant.DATA_SOURCE_A,dataSource);
         targetDataSources.put(DataSourceConstant.DATA_SOURCE_B,dataSourceTwo);

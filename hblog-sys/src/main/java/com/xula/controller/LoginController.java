@@ -99,7 +99,7 @@ public class LoginController {
         return JsonBean.success("退出成功！");
     }
 
-    @RequestMapping("captcha.jpg")
+    @RequestMapping("getCaptcha")
     public void captcha(HttpServletResponse response, HttpServletRequest request) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");

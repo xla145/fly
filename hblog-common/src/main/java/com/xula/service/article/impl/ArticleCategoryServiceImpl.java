@@ -17,7 +17,7 @@ import java.util.List;
  * @author xla
  */
 @Service("IArticleCategoryService")
-@CacheConfig(cacheNames = "cache-time-30")
+@CacheConfig(cacheNames = "serviceCache-30")
 public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
 
@@ -48,7 +48,7 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
      * @param alias
      * @return
      */
-    @Cacheable(cacheNames = "cache-time-30")
+    @Cacheable(cacheNames = "serviceCache-30")
     @Override
     public Category getCategoryByAlias(String alias) {
         return BaseDao.dao.queryForEntity(Category.class,new Conditions("alias", SqlExpr.EQUAL,alias));

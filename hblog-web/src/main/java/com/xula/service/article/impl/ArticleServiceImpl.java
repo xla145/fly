@@ -40,7 +40,7 @@ import java.util.Map;
  */
 @Service("iArticleService")
 @DataSourceConfig(name = DataSourceConstant.DATA_SOURCE_A)
-@CacheConfig(cacheNames = "cache-time-30")
+@CacheConfig(cacheNames = "serviceCache-30")
 public class ArticleServiceImpl extends BaseService implements IArticleService {
 
     @Autowired

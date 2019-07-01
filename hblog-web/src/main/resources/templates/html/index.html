@@ -1,60 +1,17 @@
 #include("layout/_layout.html")
 <!-- 导航栏  -->
 #define body()
-#module("/common/column.html",class="GetCategoryNodes",checked=data.type??'')
+#module("/common/menu.html",class="GetCategoryNodes",checked=data.type??'')
+
+#include("/common/search.html")
+
 <!-- 主体部分  -->
 <div class="layui-container">
-    <div class="layui-row layui-col-space15">
-        <div class="layui-col-md8">
-            <!-- 置顶文章 -->
-            #module("/common/article-list.html",class="GetArticleNodes")
-            <div class="fly-panel" style="margin-bottom: 0;">
-                #include("common/filter.html")
-                <ul class="fly-list">
-                    #include("article/_list.html")
-                </ul>
-                #@paginate(page.pageNo, page.pageTotal, "/column/list/"+data.type??'all'+"/page/")
-            </div>
-        </div>
-        <div class="layui-col-md4">
-            <!-- 温馨通道 -->
-            #module("/common/channel.html",class="GetLinkNodes",type="2")
-
-            <div class="fly-panel fly-signin">
-                <div class="fly-panel-title">
-                    签到
-                    <i class="fly-mid"></i>
-                    <a href="javascript:;" class="fly-link" id="LAY_signinHelp">说明</a>
-                    <i class="fly-mid"></i>
-                    <a href="javascript:;" class="fly-link" id="LAY_signinTop">活跃榜<span class="layui-badge-dot"></span></a>
-                    <span class="fly-signin-days">已连续签到<cite>16</cite>天</span>
-                </div>
-                <div class="fly-panel-main fly-signin-main">
-                    <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>
-                    <span>可获得<cite>20</cite>飞吻</span>
-
-                    <!-- 已签到状态 -->
-                    <!--
-                    <button class="layui-btn layui-btn-disabled">今日已签到</button>
-                    <span>获得了<cite>20</cite>飞吻</span>
-                    -->
-                </div>
-            </div>
-
-            <!-- 回贴周榜 -->
-            #module("/common/hot-reply.html",class="GetHotReplyNodes")
-
-            <!-- 本周热议 -->
-            #module("/common/hot-article.html",class="GetHotArticleNodes")
-
-            <!-- 广告栏 -->
-
-            #module("/common/adv.html",class="GetAdvNodes")
-
-            <!-- 友情链接 -->
-            #module("/common/fly-link.html",class="GetLinkNodes",type="1")
-
-        </div>
+    <div class="layui-row">
+        #include("common/filter.html")
+    </div>
+    <div class="layui-row layui-col-space10">
+        #include("common/list_2.html")
     </div>
 </div>
 #end

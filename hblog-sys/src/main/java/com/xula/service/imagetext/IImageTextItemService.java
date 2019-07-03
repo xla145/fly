@@ -3,7 +3,7 @@ package com.xula.service.imagetext;
 import cn.assist.easydao.common.Conditions;
 import cn.assist.easydao.pojo.PagePojo;
 import com.xula.base.utils.RecordBean;
-import com.xula.entity.imagetext.ImageTextItem;
+import com.xula.entity.ImageTextItem;
 
 
 /**

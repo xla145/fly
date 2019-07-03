@@ -9,7 +9,7 @@ import com.xula.base.utils.RecordBean;
 import com.xula.base.utils.ReqUtils;
 import com.xula.controller.BaseController;
 import com.xula.entity.imagetext.ImageTextGroup;
-import com.xula.entity.imagetext.ImageTextItem;
+import com.xula.entity.ImageTextItem;
 import com.xula.service.imagetext.IImageTextGroupService;
 import com.xula.service.imagetext.IImageTextItemService;
 import org.apache.commons.lang.StringUtils;

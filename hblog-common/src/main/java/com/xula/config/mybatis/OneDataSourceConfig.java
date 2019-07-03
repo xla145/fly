@@ -5,7 +5,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -23,6 +25,7 @@ import javax.sql.DataSource;
 @AutoConfigureAfter(DataSourceConfig.class)
 @Import(DataSourceConfig.class)
 @MapperScan(basePackages = OneDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "oneSqlSessionFactory")
+@ConfigurationProperties("mybatis")
 public class OneDataSourceConfig {
 
     /**
@@ -30,6 +33,9 @@ public class OneDataSourceConfig {
      */
     static final String PACKAGE = "com.xula.dao.one";
     static final String MAPPER_LOCATION = "classpath:mapper/one/*.xml";
+
+    @Value("${mybatis.type-aliases-package}")
+    private String typeAliasesPackage;
 
 
     /**
@@ -58,6 +64,8 @@ public class OneDataSourceConfig {
         sessionFactory.setDataSource(masterDataSource);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources(OneDataSourceConfig.MAPPER_LOCATION));
+
+        sessionFactory.setTypeAliasesPackage(typeAliasesPackage);
         return sessionFactory.getObject();
     }
 }

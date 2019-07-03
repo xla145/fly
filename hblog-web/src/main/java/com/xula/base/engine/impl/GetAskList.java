@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author xla
  */
-@CacheConfig(cacheNames = "cache-time-30")
+@CacheConfig(cacheNames = "serviceCache-30")
 public class GetAskList extends ModuleData {
 
     private IArticleService iArticleService = SpringFactory.getBean("iArticleService");

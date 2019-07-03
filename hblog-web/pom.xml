@@ -30,12 +30,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!-- 后端模板-->
         <dependency>
             <groupId>com.jfinal</groupId>
@@ -47,11 +41,9 @@
             <artifactId>okhttp</artifactId>
             <version>3.10.0</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.jfinal</groupId>-->
-            <!--<artifactId>jfinal</artifactId>-->
-            <!--<version>3.5</version>-->
-        <!--</dependency>-->
+
+
+
     </dependencies>
 
     <build>

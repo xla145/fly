@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * web项目member 实现类
  * @author xla
  */
-@CacheConfig(cacheNames = "cache-time-60")
+@CacheConfig(cacheNames = "serviceCache-30")
 @Service("IWebMemberService")
 public class WebMemberServiceImpl implements IWebMemberService {
 

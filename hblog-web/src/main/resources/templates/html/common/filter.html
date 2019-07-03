@@ -1,17 +1,20 @@
-
-<div class="fly-panel-title fly-filter">
-    <a href="/column/list/#(data.type??'all')/" class="#(data.filter??'layui-this')">综合</a>
-    <span class="fly-mid"></span>
-    <a href="/column/list/#(data.type??'all')/unsolved" class="#(data.filter == 'unsolved' ?'layui-this':'')">未结</a>
-    <span class="fly-mid"></span>
-    <a href="/column/list/#(data.type??'all')/solved" class="#(data.filter == 'solved' ?'layui-this':'')">已结</a>
-    <span class="fly-mid"></span>
-    <a href="/column/list/#(data.type??'all')/wonderful" class="#(data.filter == 'wonderful' ?'layui-this':'')">精华</a>
-    #if(data.show)
-    <span class="fly-filter-right layui-hide-xs">
-        <a href="" class="layui-this">按最新</a>
-        <span class="fly-mid"></span>
-        <a href="">按热议</a>
-    </span>
-    #end
+<div class="shoplist-filter">
+    <div class="layui-container">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="store-cat-item"><span><i class="layui-icon"></i>软件类别：</span>
+                    <ul>
+                        <li><a href="/store/cat/0/">全部</a></li>
+                        <li><a href="/store/cat/1/">后台管理</a></li>
+                        <li class="active"><a href="/store/cat/2/">商城购物</a></li>
+                        <li><a href="/store/cat/3/">社区论坛</a></li>
+                        <li><a href="/store/cat/4/">主页博客</a></li>
+                        <li><a href="/store/cat/5/">企业门户</a></li>
+                        <li><a href="/store/cat/6/">资讯头条</a></li>
+                        <li><a href="/store/cat/7/">其它模板</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

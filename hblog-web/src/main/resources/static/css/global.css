@@ -142,6 +142,8 @@ pre{padding: 10px 15px; margin: 10px 0; font-size: 12px; border-left: 6px solid 
 .fly-nav a i{position: absolute; left: 25px; top: 0; padding-right: 10px; font-size: 26px;}
 .fly-nav a .icon-shouye, .nav a .icon-shezhi{top: 2px;}
 
+.fly-nav .fly-mid{margin: 0 20px;}
+
 .fly-nav-user{position: absolute; top: 0; right: 0;}
 .fly-nav-user .iconfont{position: relative;}
 .fly-nav-avatar img{width: 36px; height: 36px; margin-left: 10px; border-radius: 100%;}
@@ -153,7 +155,7 @@ pre{padding: 10px 15px; margin: 10px 0; font-size: 12px; border-left: 6px solid 
 .fly-nav-msg:hover{color:#fff;}
 
 .fly-header .layui-nav{padding: 0; background: none;}
-.fly-header .fly-nav a{padding: 0 25px 0 60px;}
+.fly-header .fly-nav a{padding: 0 25px 0 20px;}
 .fly-header .fly-nav-user li a{padding: 0 10px;}
 .fly-header .fly-nav-user li .fly-nav-avatar{padding-right: 0;}
 .fly-header .fly-nav-user a.iconfont{color: #A9B7B7;}
@@ -163,6 +165,46 @@ pre{padding: 10px 15px; margin: 10px 0; font-size: 12px; border-left: 6px solid 
 .fly-header .layui-nav .layui-nav-bar,
 .fly-header .fly-nav-user .layui-nav-more{display: none !important;}
 .fly-header .fly-nav-user .layui-nav-child{left: auto; right: 0; width: 120px; min-width: 0;}
+
+/*搜索 */
+
+.layui-search { height: 120px;background-color: white;margin-bottom: 20px;}
+#layui-topbar { height: auto;}
+#layui-topbar .input-search{width: 100%; padding: 30px 0 10px; text-align: center; background-color: #FFF;}
+#layui-topbar .input-search > div{position: relative; display: inline-block;}
+#layui-topbar .input-search input{vertical-align: middle; width: 500px; height: 40px; background: #eff4f5; border: none; outline: none; padding-left: 10px; border-top-left-radius: 2px; border-bottom-left-radius: 2px;}
+#layui-topbar .input-search button.layui-btn-shop{vertical-align: middle; width: 80px; height: 40px; background: #5eba78; border-top-left-radius: 0px; border-bottom-left-radius: 0px;}
+#layui-topbar .input-search button.layui-btn-shop i{font-size: 22px; line-height: 40px;}
+#layui-topbar .input-search dl{position: relative; text-align: left; font-size: 12px; line-height: 30px; top: 5px; left: 10px;}
+#layui-topbar .input-search dl dd, #layui-topbar .input-search dl dt{display: inline-block; color: #9495a4;}
+#layui-topbar .input-search dl dd a{color: #b3b6b8; margin-right: 10px;}
+#layui-topbar .input-search dl dd a:hover{color: #9495a4;}
+#layui-topbar .input-search a.userBtn{width: 60px; padding: 0; text-align: center; height: 40px; font-size: 12px; margin-left: 20px;}
+#layui-topbar .input-search .layui-container{display: none;}
+#layui-topbar .input-search.scroll{position: fixed; top: 60px; z-index: 999; top: 0; padding-top: 10px; box-shadow: 0px 3px 3px rgba(0,0,0,0.15);}
+#layui-topbar .input-search.scroll .layui-container{display: block;}
+#layui-topbar .input-search.scroll .topbar-logo{display: block; position: absolute; left: 15px; bottom: 5px; z-index: 10;}
+#layui-topbar .input-search.scroll>div{display: block;}
+#layui-topbar .input-search.scroll>div>*{display: inline-block;}
+#layui-topbar .input-search.scroll input{width: 350px;}
+
+
+/*过滤条件*/
+.shoplist-filter{margin-top: 30px;}
+.shoplist-filter .layui-card-body{padding-left: 25px;}
+.shoplist-filter .layui-container li.active a,
+.shoplist-filter .layui-container li a:hover{color: #5eba78;}
+.shoplist-filter .layui-container p.filtEnd{margin-top: 10px; line-height: 48px;}
+.shoplist-filter .layui-container p.filtEnd span{margin: 0 7px; color: #ffa921;}
+
+@media screen and (min-width: 480px){
+  #layui-topbar .input-search input/* .shop-nav.shopdata .input-search input*/{width: 300px; display: inline-block;}
+  .shop-temp .temp-hot img + p{font-size: 20px;}
+  .shop-temp.shoplist #shopList .layui-laypage a,.shop-temp.shoplist #shopList .layui-laypage span{padding: 0 15px; font-size: 18px; line-height: 40px; height: 40px; margin-right: 20px;}
+  .shoplist-filter .layui-container div span{width: 100px;}
+}
+
+
 
 /* 底部 */
 .fly-footer {margin: 50px 0 0; padding: 20px 0 30px; line-height: 30px; text-align: center; color: #737573; border-top: 1px solid #e2e2e2;}

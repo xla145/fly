@@ -19,8 +19,15 @@ spring:
         suffix: .html
         template-loader-path: classpath:/templates/
         cache: false
+dubbo:
+    application:
+        name: duboo-consumer
+    registry:
+        address: zookeeper://192.168.1.6:2181
 is:
  dev: true
+
+
 
 
 

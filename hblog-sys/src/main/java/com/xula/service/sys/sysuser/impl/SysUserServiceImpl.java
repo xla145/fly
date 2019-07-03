@@ -3,14 +3,12 @@ package com.xula.service.sys.sysuser.impl;
 import cn.assist.easydao.common.*;
 import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
-import com.xula.base.cache.MCache;
+import com.xula.base.constant.SysUserConstant;
 import com.xula.base.utils.CommonUtil;
 import com.xula.base.utils.RecordBean;
-import com.xula.base.constant.SysUserConstant;
 import com.xula.entity.SysAction;
 import com.xula.service.sys.sysuser.ISysUserService;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -25,8 +23,8 @@ import java.util.Map;
  * @author caibin
  */
 @Service("ISysUserService")
-@CacheConfig
 public class SysUserServiceImpl implements ISysUserService {
+
     /**
      * 登录
      *
@@ -70,7 +68,6 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param
      * @return
      */
-    @Cacheable
     @Override
     public SysAction.SysUser getSysUser(int uid) {
         SysAction.SysUser sysUser = BaseDao.dao.queryForEntity(SysAction.SysUser.class, uid);
@@ -84,9 +81,8 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return
      */
     @Override
-    @Cacheable
+    @Cacheable(cacheNames = "serviceCache-150")
     public PagePojo<SysAction.SysUser> getSysUsers(Map<String, Object> map) {
-
         int pageNo = (int) map.get("pageNo");
         int pageSize = (int) map.get("pageSize");
         //查询条件

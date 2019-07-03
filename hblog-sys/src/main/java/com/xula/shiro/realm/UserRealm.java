@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 public class UserRealm extends AuthorizingRealm {
 
 
+    @Lazy
     @Autowired
     private ISysUserService sysUserService;
     @Autowired

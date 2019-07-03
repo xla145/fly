@@ -10,9 +10,11 @@ import cn.assist.easydao.pojo.PagePojo;
 import com.xula.base.utils.RecordBean;
 import com.xula.entity.dict.DictGroup;
 import com.xula.entity.dict.DictItem;
+import com.xula.service.article.IArticleCategoryService;
 import com.xula.service.dict.api.IDictOperService;
 import com.xula.service.dict.cache.DictCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,6 +29,8 @@ public class DictOperServiceImpl implements IDictOperService {
 
     @Autowired
     private DictCache dictCache;
+    @Autowired
+    private IArticleCategoryService iArticleCategoryService;
 
     /**
      * 添加字典组
@@ -51,10 +55,13 @@ public class DictOperServiceImpl implements IDictOperService {
      * @param pageSize
      * @return
      */
+    @Cacheable(cacheNames = "serviceCache-90")
     @Override
     public PagePojo<DictGroup> getDictGroupPage(Conditions conn, int pageNo, int pageSize) {
 //        Conditions conn = new Conditions("belong", SqlExpr.EQUAL,belong);
         Sort sort = new Sort("create_time", SqlSort.DESC);
+
+        iArticleCategoryService.getCategoryList();
         return BaseDao.dao.queryForListPage(DictGroup.class,conn,sort,pageNo,pageSize);
     }
 

@@ -1,0 +1,19 @@
+<div class="fly-header layui-bg-black">
+    <div class="layui-container layui-menu">
+        <a class="fly-logo" href="/">
+            <img src="#(resource)/images/logo.png" alt="layui">
+        </a>
+        <ul class="layui-nav fly-nav layui-hide-xs">
+            #set(alias = checked??'')
+            <li class="layui-nav-item layui-hide-xs #(alias == 'all'?'layui-this':'')"><a href="/">首页</a></li>
+            #for(item:data)
+            <li class="layui-nav-item #(alias == item.alias ? 'layui-this':'')"><a href="#(ctx)column/list/#(item.alias)">#(item.name)<span class="#(item.isHot == 1?'layui-badge-dot':'')"></span></a></li>
+            #end
+            <li class="layui-nav-item layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+        </ul>
+        <ul class="layui-nav fly-nav-user">
+        <!-- 未登入的状态 -->
+         #include("/common/user.html")
+        </ul>
+    </div>
+</div>

@@ -1,10 +1,7 @@
 package com.xula.controller;
 
 
-import cn.assist.easydao.common.Conditions;
-import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
-import cn.assist.easydao.util.JsonKit;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xula.base.constant.GlobalConstant;
@@ -14,25 +11,26 @@ import com.xula.base.utils.*;
 import com.xula.dao.one.MemberMapper;
 import com.xula.dao.two.UserMapper;
 import com.xula.entity.Member;
-import com.xula.entity.Order;
-import com.xula.entity.OrderGoodsModel;
 import com.xula.entity.User;
 import com.xula.entity.extend.ArticleList;
 import com.xula.service.article.IArticleService;
 import com.xula.service.member.IWebMemberService;
 import com.xula.service.oss.IUploadFileService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 首页信息
@@ -54,10 +52,11 @@ public class IndexController extends WebController{
     private IWebMemberService iWebMemberService;
 
 
-
-
     @GetMapping(value = {"/","index"})
     public String index(Model model) {
+
+
+
         // 获取 filter 列表数据
         Map<String,Object> map = new HashMap<>();
         PagePojo<ArticleList> page = iArticleService.getArticlePage(null,1,GlobalConstant.PAGE_SIZE);
@@ -66,7 +65,7 @@ public class IndexController extends WebController{
 
         model.addAttribute("page",page);
         model.addAttribute("data",map);
-        return "index";
+        return "book/index";
     }
 
     @GetMapping(value = "loginTest")

@@ -7,3 +7,6 @@
 /hblog-web/mvnw.cmd
 /hblog-web/mvnw
 /hblog.iml
+/hblog-common/hblog-common.iml
+/hblog-sys/hblog-sys.iml
+/hblog-web/hblog-web.iml

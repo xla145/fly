@@ -15,40 +15,32 @@
     <result column="update_by" jdbcType="TIMESTAMP" property="updateBy" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
-
   <sql id="Base_Column_List">
     id, username, email, password, status, avatar, code, create_date, create_by, update_date, 
     update_by, remark
   </sql>
-  <!-- 查询数据-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from h_user
     where id = #{id,jdbcType=INTEGER}
   </select>
-
-  <!-- 删除数据 -->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from h_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-
-  <!-- 插入数据 -->
   <insert id="insert" parameterType="com.xula.entity.User">
-    insert into h_user (id, username, email,
-      password, status, avatar,
-      code, create_date, create_by,
+    insert into h_user (id, username, email, 
+      password, status, avatar, 
+      code, create_date, create_by, 
       update_date, update_by, remark
       )
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
-      #{password,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
-      #{code,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
       #{updateDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
-
-  <!-- 插入数据 根据是否为空，判断数据是否需要插入 -->
   <insert id="insertSelective" parameterType="com.xula.entity.User">
     insert into h_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -128,9 +120,6 @@
       </if>
     </trim>
   </insert>
-
-
-
   <update id="updateByPrimaryKeySelective" parameterType="com.xula.entity.User">
     update h_user
     <set>
@@ -170,8 +159,6 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-
   <update id="updateByPrimaryKey" parameterType="com.xula.entity.User">
     update h_user
     set username = #{username,jdbcType=VARCHAR},

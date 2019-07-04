@@ -1,0 +1,58 @@
+/* 书签菜单样式*/
+.bookmark-filter {
+    position: fixed;
+    right: 10px;
+    top:300px;
+    width: 100px;
+}
+
+ul.book-cat-name li {
+    padding: 10px;
+    width: 80px;
+    text-align: center;
+}
+
+.layui-book {margin-top: 10px;}
+.layui-book .layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 8px;
+    line-height: 22px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: white;
+}
+.layui-book .layui-book-type {
+    /*overflow: hidden;*/
+}
+.layui-book .layui-book-list {padding: 10px 0px 20px 0px;}
+/*.layui-bookmark .layui-bookmark-list ul li {margin-bottom: 10px;}*/
+.layui-book .layui-book-list ul li a{
+    color: #000000;
+    text-align: center;
+    display: block;
+    background-color: white;
+    line-height: 20px;
+    padding: 10px;
+}
+
+.layui-book .layui-book-list .book-item-desc {
+    color: #c1bbbb;
+    font-size: 12px;
+}
+
+.layui-card-body {
+    padding: 0px;
+}
+.shoplist-filter {
+    margin-top: 10px;
+}
+
+.shoplist-filter .layui-container div span {
+    width: 70px;
+    font-weight: bold;
+}
+.layui-row.layui-filter-fix {
+    position: fixed;
+    top: 51px;
+    z-index: 10000;
+}

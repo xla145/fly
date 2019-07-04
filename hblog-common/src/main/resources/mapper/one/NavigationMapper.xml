@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xula.dao.one.INavigationMapper">
+  <resultMap id="BaseResultMap" type="com.xula.entity.Navigation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, name, url, weight, create_time, update_time, status, remark
+  </sql>
+
+  <select id="queryListByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from nav
+    where 1=1
+    order by id desc
+    <if test="offset != null and pageSize != null">
+      limit #{offset}, #{pageSize}
+    </if>
+  </select>
+
+  <select id="queryTotal" resultType="int">
+    select count(*)
+    from nav
+    where 1=1
+  </select>
+
+  <insert id="saveReturnId" parameterType="com.xula.entity.Navigation" useGeneratedKeys="true" keyProperty="id">
+    insert into nav (name, url,
+    weight, create_time, update_time,
+    remark)
+    values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+    #{weight,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+    #{remark,jdbcType=VARCHAR})
+  </insert>
+
+
+  <select id="queryList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from nav
+    where 1=1
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    order by weight desc
+  </select>
+
+
+  <!--<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from nav-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</select>-->
+
+
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">-->
+    <!--delete from nav-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</delete>-->
+
+  <!--<insert id="insert" parameterType="com.xula.entity.Navigation">-->
+    <!--insert into nav (id, name, url, -->
+      <!--weight, create_time, update_time, -->
+      <!--remark)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, -->
+      <!--#{weight,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, -->
+      <!--#{remark,jdbcType=VARCHAR})-->
+  <!--</insert>-->
+
+
+  <!--<insert id="insertSelective" parameterType="com.xula.entity.Navigation">-->
+    <!--insert into nav-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="url != null">-->
+        <!--url,-->
+      <!--</if>-->
+      <!--<if test="weight != null">-->
+        <!--weight,-->
+      <!--</if>-->
+      <!--<if test="createTime != null">-->
+        <!--create_time,-->
+      <!--</if>-->
+      <!--<if test="updateTime != null">-->
+        <!--update_time,-->
+      <!--</if>-->
+      <!--<if test="remark != null">-->
+        <!--remark,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--#{id,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="url != null">-->
+        <!--#{url,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="weight != null">-->
+        <!--#{weight,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="createTime != null">-->
+        <!--#{createTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="updateTime != null">-->
+        <!--#{updateTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="remark != null">-->
+        <!--#{remark,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+
+
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.xula.entity.Navigation">-->
+    <!--update nav-->
+    <!--<set>-->
+      <!--<if test="name != null">-->
+        <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="url != null">-->
+        <!--url = #{url,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="weight != null">-->
+        <!--weight = #{weight,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="createTime != null">-->
+        <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="updateTime != null">-->
+        <!--update_time = #{updateTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="remark != null">-->
+        <!--remark = #{remark,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+
+
+  <!--<update id="updateByPrimaryKey" parameterType="com.xula.entity.Navigation">-->
+    <!--update nav-->
+    <!--set name = #{name,jdbcType=VARCHAR},-->
+      <!--url = #{url,jdbcType=VARCHAR},-->
+      <!--weight = #{weight,jdbcType=INTEGER},-->
+      <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+      <!--update_time = #{updateTime,jdbcType=TIMESTAMP},-->
+      <!--remark = #{remark,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+
+
+</mapper>

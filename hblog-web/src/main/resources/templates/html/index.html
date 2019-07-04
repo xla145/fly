@@ -1,17 +1,14 @@
 #include("layout/_layout.html")
 <!-- 导航栏  -->
 #define body()
-#module("/common/menu.html",class="GetCategoryNodes",checked=data.type??'')
+#module("/common/nav.html",class="GetNavNodes",checked=data.name??'')
 
 #include("/common/search.html")
 
 <!-- 主体部分  -->
 <div class="layui-container">
-    <div class="layui-row">
-        #include("common/filter.html")
-    </div>
     <div class="layui-row layui-col-space10">
-        #include("common/list_2.html")
+        #include("common/layout/list_2.html")
     </div>
 </div>
 #end

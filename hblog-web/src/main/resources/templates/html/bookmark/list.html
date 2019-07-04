@@ -1,0 +1,17 @@
+#for(bookmark:bookmarkList)
+<div class="layui-book-type">
+    <blockquote class="layui-elem-quote">#(bookmark.name)</blockquote>
+    <div class="layui-book-list">
+        <ul class="layui-row layui-col-space20">
+            #for(item:bookmark.imageTextItemList)
+            <li class="layui-col-xs4 layui-col-sm4 layui-col-md2">
+                <a href="#(item.url??)" target="_blank">
+                    #(item.title??)
+                    <div class="book-item-desc">#(item.desc??)</div>
+                </a>
+            </li>
+            #end
+        </ul>
+    </div>
+</div>
+#end

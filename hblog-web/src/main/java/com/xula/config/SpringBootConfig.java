@@ -3,9 +3,6 @@ package com.xula.config;
 import com.jfinal.template.ext.spring.JFinalViewResolver;
 import com.jfinal.template.source.ClassPathSourceFactory;
 import com.xula.base.engine.ModuleDirective;
-import com.xula.base.utils.CustomKeyGenerator;
-import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,7 +32,7 @@ public class SpringBootConfig {
     jfr.addSharedFunction("layout/intro.html");
     jfr.addSharedFunction("common/_paginate.html");
     jfr.addSharedFunction("article/comment/_list.html");
-    jfr.addSharedFunction("user/common/user-menu.html");
+    jfr.addSharedFunction("user/common/user-nav.html");
 
     jfr.addDirective("module", ModuleDirective.class);
     jfr.setSuffix(".html");

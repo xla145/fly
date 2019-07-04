@@ -9,7 +9,7 @@ import cn.assist.easydao.dao.BaseDao;
 import cn.assist.easydao.pojo.PagePojo;
 import com.alibaba.fastjson.JSON;
 import com.xula.base.utils.RecordBean;
-import com.xula.entity.ImageTextItem;
+import com.xula.entity.imagetext.ImageTextItem;
 import com.xula.service.imagetext.IImageTextItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

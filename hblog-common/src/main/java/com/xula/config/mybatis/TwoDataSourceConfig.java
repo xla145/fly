@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ import javax.sql.DataSource;
 @AutoConfigureAfter(DataSourceConfig.class)
 @Import(DataSourceConfig.class)
 @MapperScan(basePackages = TwoDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "twoSqlSessionFactory")
+@ConfigurationProperties("mybatis")
 public class TwoDataSourceConfig {
 
     /**
@@ -32,6 +34,8 @@ public class TwoDataSourceConfig {
     static final String PACKAGE = "com.xula.dao.two";
     static final String MAPPER_LOCATION = "classpath:mapper/two/*.xml";
 
+    @Value("${mybatis.type-aliases-package}")
+    private String typeAliasesPackage;
 
     /**
      * 事务
@@ -57,6 +61,7 @@ public class TwoDataSourceConfig {
         sessionFactory.setDataSource(dataSourceTwo);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources(TwoDataSourceConfig.MAPPER_LOCATION));
+        sessionFactory.setTypeAliasesPackage(typeAliasesPackage);
         return sessionFactory.getObject();
     }
 }

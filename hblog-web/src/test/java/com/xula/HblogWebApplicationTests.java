@@ -1,34 +1,16 @@
 
 package com.xula;
 
-import cn.assist.easydao.common.Conditions;
-import cn.assist.easydao.dao.BaseDao;
-import cn.assist.easydao.pojo.RecordPojo;
-import cn.assist.easydao.util.JsonKit;
 import com.alibaba.fastjson.JSON;
-import com.xula.base.cache.RedisKit;
-import com.xula.base.constant.DataSourceConstant;
-import com.xula.base.utils.CommonUtil;
-import com.xula.base.utils.JsonBean;
-import com.xula.dao.one.IBookMarkMapper;
-import com.xula.entity.*;
-import com.xula.listener.AsyncComponent;
-import com.xula.listener.TestAsync;
-import com.xula.service.article.IArticleService;
-import com.xula.service.article.impl.ArticleCategoryServiceImpl;
+import com.xula.entity.BookmarkCategory;
 import com.xula.service.bookmark.IBookmarkService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

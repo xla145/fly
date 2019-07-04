@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xula.dao.one.IBookMarkMapper">
+
+  <resultMap id="BaseResultMap" type="com.xula.entity.BookmarkList">
+
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+
+    <collection  property="imageTextItemList" ofType="ImageTextItem">
+      <id property="id" column="item_id"/>
+      <result column="title" jdbcType="VARCHAR" property="title"/>
+      <result column="desc" jdbcType="VARCHAR" property="desc"/>
+      <result column="url" jdbcType="VARCHAR" property="url"/>
+      <result column="weight" jdbcType="INTEGER" property="weight"/>
+    </collection>
+  </resultMap>
+
+  <!-- 表连接的时候，如果出现两个表的主键名字是一样的，另外一个表要使用别名代替，不然一对多映射会有问题 -->
+  <select id="getBookmarkList" resultMap="BaseResultMap">
+    SELECT c.id,c.name,c.code,b.id item_id,b.title,b.desc,b.url
+    FROM bookmark_category c JOIN image_text_item b ON(c.code = b.group_code)
+    where c.status = 1
+  </select>
+
+</mapper>

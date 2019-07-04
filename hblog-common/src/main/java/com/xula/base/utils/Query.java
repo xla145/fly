@@ -27,6 +27,7 @@ import java.util.Map;
  */
 
 public class Query extends LinkedHashMap<String, Object> {
+
     private static final long serialVersionUID = 1L;
     //当前页码
     private int page;

@@ -1,7 +1,23 @@
 /* 书签菜单样式*/
+body {
+    /*overflow-y: scroll;*/
+}
+html {
+    /*隐藏滚动条，当IE下溢出，仍然可以滚动*/
+    -ms-overflow-style:none;
+    /*火狐下隐藏滚动条*/
+    overflow:-moz-scrollbars-none;
+}
+/*Chrome下隐藏滚动条，溢出可以透明滚动*/
+html::-webkit-scrollbar{width:0px}
+
+.layui-book-container {
+    margin-top: 10px;
+}
+
 .bookmark-filter {
     position: fixed;
-    right: 10px;
+    right: 0px;
     top:300px;
     width: 100px;
 }
@@ -10,6 +26,7 @@ ul.book-cat-name li {
     padding: 10px;
     width: 80px;
     text-align: center;
+    cursor: pointer;
 }
 
 .layui-book {margin-top: 10px;}

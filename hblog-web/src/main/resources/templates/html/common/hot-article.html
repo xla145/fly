@@ -1,6 +1,6 @@
-<dl class="fly-panel fly-list-one">
+<dl class="zy-panel zy-list-one">
     #if(data??)
-    <dt class="fly-panel-title">本周热议</dt>
+    <dt class="zy-panel-title">本周热议</dt>
     #for(hot : data)
     <dd>
         <a href="#(hot.url??)">#(hot.title)</a>
@@ -9,6 +9,6 @@
     #end
     #else
     <!-- 无数据时 -->
-    <div class="fly-none">没有相关数据</div>
+    <div class="zy-none">没有相关数据</div>
     #end
 </dl>

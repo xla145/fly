@@ -4,42 +4,33 @@
 #define css()
 <link rel="stylesheet" href="/static/css/book.css">
 #end
-#module("/common/nav.html",class="GetNavNodes",checked="书签")
-<!-- 主体部分  -->
-<div class="layui-container">
-    <div class="layui-row layui-filter-fix">
-        #include("type-list.html")
-    </div>
-    <div class="layui-container layui-book">
-        #include("list.html")
+<div class="layui-book-container">
+    #module("/common/nav.html",class="GetNavNodes",checked="书签")
+    <!-- 主体部分  -->
+    <div class="layui-container">
+        <div class="layui-row layui-filter-fix">
+            #include("type-list.html")
+        </div>
+        <div class="layui-container layui-book">
+            #include("list.html")
+        </div>
     </div>
 </div>
 #define js()
 <script>
     layui.use(['layer'],function () {
         let $ = layui.jquery;
-        var scrollUpBox = $(".layui-book");
         $(document).on("click",".book-cat-name li",function () {
-            if (!hasScrollbar()) {
-                return;
-            }
             let index = $(this).index();
-            let scollHeight = 0;
-            if (index == 0) {
-                scollHeight = 70;
-            }
-            for (let i = 0; i < index; i++) {
-                let contentHeight = $(".layui-book-type").eq(index).css("height");
-                let itemHeight = parseInt(contentHeight);
-                scollHeight -=itemHeight;
-            }
-            scrollUpBox.animate({marginTop: scollHeight}, 400);
+            var scroll_offset = $(".layui-book-type").eq(index).offset();
+            // 70 是第一个类型的内容距头部的距离
+            var scroll = scroll_offset.top - 70;
+            console.log(scroll)
+            // scrollTop 滚动条相对其顶部的偏移
+            $("body,html").animate({
+                scrollTop:scroll
+            },400);
         })
-
-        function hasScrollbar() {
-            return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
-        }
-
     })
 
 </script>

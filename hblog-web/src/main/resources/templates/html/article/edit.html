@@ -2,8 +2,8 @@
 <!-- 导航栏  -->
 #define body()
 #module("/common/column.html",class="GetCategoryNodes",checked=data.type??'')
-<div class="layui-container fly-marginTop">
-    <div class="fly-panel" pad20 style="padding-top: 5px;">
+<div class="layui-container zy-marginTop">
+    <div class="zy-panel" pad20 style="padding-top: 5px;">
         <div class="layui-form layui-form-pane">
             <div class="layui-tab layui-tab-brief" lay-filter="user">
                 <ul class="layui-tab-title">
@@ -34,7 +34,7 @@
                             <div class="layui-form-item layui-form-text">
                                 <div class="layui-input-block">
                                     <textarea id="L_content" name="info" required lay-verify="required"
-                                              placeholder="详细描述" class="layui-textarea fly-editor"
+                                              placeholder="详细描述" class="layui-textarea zy-editor"
                                               style="height: 260px;">#(data.info??)</textarea>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                            autocomplete="off" class="layui-input">
                                 </div>
                                 <div class="layui-form-mid img-code">
-                                    <img src="/auth/imagecode" class="fly-imagecode operator-btn" data-type="refreshCode">
+                                    <img src="/auth/imagecode" class="zy-imagecode operator-btn" data-type="refreshCode">
                                 </div>
                             </div>
                             <div class="layui-form-item">
@@ -68,7 +68,7 @@
         margin-right: 10px;
     }
 
-    img.fly-imagecode {
+    img.zy-imagecode {
         position: relative;
         cursor: pointer;
     }

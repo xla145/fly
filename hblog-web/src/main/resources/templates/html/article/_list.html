@@ -1,6 +1,6 @@
 #for(item:page.pageData)
 <li>
-    <a href="/member/#(item.uid)" class="fly-avatar">
+    <a href="/member/#(item.uid)" class="zy-avatar">
         <img src="#(item.avatar??'https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg')"
              alt="贤心">
     </a>
@@ -8,27 +8,27 @@
         <a class="layui-badge">#(item.catName??'分享')</a>
         <a href="#(ctx)article/detail/#(item.aid)">#(item.title??)</a>
     </h2>
-    <div class="fly-list-info">
+    <div class="zy-list-info">
         <a href="/member/#(item.uid)" link>
             <cite>#(item.nickname)</cite>
             <!--
             <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-            <i class="layui-badge fly-badge-vip">VIP3</i>
+            <i class="layui-badge zy-badge-vip">VIP3</i>
             -->
         </a>
         <span>#date(item.createTime,"yyyy-MM-dd HH:mm:ss")</span>
 
-        <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> #(item.payPoint??0)</span>
-        <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
-        <span class="fly-list-nums">
+        <span class="zy-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> #(item.payPoint??0)</span>
+        <!--<span class="layui-badge zy-badge-accept layui-hide-xs">已结</span>-->
+        <span class="zy-list-nums">
                 <i class="iconfont icon-pinglun1" title="回答"></i> #(item.commentNum??0)
               </span>
     </div>
-    <div class="fly-list-badge">
+    <div class="zy-list-badge">
         <!--<span class="layui-badge layui-bg-red">精帖</span>-->
     </div>
 </li>
 #else
 <!-- 无数据时 -->
-<li class="fly-none">无数据</li>
+<li class="zy-none">无数据</li>
 #end

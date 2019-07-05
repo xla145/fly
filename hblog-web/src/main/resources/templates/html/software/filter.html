@@ -1,0 +1,16 @@
+<div class="zy-panel-title zy-filter">
+    <div class="layui-container">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="store-cat-item"><span><i class="layui-icon layui-icon-next"></i>类型：</span>
+                    <ul class="book-cat-name">
+                        <li><a href="/column/list/#(data.type??'all')/" class="#(data.filter??'layui-this')">类型</a>
+                        <li><a href="/column/list/#(data.type??'all')/unsolved" class="#(data.filter == 'unsolved' ?'layui-this':'')">未结</a></li>
+                        <li><a href="/column/list/#(data.type??'all')/solved" class="#(data.filter == 'solved' ?'layui-this':'')">已结</a></li>
+                        <li><a href="/column/list/#(data.type??'all')/wonderful" class="#(data.filter == 'wonderful' ?'layui-this':'')">精华</a></li></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

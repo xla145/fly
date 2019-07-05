@@ -1,0 +1,39 @@
+#include("../layout/_layout.html")
+<!-- 导航栏  -->
+#define body()
+#module("/common/nav.html",class="GetNavNodes",checked="软件")
+<!-- 主体部分  -->
+#include("filter.html")
+<div class="layui-container" style="margin-top: 20px;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="zy-panel" style="margin-bottom: 0;">
+                <ul class="zy-list">
+                    #include("_list.html")
+                </ul>
+                #@paginate(page.pageNo, page.pageTotal, "/software/list/"+data.type??'all'+"/page/")
+            </div>
+        </div>
+        <div class="layui-col-md4">
+
+            <!-- 温馨通道 -->
+
+
+            <!-- 本周热门下载 -->
+            #module("../common/hot-article.html",class="GetHotArticleNodes")
+
+            <!--  -->
+
+            #include("../common/adv.html")
+
+        </div>
+    </div>
+</div>
+#end
+#define js()
+<script>
+    layui.use(['layer'],function () {
+
+    })
+</script>
+#end

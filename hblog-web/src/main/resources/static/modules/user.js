@@ -4,7 +4,7 @@
 
  */
  
-layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
+layui.define(['laypage', 'zy', 'element', 'flow'], function(exports){
 
   var $ = layui.jquery;
   var layer = layui.layer;
@@ -12,7 +12,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
   var laytpl = layui.laytpl;
   var form = layui.form;
   var laypage = layui.laypage;
-  var fly = layui.fly;
+  var zy = layui.zy;
   var flow = layui.flow;
   var element = layui.element;
   var upload = layui.upload;
@@ -37,7 +37,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
           <i>{{ d.rows[i].collectionTime }} 收藏</i>\
         {{# } else { }}\
           {{# if(d.rows[i].isGood == 1){ }}\
-          <span class="fly-jing layui-hide-xs">精</span>\
+          <span class="zy-jing layui-hide-xs">精</span>\
           {{# } }}\
           {{# if(d.rows[i].status == 15){ }}\
             <span class="article-status article-status-ok">已结</span>\
@@ -61,7 +61,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     var view = function(res){
       var html = laytpl(tpl[0]).render(res);
       dom.mine.children().eq(index).find('span').html(res.count);
-      elemUCM.children().eq(index).find('ul').html(res.rows.length === 0 ? '<div class="fly-msg">没有相关数据</div>' : html);
+      elemUCM.children().eq(index).find('ul').html(res.rows.length === 0 ? '<div class="zy-msg">没有相关数据</div>' : html);
     };
 
     var page = function(now){
@@ -72,7 +72,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
         //我收藏的帖
         if(type === 'collection'){
           var nums = 10; //每页出现的数据量
-          fly.json(url, {}, function(res){
+          zy.json(url, {}, function(res){
 
             var rows = layui.sort(res.data.rows, 'createTime', 'desc')
             ,render = function(curr){
@@ -109,7 +109,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
             });
           });
         } else {
-          fly.json('/member/'+ type +'/', {
+          zy.json('/member/'+ type +'/', {
             page: curr
           }, function(res){
             // res.data.rows = res.data.pageData;
@@ -239,7 +239,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     };
 
     var effectShow = function(page){
-      fly.json('/cooperation/effect', {
+      zy.json('/cooperation/effect', {
         page: page||1
       }, function(res){
         effectView(res);
@@ -261,7 +261,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
   }
 
   //提交成功后刷新
-  fly.form['/member/update'] = function(data, required){
+  zy.form['/member/update'] = function(data, required){
     layer.msg('修改成功', {
       icon: 1
       ,time: 1000
@@ -273,7 +273,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 
 
   //提交成功后刷新
-  fly.form['/member/repass'] = function(data, required){
+  zy.form['/member/repass'] = function(data, required){
       layer.msg('修改成功', {
           icon: 1
           ,time: 1000
@@ -290,7 +290,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       2: 'QQ'
       ,3: '微博'
     })[type] + '吗？', {icon: 5}, function(){
-      fly.json('/member/unbind', {
+      zy.json('/member/unbind', {
         type: type
       }, function(res){
         if(res.status === 0){
@@ -313,26 +313,26 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     var delAll = $('#LAY_delallmsg')
     ,tpl = '{{# var len = d.data.length;\
     if(len === 0){ }}\
-      <div class="fly-none">您暂时没有最新消息</div>\
+      <div class="zy-none">您暂时没有最新消息</div>\
     {{# } else { }}\
       <ul class="mine-msg">\
       {{# for(var i = 0; i < len; i++){ }}\
         <li data-id="{{d.data[i].id}}">\
           <blockquote class="layui-elem-quote">{{ d.data[i].content}}</blockquote>\
-          <p><span>{{layui.util.timeAgo(d.data[i].createTime)}}</span><a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">删除</a></p>\
+          <p><span>{{layui.util.timeAgo(d.data[i].createTime)}}</span><a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger zy-delete">删除</a></p>\
         </li>\
       {{# } }}\
       </ul>\
     {{# } }}'
     ,delEnd = function(clear){
       if(clear || dom.minemsg.find('.mine-msg li').length === 0){
-        dom.minemsg.html('<div class="fly-none">您暂时没有最新消息</div>');
+        dom.minemsg.html('<div class="zy-none">您暂时没有最新消息</div>');
       }
     }
     
     
 
-    fly.json('/member/message/find/', {}, function(res){
+    zy.json('/member/message/find/', {}, function(res){
       var html = laytpl(tpl).render(res);
       dom.minemsg.html(html);
       if(res.data.length > 0){
@@ -342,9 +342,9 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 
     
     //阅读后删除
-    dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
+    dom.minemsg.on('click', '.mine-msg li .zy-delete', function(){
       var othis = $(this).parents('li'), id = othis.data('id');
-      fly.json('/member/message/remove/', {
+      zy.json('/member/message/remove/', {
         id: id
       }, function(res){
         if(res.code === 0){
@@ -358,7 +358,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     $('#LAY_delallmsg').on('click', function(){
       var othis = $(this);
       layer.confirm('确定清空吗？', function(index){
-        fly.json('/member/message/remove/', {
+        zy.json('/member/message/remove/', {
           all: true
         }, function(res){
           if(res.code === 0){

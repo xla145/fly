@@ -1,0 +1,30 @@
+<!-- 左图右字-->
+#for(item:page.pageData)
+<li>
+    <div class="zy-item-left">
+        <a href="/software/#(item.aid)" class="zy-img">
+            <img src="#(resource)/images/other/test.png"
+                 alt="office" width="200">
+        </a>
+    </div>
+    <div class="zy-item-right">
+        <h2>
+            <a class="layui-badge">#(item.catName??'分享')</a>
+            <a href="#(ctx)article/detail/#(item.aid)">官方正版 Office 2019 家庭和学生版 仅需 285 元！绑定您的微软账户，安全可靠看得见！APSGO软购商城</a>
+        </h2>
+        <div class="zy-list-info">
+
+            <span class="layui-hide-xs" title="点赞"><i class="layui-icon layui-icon-username"></i> #(item.nickname)</span>
+            <span>#date(item.createTime,"yyyy-MM-dd HH:mm:ss")</span>
+            <span class="zy-list-kiss layui-hide-xs" title="点赞"><i class="layui-icon layui-icon-praise"></i> #(item.payPoint??0)</span>
+            <span class="zy-list-nums">
+                <i class="layui-icon layui-icon-dialogue" title="评论"></i> #(item.commentNum??0)
+              </span>
+            <p class="zy-note">本站又发大招与软购商城合作发布活动 Microsoft Office 2019 家庭和学生版，当前新品上线特惠促销价低至 285 元，就可以得到 Office 2019 最新版永久授权。一次购买绑定您的微软账户，终身使用此版本！家庭和学生版...</p>
+        </div>
+    </div>
+</li>
+#else
+<!-- 无数据时 -->
+<li class="zy-none">无数据</li>
+#end

@@ -5,15 +5,15 @@
         <li data-id="#(item.id)" class="jieda-daan">
             <a name="item-1111111111"></a>
             <div class="detail-about detail-about-reply">
-                <a class="fly-avatar" href="/member/#(item.uid)">
+                <a class="zy-avatar" href="/member/#(item.uid)">
                     <img src="#(item.avatar??'https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg')"
                          alt="#(item.nickname)">
                 </a>
-                <div class="fly-detail-user">
-                    <a href="" class="fly-link">
+                <div class="zy-detail-user">
+                    <a href="" class="zy-link">
                         <cite>#(item.nickname)</cite>
                         <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-                        <i class="layui-badge fly-badge-vip">#(item.vipName??"普通会员")</i>
+                        <i class="layui-badge zy-badge-vip">#(item.vipName??"普通会员")</i>
                     </a>
 
                     #if(uid == item.uid)
@@ -58,7 +58,7 @@
         #end
     #else
     <!-- 无数据时 -->
-     <li class="fly-none">消灭零回复</li>
+     <li class="zy-none">消灭零回复</li>
     #end
 </ul>
 #end

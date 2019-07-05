@@ -6,16 +6,16 @@
 
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
-        <div class="layui-col-md6 fly-home-jie">
-            <div class="fly-panel">
-                <h3 class="fly-panel-title">#(member.nickname??) 最近的提问</h3>
+        <div class="layui-col-md6 zy-home-jie">
+            <div class="zy-panel">
+                <h3 class="zy-panel-title">#(member.nickname??) 最近的提问</h3>
                 #module("/user/common/ask-list.html",class="GetAskList",uid=member.uid)
             </div>
         </div>
 
-        <div class="layui-col-md6 fly-home-da">
-            <div class="fly-panel">
-                <h3 class="fly-panel-title">#(member.nickname??) 最近的回答</h3>
+        <div class="layui-col-md6 zy-home-da">
+            <div class="zy-panel">
+                <h3 class="zy-panel-title">#(member.nickname??) 最近的回答</h3>
                 #module("/user/common/reply-list.html",class="GetCommentList",uid=member.uid)
             </div>
         </div>

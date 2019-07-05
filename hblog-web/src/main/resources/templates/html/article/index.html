@@ -5,9 +5,9 @@
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md8">
-            <div class="fly-panel" style="margin-bottom: 0;">
+            <div class="zy-panel" style="margin-bottom: 0;">
                 #include("../common/filter.html")
-                <ul class="fly-list">
+                <ul class="zy-list">
                     #include("_list.html")
                 </ul>
                 #@paginate(page.pageNo, page.pageTotal, "/column/list/"+data.type??'all'+"/page/")
@@ -22,7 +22,7 @@
             #module("../common/adv.html",class="GetAdvNodes")
 
             <!-- 友情链接 -->
-            #module("../common/fly-link.html",class="GetLinkNodes",type="1")
+            #module("../common/zy-link.html",class="GetLinkNodes",type="1")
 
         </div>
     </div>

@@ -2,10 +2,10 @@
 #if(member.uid??)
 <!-- 登入前的状态 -->
 <li class="layui-nav-item">
-    <a class="fly-nav-avatar" href="javascript:;">
+    <a class="zy-nav-avatar" href="javascript:;">
         <cite class="layui-hide-xs">#(member.nickname??)</cite>
         <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-        <i class="layui-badge fly-badge-vip layui-hide-xs">#(member.vipName??)</i>
+        <i class="layui-badge zy-badge-vip layui-hide-xs">#(member.vipName??)</i>
         <img src="#(member.avatar??'/static/images/avatar/0.jpg')">
     </a>
     <dl class="layui-nav-child">
@@ -19,7 +19,7 @@
 #else
 <!-- 登入后的状态 -->
 <li class="layui-nav-item">
-    <a class="iconfont icon-touxiang layui-hide-xs" href="/user/login"></a>
+    <a class="layui-hide-xs" href="/user/login"></a>
 </li>
 <li class="layui-nav-item">
     <a href="#(ctx)user/login">登入</a>
